@@ -16,7 +16,13 @@ export default function Home() {
         </p>
       </div>
       <div>
+        <div>
         <a href="/add-word">Add Word</a>
+        </div>
+        <div>
+          <a href="/add-translation">Add Translation</a>
+        </div>
+        
       </div>
   </div>
   )

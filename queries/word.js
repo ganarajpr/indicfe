@@ -23,3 +23,21 @@ export const addWord = (word, script, language) => {
         }
     });
 };
+
+export const getWords = () => {
+    const GET_WORDS = gql`
+        query Query {
+            words {
+                text,
+                language,
+                translation {
+                    text,
+                    language
+                }
+            }
+        }
+    `;
+    return client.query({
+        query: GET_WORDS
+    });
+}
