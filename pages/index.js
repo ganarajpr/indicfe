@@ -20,9 +20,14 @@ export default function Home() {
         <a href="/add-word">Add Word</a>
         </div>
         <div>
-          <a href="/add-translation">Add Translation</a>
+          <a href="/add-translation">Add Translation of Word</a>
         </div>
-        
+        <div>
+          <a href="/add-line">Add Line</a>
+        </div>
+        <div>
+          <a href="/connect-words-in-line">Connect Words in Line</a>
+        </div>
       </div>
   </div>
   )
