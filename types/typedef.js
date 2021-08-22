@@ -1,7 +1,8 @@
 import { gql } from "apollo-server-micro";
 const typeDefs = gql`
     type Query {
-        getUser(word: String!, line: String!): String
+        getUserByName(name:String!): String
+        getUserByEmail(email:String!): String        
     }
 
     type User {

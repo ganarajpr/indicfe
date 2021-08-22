@@ -2,34 +2,26 @@ import { ApolloServer } from "apollo-server-micro";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { typeDefs as scalarTypeDefs, resolvers as scalarResolvers  } from 'graphql-scalars';
 import typeDefs from '../../types/typedef';
-//import { resolvers } from '../../resolvers';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-
+import resolvers from '../../resolvers';
+import connectDB from '../../middleware/mongodb';
 const apolloServer = new ApolloServer({
-  // schema: makeExecutableSchema({
-  //   typeDefs: [
-  //     //...typeDefs,
-  //     ...scalarTypeDefs
-  //   ],
-  //   resolvers:[
-  //     //...resolvers,
-  //     ...scalarResolvers
-  //   ]
-  // }),
+
   typeDefs: [...scalarTypeDefs, typeDefs],
-  resolvers: scalarResolvers,
+  resolvers: [scalarResolvers, resolvers],
   playground: true,
   plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 });
 
 const startServer = apolloServer.start();
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
   await startServer;
   await apolloServer.createHandler({
     path: "/api/graphql",
   })(req, res);
-}
+};
+
+export default connectDB(handler);
 
 export const config = {
   api: {
