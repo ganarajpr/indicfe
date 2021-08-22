@@ -25,10 +25,40 @@ export const addLine = (line, script, language) => {
     });
 };
 
+// export const connectWordToLine = (word, line) => {
+//     const CONNECT_LINE_WITH_WORD = gql`
+//         mutation Mutation($updateLinesWhere: LineWhere, $updateLinesConnect: LineConnectInput) {
+//             updateLines(where: $updateLinesWhere, connect: $updateLinesConnect) {
+//                 lines {
+//                     text
+//                 }
+//             }
+//         }
+//     `;
+//     return client.mutate({
+//         mutation: CONNECT_LINE_WITH_WORD,
+//         variables: { 
+//             updateLinesWhere: {
+//                 text: line
+//             },
+//             updateLinesConnect: {
+//                 words: {
+//                   where: {
+//                     node: {
+//                       text: word
+//                     }
+//                   }
+//                 }
+//             }
+//         }
+//     });
+// };
+
+
 export const connectWordToLine = (word, line) => {
     const CONNECT_LINE_WITH_WORD = gql`
-        mutation Mutation($updateLinesWhere: LineWhere, $updateLinesConnect: LineConnectInput) {
-            updateLines(where: $updateLinesWhere, connect: $updateLinesConnect) {
+        mutation Mutation($word: String, $line: String) {
+            addWordToLine(word: $word, line:$line) {
                 lines {
                     text
                 }
@@ -38,18 +68,8 @@ export const connectWordToLine = (word, line) => {
     return client.mutate({
         mutation: CONNECT_LINE_WITH_WORD,
         variables: { 
-            updateLinesWhere: {
-                text: line
-            },
-            updateLinesConnect: {
-                words: {
-                  where: {
-                    node: {
-                      text: word
-                    }
-                  }
-                }
-            }
+            word: word,
+            line: line
         }
     });
 };
