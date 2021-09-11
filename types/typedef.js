@@ -1,8 +1,12 @@
 import { gql } from "apollo-server-micro";
 const typeDefs = gql`
     type Query {
-        getUserByName(name:String!): String
-        getUserByEmail(email:String!): String        
+        getUserByName(name:String!): User
+        getUserByEmail(email:String!): User        
+    }
+    
+    type Mutation {
+        addWordToLine(word: String!, line: String!): String
     }
 
     type User {
@@ -73,11 +77,6 @@ const typeDefs = gql`
         createdAt: DateTime! 
         word: Word!
     }
-
-    type Mutation {
-        addWordToLine(word: String!, line: String!): String
-    }
-
 `;
 
 export default typeDefs;
