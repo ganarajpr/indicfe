@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { addLine } from "../queries/line";
+// import { addLine } from "../queries/line";
+import { addLine } from '../fetches/line';
+import { signIn } from 'next-auth/client'
 export default function Line() {
   const { register, handleSubmit } = useForm();
   const [result, setResult] = useState("");

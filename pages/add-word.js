@@ -6,7 +6,7 @@ import { getSession } from 'next-auth/client';
 
 import Layout from '../components/Layout';
 import AccessDenied from '../components/accessDenied';
-
+import { signOut } from 'next-auth/client'
 export default function Word({session}) {
 
   if (!session) { return  <Layout><AccessDenied/></Layout> }
@@ -41,6 +41,11 @@ export default function Word({session}) {
       <input type="submit" />
     </form>
       <a href="/">Go Home</a>
+      <a href="/api/auth/signout"
+           onClick={(e) => {
+           e.preventDefault()
+           signOut()
+        }}>signOut</a>
   </Layout>
   )
 }

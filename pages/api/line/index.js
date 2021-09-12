@@ -1,5 +1,6 @@
 import getDb from "../../../mongo";
 import corsWrapper from "../../../lib/corsWrapper";
+import { getSession } from 'next-auth/client';
 
 const addLine = async (req) => {
     const { text, language, script } = req.body;
@@ -16,8 +17,13 @@ const addLine = async (req) => {
 
 async function handler(req, res) {
     if (req.method === 'POST') {
-        const word = await addLine(req);
-        return res.json(word);
+        const session = await getSession({ req });
+        console.log(session);
+        if(session) {
+            const word = await addLine(req);
+            return res.json(word);
+        }
+
     }
 }
 
