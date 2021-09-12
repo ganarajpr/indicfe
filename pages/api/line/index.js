@@ -18,7 +18,7 @@ const addLine = async (req) => {
 async function handler(req, res) {
     if (req.method === 'POST') {
         const session = await getSession({ req });
-        console.log(session);
+        console.log(session, "session information on post");
         if(session) {
             const word = await addLine(req);
             return res.json(word);

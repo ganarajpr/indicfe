@@ -132,7 +132,7 @@ function MongoDBAdapter(options) {
             return session;            
         }
         async function updateSession(data) {
-            console.log('updateing session', data);
+            // console.log('updateing session', data);
             const { id, ...rest } = data;
             const { value: session } = await Sessions.findOneAndUpdate({ sessionToken: data.sessionToken }, { $set: rest });
             return session;

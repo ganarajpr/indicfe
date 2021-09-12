@@ -2,8 +2,13 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 // import { addLine } from "../queries/line";
 import { addLine } from '../fetches/line';
-import { signIn } from 'next-auth/client'
-export default function Line() {
+import { getSession } from 'next-auth/client';
+import Layout from '../components/Layout';
+import AccessDenied from '../components/accessDenied';
+
+export default function Line({session}) {
+
+  if (!session) { return  <Layout><AccessDenied/></Layout> }
   const { register, handleSubmit } = useForm();
   const [result, setResult] = useState("");
 
@@ -40,7 +45,10 @@ export default function Line() {
 
 
 export async function getServerSideProps(context) {
-    return {
-        props: { }
+  const session = await getSession(context);
+  return {
+    props: {
+      session
     }
+  }
 }

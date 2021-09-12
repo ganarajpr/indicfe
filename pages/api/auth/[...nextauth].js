@@ -13,7 +13,7 @@ export default async (req, res) => {
             clientSecret: process.env.GOOGLE_SECRET
             }),
         ],
-        debug: true,
+        debug: false,
         adapter: MongoDBAdapter({
             db: () => db,
             ObjectId: ObjectId

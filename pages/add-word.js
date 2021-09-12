@@ -1,8 +1,9 @@
 import styles from '../styles/Home.module.css'
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { addWord } from "../queries/word";
+// import { addWord } from "../queries/word";
 import { getSession } from 'next-auth/client';
+import { addWord } from '../fetches/line';
 
 import Layout from '../components/Layout';
 import AccessDenied from '../components/accessDenied';

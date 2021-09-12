@@ -2,7 +2,8 @@ import styles from '../styles/Home.module.css'
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { addTranslation } from "../queries/translation";
-import { getWords } from "../queries/word";
+// import { getWords } from "../queries/word";
+
 export default function Translation({words}) {
   const { register, handleSubmit } = useForm();
   const [result, setResult] = useState("");
