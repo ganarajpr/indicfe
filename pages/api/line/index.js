@@ -6,6 +6,10 @@ const addLine = async (text,language,script,email) => {
     const db = await getDb();
     const user = await db.collection('users').findOne({email});
     const lines = db.collection('lines');
+    const line = await lines.findOne({text, language});
+    if(line) {
+        return line;
+    }
     if(user) {
         console.log('user found', user);
         await lines.insertOne({

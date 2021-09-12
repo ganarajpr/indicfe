@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 // import { addWord } from "../queries/word";
 import { getSession } from 'next-auth/client';
-import { addWord } from '../fetches/line';
+import { addWord } from '../fetches/word';
 
 import Layout from '../components/Layout';
 import AccessDenied from '../components/accessDenied';
