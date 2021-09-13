@@ -1,7 +1,12 @@
+import { Container } from 'semantic-ui-react';
+import Header from './Header';
 export default function Layout (props) {
     return (
-      <div>
+      <>
+      <Header/>
+      <Container>
           {props.children}
-      </div>
+      </Container>
+      </>
     )
   }

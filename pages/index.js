@@ -26,6 +26,9 @@ export default function Home() {
         <div>
           <a href="/connect-words-in-line">Connect Words in Line</a>
         </div>
+        <div>
+          <a href="/line/613fb4e9c1a8e095654e5398">Show Line</a>
+        </div>
       </div>
   </div>
   )

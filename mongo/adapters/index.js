@@ -117,16 +117,18 @@ function MongoDBAdapter(options) {
         async function createSession(data) {
             console.log('creating session', data);
             const {id, ...rest } = data;
+            console.log('finding session with id', id);
+            const existingSession = await Sessions.findOne({userId: id});
+            if(existingSession) {
+                console.log('existin session deleting');
+                await Sessions.deleteOne({userId: id});
+            }
             let expires = null
             if (sessionMaxAge) {
                 const dateExpires = new Date()
                 dateExpires.setTime(dateExpires.getTime() + sessionMaxAge)
                 expires = dateExpires.toISOString()
             }
-            // const account = await Accounts.findOne({accountId: id });
-            // if(account) {
-                    
-            // }
             const session = { ...rest, userId: id, sessionToken: uuidv4(), expires };
             await Sessions.insertOne(session);
             return session;            
