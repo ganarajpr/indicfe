@@ -10,10 +10,10 @@ export const addLine = async (text, script, language) => {
 };
 
 
-export const addWordToLine = async(wordId, lineId) => {
-    const res = await axios.post(`/api/line/contains`, {
-        lineId,
-        wordId
+export const addWordToLine = async(id, word) => {
+    const res = await axios.put(`/api/line`, {
+        id,
+        word
     });
     return res;
 };

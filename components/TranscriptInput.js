@@ -16,10 +16,11 @@ export default function TranscriptInput (props) {
     const [textInput, setTextInput] = useState('');
     const [outputMethod, setOutputMethod] = useState('devanagari');
     const [displayButtons, setDisplayButtons] = useState(false);
-
+    // if(props.transcribed === '') {
+    //     setTextInput('');
+    // }
     const dispatchChange = () => {
         try{
-            console.log(textInput, inputMethod, outputMethod);
             const val = Sanscript.t(textInput,inputMethod, outputMethod);
             props.onChange(val);
         }

@@ -5,9 +5,20 @@ import { Container, Grid, Segment, Rail, Form } from 'semantic-ui-react';
 import Verse from '../../components/Verse';
 import TranscriptInput from '../../components/TranscriptInput';
 import { useState } from 'react';
+import { addWordToLine } from '../../fetches/line';
+import { useRouter } from 'next/router';
 export default function ShowLine({ line }) {
-  const lines = line.text.split('\n');
-  const rows = lines.map( (line) => {
+  const [transcribed, setTranscribed] = useState('');
+  // const [submitToAdd, setSubmitToAdd] = useState();
+  const [lineState, setLine] = useState({});
+  const router = useRouter();
+  const { lineId } = router.query;
+  if(!lineState.lines) {
+    const lines = line.text.split('\n');
+    setLine({lines, ...line});  
+  }
+
+  const rows = lineState.lines?.map( (line) => {
     return (<Grid.Row centered columns={1} key={line}>
       <Grid.Column>
         <Verse>{line}</Verse>
@@ -16,9 +27,23 @@ export default function ShowLine({ line }) {
       </Grid.Column>
     </Grid.Row>)
   });
-  const [transcribed, setTranscribed] = useState('');
   const onInputChange = (val) => {
     setTranscribed(val);
+  };
+
+  const getWordsInLine = () =>{ 
+    const words = lineState.words;
+    if(words?.length) {
+      return words.map( (word) => word.text).join(' ');
+    }
+  };
+
+  const onSubmit = async ()=>{
+    await addWordToLine(lineId,transcribed);
+    const line = await getLine(lineId);    
+    const lines = line.text.split('\n');
+    setLine({lines, ...line});
+    setTranscribed('');
   };
   return (
     <Layout>
@@ -32,10 +57,14 @@ export default function ShowLine({ line }) {
           </Rail> */}
         </Segment>
         <Segment>
-          {transcribed}
+          {transcribed} {getWordsInLine()}
         </Segment>
         <Segment>
-          <TranscriptInput onChange={onInputChange}/>
+          <Form onSubmit={onSubmit}>
+            <Form.Field>
+              <TranscriptInput onChange={onInputChange} transcribed={transcribed}/>
+            </Form.Field>
+          </Form>
         </Segment>
       </Container>      
     </Layout>    

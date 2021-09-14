@@ -1,5 +1,5 @@
-import getDb from "../../../mongo";
-import corsWrapper from "../../../lib/corsWrapper";
+import getDb from "../../../../mongo";
+import corsWrapper from "../../../../lib/corsWrapper";
 import { ObjectId } from 'mongodb';
 
 const getLine = async (id) => {
@@ -13,10 +13,9 @@ const getLine = async (id) => {
 async function handler(req, res) {
     if (req.method === 'GET') {
         const { id } = req.query;
-        console.log('handler line id', id);
         const line = await getLine(id);
         return res.json(line);
-    }
+    } 
 }
 
 export default corsWrapper(handler);
