@@ -1,21 +1,25 @@
 
 import { getLine } from '../../fetches/line';
 import Layout from '../../components/Layout';
-import { Container, Grid, Segment, Input } from 'semantic-ui-react';
-// import SelectableVerse from '../../components/SelectableVerse';
+import { Container, Grid, Segment, Rail, Form } from 'semantic-ui-react';
 import Verse from '../../components/Verse';
-// plus
+import TranscriptInput from '../../components/TranscriptInput';
+import { useState } from 'react';
 export default function ShowLine({ line }) {
   const lines = line.text.split('\n');
   const rows = lines.map( (line) => {
     return (<Grid.Row centered columns={1} key={line}>
-      <Grid.Column textAlign="center">
+      <Grid.Column>
         <Verse>{line}</Verse>
       </Grid.Column>  
-      <Grid.Column textAlign="center">      
+      <Grid.Column>      
       </Grid.Column>
     </Grid.Row>)
   });
+  const [transcribed, setTranscribed] = useState('');
+  const onInputChange = (val) => {
+    setTranscribed(val);
+  };
   return (
     <Layout>
       <Container>
@@ -23,13 +27,15 @@ export default function ShowLine({ line }) {
           <Grid centered columns={1}>
             {rows}     
           </Grid>
+          <Rail internal position='right'>
+            <Segment>{line.script}</Segment>
+          </Rail>
         </Segment>
         <Segment>
-          <Input
-            action={{ icon: 'plus'}}
-            labelPosition='right'
-            placeholder='Words in line'
-          />
+          {transcribed}
+        </Segment>
+        <Segment>
+          <TranscriptInput onChange={onInputChange}/>
         </Segment>
       </Container>      
     </Layout>    
