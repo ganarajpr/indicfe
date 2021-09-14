@@ -15,6 +15,7 @@ export default function TranscriptInput (props) {
     const [inputMethod, setInputMethod] = useState('hk');
     const [textInput, setTextInput] = useState('');
     const [outputMethod, setOutputMethod] = useState('devanagari');
+    const [displayButtons, setDisplayButtons] = useState(false);
 
     const dispatchChange = () => {
         try{
@@ -31,7 +32,6 @@ export default function TranscriptInput (props) {
       }, [textInput, inputMethod, outputMethod]);
 
     const onInputOptionChange = (e, {value}) => {
-        console.log(e, 'input option', value);
         setInputMethod(value);
     };
     const onOutputOptionChange = (e, {value}) => {
@@ -40,11 +40,18 @@ export default function TranscriptInput (props) {
     const onTextChange = (e) => {
         setTextInput(e.target.value);
     };
+    const onExchangeClick = () => {
+        setDisplayButtons(!displayButtons);
+    };
     return (
         <Input type='text' placeholder='Add Word...'>
-            <Select compact options={inputOptions} defaultValue='hk' onChange={onInputOptionChange}/>
+            {displayButtons ? <Select compact options={inputOptions} defaultValue='hk' onChange={onInputOptionChange}/> : null}
+            
+            <Button icon onClick={onExchangeClick}>
+                <Icon name='exchange' />
+            </Button>
             <input onChange={onTextChange}/>
-            <Select compact options={outputOptions} defaultValue='devanagari' onChange={onOutputOptionChange}/>
+            { displayButtons ? <Select compact options={outputOptions} defaultValue='devanagari' onChange={onOutputOptionChange}/> : null }
             <Button icon>
                 <Icon name='plus' />
             </Button>

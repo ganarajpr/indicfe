@@ -27,9 +27,9 @@ export default function ShowLine({ line }) {
           <Grid centered columns={1}>
             {rows}     
           </Grid>
-          <Rail internal position='right'>
+          {/* <Rail internal position='right'>
             <Segment>{line.script}</Segment>
-          </Rail>
+          </Rail> */}
         </Segment>
         <Segment>
           {transcribed}
