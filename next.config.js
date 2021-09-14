@@ -1,4 +1,4 @@
 module.exports = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   mongodburl: "mongodb://localhost:27017/indic"
 }
