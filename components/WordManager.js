@@ -28,7 +28,7 @@ const WordManager = (props) => {
                 <Grid.Column centered>
                     <Form onSubmit={onFormSubmit} centered>
                         <Form.Group widths='equal' verticalAlign='middle'>
-                            <Form.Input centered verticalAlign='middle' placeholder='Translate' 
+                            <Form.Input centered verticalAlign='middle' placeholder='Translation in English' 
                             action='Translate'
                             value={translation} onChange={handleInputChange}/>
                         </Form.Group>

@@ -1,27 +1,59 @@
 import getDb from "../../../mongo";
 import corsWrapper from "../../../lib/corsWrapper";
 import { getSession } from 'next-auth/client';
+import { ObjectId } from 'mongodb';
 
-const addWord = async (text,language,script,email) => {
+
+
+const addTranslationToWord = async (word, translation, user) => {
     const db = await getDb();
-    const user = await db.collection('users').findOne({email});
+    console.log('adding translation');
     const words = db.collection('words');
-    const word = await words.findOne({text, language});
-    if(word) {
-        return word;
+    const wordWithTranslation = await words.findOne({_id: ObjectId(word._id), "translations.$.text": translation});
+    if(wordWithTranslation) {
+        console.log('returning word with translation', wordWithTranslation);
+        return wordWithTranslation;
+    } else {
+        console.log('updating word');
+        await words.updateOne({_id: ObjectId(word._id)}, {
+            $push: {
+                translations: {
+                    text: translation,
+                    createdBy: user.id,
+                    createdAt: new Date(),
+                    language: 'English'
+                }
+            }
+        });
     }
-    if(user) {
+};
+
+const addWord = async (text,language,script, translation, email) => {
+    const db = await getDb();
+    const words = db.collection('words');
+    const user = await db.collection('users').findOne({email});    
+    const word = await words.findOne({text, language});
+    if(!user) {
+        throw(new Error('User not found'));    
+    }
+    if(word) {
+        await addTranslationToWord(word, translation, user);
+        return words.findOne({text, language});
+    } else {
         await words.insertOne({
             text,
             language,
             script,
+            translations: [{
+                text: translation,
+                createdBy: user.id,
+                createdAt: new Date(),
+                language: 'English'
+            }],
             createdBy: user.id,
             createdAt: new Date()
         });
         return words.findOne({text});
-    }
-    else {
-        throw(new Error('User not found'));    
     }
 };
 
@@ -31,12 +63,16 @@ async function handler(req, res) {
             const session = await getSession({ req });
             if(session) {
                 const { user: {email}} = session;
-                const { text, language, script } = req.body;
-                const word = await addWord(text,language,script,email);
+                const { text, language, script, translation } = req.body;
+                const word = await addWord(text,language,script,translation, email);
                 return res.json(word);
+            } else {
+                return res.status(401).send('Not Authenticated');
             }
+        } else {
+            return res.status(404).send('Not Found');
         }
-        return res.status(401).send('Not Authenticated');
+        
     } catch(e) {
         res.status(500).send(e.message);
     }    

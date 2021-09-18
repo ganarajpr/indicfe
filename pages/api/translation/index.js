@@ -1,6 +1,7 @@
 import getDb from "../../../mongo";
 import corsWrapper from "../../../lib/corsWrapper";
 import { getSession } from 'next-auth/client';
+import { ObjectId } from 'mongodb';
 
 const addWord = async (text,language,script,email) => {
     const db = await getDb();

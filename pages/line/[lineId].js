@@ -6,6 +6,7 @@ import Verse from '../../components/Verse';
 import TranscriptInput from '../../components/TranscriptInput';
 import { useState } from 'react';
 import { addWordToLine } from '../../fetches/line';
+import { addWord } from '../../fetches/word';
 import { useRouter } from 'next/router';
 
 import WordManager from '../../components/WordManager';
@@ -50,8 +51,8 @@ export default function ShowLine({ line }) {
     setTranscribed('');
   };
 
-  const onTranslation = (word, translation) => {
-    console.log(word, translation);
+  const onTranslation = async (word, translation) => {
+    await addWord(word,lineState.script, lineState.language, translation);
   };
   return (
     <Layout>
@@ -60,9 +61,6 @@ export default function ShowLine({ line }) {
           <Grid centered columns={1}>
             {rows}     
           </Grid>
-          {/* <Rail internal position='right'>
-            <Segment>{line.script}</Segment>
-          </Rail> */}
         </Segment>
         {
           selectedWord ? <Segment><WordManager word={selectedWord} onTranslation={onTranslation}></WordManager></Segment> : null
