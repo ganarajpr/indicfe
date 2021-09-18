@@ -7,6 +7,8 @@ import TranscriptInput from '../../components/TranscriptInput';
 import { useState } from 'react';
 import { addWordToLine } from '../../fetches/line';
 import { useRouter } from 'next/router';
+
+import WordManager from '../../components/WordManager';
 export default function ShowLine({ line }) {
   const [transcribed, setTranscribed] = useState('');
   // const [submitToAdd, setSubmitToAdd] = useState();
@@ -17,11 +19,13 @@ export default function ShowLine({ line }) {
     const lines = line.text.split('\n');
     setLine({lines, ...line});  
   }
+  const [selectedWord, setSelectedWord] = useState();
+
 
   const rows = lineState.lines?.map( (line) => {
     return (<Grid.Row centered columns={1} key={line}>
       <Grid.Column>
-        <Verse line={line}></Verse>
+        <Verse line={line} onSelect={(w) => setSelectedWord(w)}></Verse>
       </Grid.Column>  
       <Grid.Column>      
       </Grid.Column>
@@ -45,6 +49,10 @@ export default function ShowLine({ line }) {
     setLine({lines, ...line});
     setTranscribed('');
   };
+
+  const onTranslation = (word, translation) => {
+    console.log(word, translation);
+  };
   return (
     <Layout>
       <Container>
@@ -56,16 +64,10 @@ export default function ShowLine({ line }) {
             <Segment>{line.script}</Segment>
           </Rail> */}
         </Segment>
-        {/* <Segment>
-          {transcribed} {getWordsInLine()}
-        </Segment> */}
-        {/* <Segment>
-          <Form onSubmit={onSubmit}>
-            <Form.Field>
-              <TranscriptInput onChange={onInputChange} transcribed={transcribed}/>
-            </Form.Field>
-          </Form>
-        </Segment> */}
+        {
+          selectedWord ? <Segment><WordManager word={selectedWord} onTranslation={onTranslation}></WordManager></Segment> : null
+        }        
+
       </Container>      
     </Layout>    
   )

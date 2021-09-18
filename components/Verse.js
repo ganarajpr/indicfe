@@ -9,6 +9,7 @@ const Wrapper = styled.div`
 const StyledWord = styled.span`
     &:hover {
         background-color: #ecc3fa;
+        cursor: pointer;
     }
 `;
 
@@ -16,10 +17,13 @@ const Word = (props) => {
     if(props.children === '|' || props.children === '||') {
         return (<span>{props.children}&nbsp;</span>);    
     }
+    const onClick = () => {
+        props.onSelect(props.children)
+    };
     return (
         <>
         <Popup
-          trigger={<StyledWord>{props.children}</StyledWord>}
+          trigger={<StyledWord onClick={onClick}>{props.children}</StyledWord>}
           content={props.children}
           position='top left'
           flowing hoverable
@@ -34,7 +38,7 @@ const Verse = (props) => {
     const { line } = props;
     const words = line.split(' ');
     return (<Wrapper>
-        {words.map((word) => <Word>{word}</Word>)}
+        {words.map((word) => <Word key={word} onSelect={props.onSelect}>{word}</Word>)}
     </Wrapper>)    
 };
 
