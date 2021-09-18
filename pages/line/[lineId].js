@@ -21,7 +21,7 @@ export default function ShowLine({ line }) {
   const rows = lineState.lines?.map( (line) => {
     return (<Grid.Row centered columns={1} key={line}>
       <Grid.Column>
-        <Verse>{line}</Verse>
+        <Verse line={line}></Verse>
       </Grid.Column>  
       <Grid.Column>      
       </Grid.Column>
@@ -56,16 +56,16 @@ export default function ShowLine({ line }) {
             <Segment>{line.script}</Segment>
           </Rail> */}
         </Segment>
-        <Segment>
+        {/* <Segment>
           {transcribed} {getWordsInLine()}
-        </Segment>
-        <Segment>
+        </Segment> */}
+        {/* <Segment>
           <Form onSubmit={onSubmit}>
             <Form.Field>
               <TranscriptInput onChange={onInputChange} transcribed={transcribed}/>
             </Form.Field>
           </Form>
-        </Segment>
+        </Segment> */}
       </Container>      
     </Layout>    
   )
