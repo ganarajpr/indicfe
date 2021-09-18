@@ -1,5 +1,7 @@
 import styled from "styled-components";
-import { Popup } from 'semantic-ui-react'
+import { Popup } from 'semantic-ui-react';
+import { getWord } from "../fetches/word";
+import { useState } from 'react';
 
 const Wrapper = styled.div`
     font-size: 2em;
@@ -13,6 +15,10 @@ const StyledWord = styled.span`
     }
 `;
 
+const Italicized = styled.span`
+    font-style: italic;
+`;
+
 const Word = (props) => {
     if(props.children === '|' || props.children === '||') {
         return (<span>{props.children}&nbsp;</span>);    
@@ -20,11 +26,22 @@ const Word = (props) => {
     const onClick = () => {
         props.onSelect(props.children)
     };
+
+    const [translations, setTranslation] = useState({});
+
+
+    const onHover = async (word) => {
+        if(!translations[word]) {
+            const wordDoc = await getWord(word);
+            const translation = wordDoc.translations?.length > 0 ? wordDoc.translations[0].text : undefined;
+            setTranslation({...translations, [word]: translation});
+        }
+    };
     return (
         <>
         <Popup
-          trigger={<StyledWord onClick={onClick}>{props.children}</StyledWord>}
-          content={props.children}
+          trigger={<StyledWord onClick={onClick} onMouseOver={() => onHover(props.children)}>{props.children}</StyledWord>}
+          content={translations[props.children] ? translations[props.children]:  <Italicized>No Translations; Click to add</Italicized>}
           position='top left'
           flowing hoverable
         >

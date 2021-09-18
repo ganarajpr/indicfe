@@ -8,3 +8,8 @@ export const addWord = async (text, script, language, translation) => {
     });
     return res;
 };
+
+export const getWord = async(word) => {
+    const res = await axios.get(`/api/word/${word}`);
+    return res.data;
+};

@@ -2,7 +2,7 @@ import getDb from "../../../mongo";
 import corsWrapper from "../../../lib/corsWrapper";
 
 const getWord = async (req) => {
-    const { text } = req.query;
+    const { text } = req.query;    
     const db = await getDb();
     return db.collection('words').findOne({text});
 }

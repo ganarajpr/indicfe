@@ -12,7 +12,6 @@ import { useRouter } from 'next/router';
 import WordManager from '../../components/WordManager';
 export default function ShowLine({ line }) {
   const [transcribed, setTranscribed] = useState('');
-  // const [submitToAdd, setSubmitToAdd] = useState();
   const [lineState, setLine] = useState({});
   const router = useRouter();
   const { lineId } = router.query;
@@ -65,7 +64,6 @@ export default function ShowLine({ line }) {
         {
           selectedWord ? <Segment><WordManager word={selectedWord} onTranslation={onTranslation}></WordManager></Segment> : null
         }        
-
       </Container>      
     </Layout>    
   )
