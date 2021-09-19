@@ -13,37 +13,43 @@ const WordManager = (props) => {
     const { word, language, script, wordInText } = props;
     const [translation, setTranslation] = useState('');
     const [storedTranslations, setStoredTranslations] = useState([]);
+    const [storedWord, setStoredWord] = useState();
 
     const handleInputChange = (e, {value}) =>{
         setTranslation(value);
     };
     const onFormSubmit = async () => {
-        await onAddTranslation(wordInText, translation);
-        setTranslation('');
+        if(translation) {
+            await onAddTranslation(wordInText, translation);
+            setTranslation('');
+        }        
     };
 
     const getTranslations = () => {
         if (storedTranslations && storedTranslations.length ) {
             return storedTranslations.map( (t) => {
-                return (<TranslationManager key={t.text} word={word} translation={t} onDelete={onDeleteTranslation}/>)
+                return (<TranslationManager key={t.text} word={storedWord} translation={t} onDelete={onDeleteTranslation}/>)
             });
         }
         return null;
     };
     
-    useEffect(() => {
+    useEffect(() => {        
         setStoredTranslations(word.translations);
+        setStoredWord(word);
     }, [wordInText]);
 
     
     const onAddTranslation = async (word, translation) => {
         const wordWithTranslation = await addWord(word, script, language, translation);
         setStoredTranslations(wordWithTranslation.translations);
+        setStoredWord(wordWithTranslation);
     };
 
     const onDeleteTranslation = async (wordId, translation) => {
         const word = await deleteTranslationForWord(wordId, translation);
         setStoredTranslations(word.translations);
+        setStoredWord(word);
     };
 
     return (<Grid columns={2} divided>

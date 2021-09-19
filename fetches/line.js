@@ -20,6 +20,5 @@ export const addWordToLine = async(id, word) => {
 
 export const getLine = async(lineId) => {
     const res = await axios.get(`/api/line/${lineId}`);
-    console.log('response', res);
     return res.data;
 };
