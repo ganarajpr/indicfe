@@ -2,19 +2,15 @@ import getDb from "../../../mongo";
 import corsWrapper from "../../../lib/corsWrapper";
 import { getSession } from 'next-auth/client';
 import { ObjectId } from 'mongodb';
-
-
+import { getWordById } from "./_core";
 
 const addTranslationToWord = async (word, translation, user) => {
     const db = await getDb();
-    console.log('adding translation');
     const words = db.collection('words');
     const wordWithTranslation = await words.findOne({_id: ObjectId(word._id), "translations.$.text": translation});
     if(wordWithTranslation) {
-        console.log('returning word with translation', wordWithTranslation);
         return wordWithTranslation;
     } else {
-        console.log('updating word');
         await words.updateOne({_id: ObjectId(word._id)}, {
             $push: {
                 translations: {
@@ -38,7 +34,7 @@ const addWord = async (text,language,script, translation, email) => {
     }
     if(word) {
         await addTranslationToWord(word, translation, user);
-        return words.findOne({text, language});
+        return getWordById(word._id);
     } else {
         await words.insertOne({
             text,
@@ -53,7 +49,7 @@ const addWord = async (text,language,script, translation, email) => {
             createdBy: user.id,
             createdAt: new Date()
         });
-        return words.findOne({text});
+        return getWordById(word._id);
     }
 };
 

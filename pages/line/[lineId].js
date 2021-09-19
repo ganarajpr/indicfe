@@ -6,7 +6,7 @@ import Verse from '../../components/Verse';
 import TranscriptInput from '../../components/TranscriptInput';
 import { useState } from 'react';
 import { addWordToLine } from '../../fetches/line';
-import { addWord } from '../../fetches/word';
+import { addWord, deleteTranslationForWord } from '../../fetches/word';
 import { useRouter } from 'next/router';
 
 import WordManager from '../../components/WordManager';
@@ -21,25 +21,21 @@ export default function ShowLine({ line }) {
   }
   const [selectedWord, setSelectedWord] = useState();
 
-
-  const rows = lineState.lines?.map( (line) => {
-    return (<Grid.Row centered columns={1} key={line}>
-      <Grid.Column>
-        <Verse line={line} onSelect={(w) => setSelectedWord(w)}></Verse>
-      </Grid.Column>  
-      <Grid.Column>      
-      </Grid.Column>
-    </Grid.Row>)
-  });
-  const onInputChange = (val) => {
-    setTranscribed(val);
+  const onSelect = (w) => {
+    setSelectedWord(w);
   };
 
-  const getWordsInLine = () =>{ 
-    const words = lineState.words;
-    if(words?.length) {
-      return words.map( (word) => word.text).join(' ');
-    }
+
+  const getLines = () => {
+    return lineState.lines?.map( (line) => {
+      return (<Grid.Row centered columns={1} key={line}>
+        <Grid.Column>
+          <Verse line={line} onSelect={onSelect}></Verse>
+        </Grid.Column>  
+        <Grid.Column>      
+        </Grid.Column>
+      </Grid.Row>)
+    });
   };
 
   const onSubmit = async ()=>{
@@ -50,19 +46,17 @@ export default function ShowLine({ line }) {
     setTranscribed('');
   };
 
-  const onTranslation = async (word, translation) => {
-    await addWord(word,lineState.script, lineState.language, translation);
-  };
   return (
     <Layout>
       <Container>
         <Segment>
           <Grid centered columns={1}>
-            {rows}     
+            {getLines()}     
           </Grid>
         </Segment>
         {
-          selectedWord ? <Segment><WordManager word={selectedWord} onTranslation={onTranslation}></WordManager></Segment> : null
+          selectedWord ? <Segment><WordManager word={selectedWord} script={lineState.script} language={lineState.language}
+            ></WordManager></Segment> : null
         }        
       </Container>      
     </Layout>    
@@ -77,6 +71,6 @@ export async function getServerSideProps(context) {
     return {
       props: {
         line
-      },
+      }
    };
 }

@@ -102,25 +102,18 @@ function MongoDBAdapter(options) {
                 sessionToken
             });
             if (!session)
-                return null;
+                return null;            
             // Check session has not expired (do not return it if it has)
             if (session?.expires && new Date() > new Date(session.expires)) {
                 await Sessions.deleteOne({sessionToken});
                 return null;
             }
-            // const user = await getUser(session.userId);
-            // // console.log('found user with session user id', user);
-            // if (!user)
-            //     return null;
             return session;
         }
         async function createSession(data) {
-            console.log('creating session', data);
             const {id, ...rest } = data;
-            console.log('finding session with id', id);
             const existingSession = await Sessions.findOne({userId: id});
             if(existingSession) {
-                console.log('existin session deleting');
                 await Sessions.deleteOne({userId: id});
             }
             let expires = null
@@ -129,18 +122,16 @@ function MongoDBAdapter(options) {
                 dateExpires.setTime(dateExpires.getTime() + sessionMaxAge)
                 expires = dateExpires.toISOString()
             }
-            const session = { ...rest, userId: id, sessionToken: uuidv4(), expires };
+            const session = { ...rest, userId: id, sessionUserId: id, sessionToken: uuidv4(), expires };
             await Sessions.insertOne(session);
             return session;            
         }
         async function updateSession(data) {
-            // console.log('updateing session', data);
             const { id, ...rest } = data;
             const { value: session } = await Sessions.findOneAndUpdate({ sessionToken: data.sessionToken }, { $set: rest });
             return session;
         }
         async function deleteSession(sessionToken) {
-            console.log('deleting session', sessionToken);
             const { value: session } = await Sessions.findOneAndDelete({
                 sessionToken,
             });

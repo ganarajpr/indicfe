@@ -17,7 +17,15 @@ export default async (req, res) => {
         adapter: MongoDBAdapter({
             db: () => db,
             ObjectId: ObjectId
-        })
+        }),
+        callbacks : {
+            session : async (session, user) => {
+                // Send properties to the client, like an access_token from a provider.
+                //console.log('session callback', session, user);
+                session.user.id = user.id;
+                return session
+            }
+        }
     };
     return NextAuth(req, res, options);
 }

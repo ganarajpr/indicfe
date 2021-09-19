@@ -1,8 +1,28 @@
-import getDb from "../../../mongo";
+import { ObjectId } from 'mongodb';
+import getDb from '../../../mongo';
+import { keyBy, uniq } from "lodash-es";
 
 export const getWord = async (text) => {
     const db = await getDb();
     return db.collection('words').findOne({text});
+}
+
+export const getWordById = async (id) => {
+    const db = await getDb();
+    const word = await db.collection('words').findOne({_id:ObjectId(id)});
+    const translations = word.translations;    
+    if(translations && translations.length) {
+        const userIds = translations.map( (t) => t.createdBy);
+        const uniqUserIds = uniq(userIds);
+        const users = await db.collection('users').find({id: {$in: uniqUserIds}}).toArray()
+        const userById = keyBy(users, 'id');
+        const trWithUser =  translations.map( t => {
+            t.user = userById[t.createdBy];
+            return t;
+        });
+        word.translations = trWithUser;
+    }
+    return word;
 }
 
 export const upsertWord = async (text, language, script, createdBy) => {

@@ -23,17 +23,19 @@ const Word = (props) => {
     if(props.children === '|' || props.children === '||') {
         return (<span>{props.children}&nbsp;</span>);    
     }
-    const onClick = () => {
-        props.onSelect(props.children)
+    const onClick = async () => {
+        const wordDoc = await getWord(props.children);
+        const translation = wordDoc.translations?.length > 0 ? wordDoc.translations : undefined;
+        setTranslation({...translations, [props.children]: translation});
+        props.onSelect(wordDoc);
     };
 
     const [translations, setTranslation] = useState({});
 
-
     const onHover = async (word) => {
         if(!translations[word]) {
             const wordDoc = await getWord(word);
-            const translation = wordDoc.translations?.length > 0 ? wordDoc.translations[0].text : undefined;
+            const translation = wordDoc.translations?.length > 0 ? wordDoc.translations : undefined;
             setTranslation({...translations, [word]: translation});
         }
     };
@@ -41,7 +43,7 @@ const Word = (props) => {
         <>
         <Popup
           trigger={<StyledWord onClick={onClick} onMouseOver={() => onHover(props.children)}>{props.children}</StyledWord>}
-          content={translations[props.children] ? translations[props.children]:  <Italicized>No Translations; Click to add</Italicized>}
+          content={translations[props.children] ? translations[props.children][0].text:  <Italicized>No Translations; Click to add</Italicized>}
           position='top left'
           flowing hoverable
         >
