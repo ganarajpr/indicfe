@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Grid, Form, Label, Button, Comment, Header } from 'semantic-ui-react'
+import { Grid, Form, Comment, Header } from 'semantic-ui-react'
 import { useState, useEffect } from 'react';
 import TranslationManager from "./TranslationManager";
 import { deleteTranslationForWord, addWord } from "../fetches/word";
@@ -18,7 +18,7 @@ const WordManager = (props) => {
         setTranslation(value);
     };
     const onFormSubmit = async () => {
-        await onAddTranslation(word.text, translation);
+        await onAddTranslation(wordInText, translation);
         setTranslation('');
     };
 
@@ -33,7 +33,7 @@ const WordManager = (props) => {
     
     useEffect(() => {
         setStoredTranslations(word.translations);
-    }, [])
+    }, [wordInText]);
 
     
     const onAddTranslation = async (word, translation) => {

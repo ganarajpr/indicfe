@@ -6,7 +6,7 @@ export const addWord = async (text, script, language, translation) => {
         script,
         translation
     });
-    return res;
+    return res.data;
 };
 
 export const getWord = async(word) => {

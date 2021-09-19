@@ -2,7 +2,7 @@ import getDb from "../../../mongo";
 import corsWrapper from "../../../lib/corsWrapper";
 import { getSession } from 'next-auth/client';
 import { ObjectId } from 'mongodb';
-import { getWordById } from "./_core";
+import { getWordById, getWordByText } from "./_core";
 
 const addTranslationToWord = async (word, translation, user) => {
     const db = await getDb();
@@ -11,7 +11,7 @@ const addTranslationToWord = async (word, translation, user) => {
     if(wordWithTranslation) {
         return wordWithTranslation;
     } else {
-        await words.updateOne({_id: ObjectId(word._id)}, {
+        return words.updateOne({_id: ObjectId(word._id)}, {
             $push: {
                 translations: {
                     text: translation,
@@ -24,10 +24,9 @@ const addTranslationToWord = async (word, translation, user) => {
     }
 };
 
-const addWord = async (text,language,script, translation, email) => {
+const addWord = async (text,language,script, translation, user) => {
     const db = await getDb();
     const words = db.collection('words');
-    const user = await db.collection('users').findOne({email});    
     const word = await words.findOne({text, language});
     if(!user) {
         throw(new Error('User not found'));    
@@ -49,7 +48,7 @@ const addWord = async (text,language,script, translation, email) => {
             createdBy: user.id,
             createdAt: new Date()
         });
-        return getWordById(word._id);
+        return getWordByText(text);
     }
 };
 
@@ -58,9 +57,9 @@ async function handler(req, res) {
         if (req.method === 'POST') {
             const session = await getSession({ req });
             if(session) {
-                const { user: {email}} = session;
+                const { user} = session;
                 const { text, language, script, translation } = req.body;
-                const word = await addWord(text,language,script,translation, email);
+                const word = await addWord(text,language,script,translation, user);
                 return res.json(word);
             } else {
                 return res.status(401).send('Not Authenticated');
