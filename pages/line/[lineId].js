@@ -1,12 +1,10 @@
 
 import { getLine } from '../../fetches/line';
 import Layout from '../../components/Layout';
-import { Container, Grid, Segment, Rail, Form } from 'semantic-ui-react';
+import { Container, Grid, Segment } from 'semantic-ui-react';
 import Verse from '../../components/Verse';
-import TranscriptInput from '../../components/TranscriptInput';
 import { useState } from 'react';
 import { addWordToLine } from '../../fetches/line';
-import { addWord, deleteTranslationForWord } from '../../fetches/word';
 import { useRouter } from 'next/router';
 
 import WordManager from '../../components/WordManager';
@@ -20,9 +18,11 @@ export default function ShowLine({ line }) {
     setLine({lines, ...line});  
   }
   const [selectedWord, setSelectedWord] = useState();
+  const [wordInText, setWordInText] = useState('');
 
-  const onSelect = (w) => {
+  const onSelect = (w, selectedWord) => {
     setSelectedWord(w);
+    setWordInText(selectedWord);
   };
 
 
@@ -55,7 +55,9 @@ export default function ShowLine({ line }) {
           </Grid>
         </Segment>
         {
-          selectedWord ? <Segment><WordManager word={selectedWord} script={lineState.script} language={lineState.language}
+          selectedWord ? <Segment><WordManager 
+            wordInText={wordInText}
+            word={selectedWord} script={lineState.script} language={lineState.language}
             ></WordManager></Segment> : null
         }        
       </Container>      

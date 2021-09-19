@@ -27,7 +27,7 @@ const Word = (props) => {
         const wordDoc = await getWord(props.children);
         const translation = wordDoc.translations?.length > 0 ? wordDoc.translations : undefined;
         setTranslation({...translations, [props.children]: translation});
-        props.onSelect(wordDoc);
+        props.onSelect(wordDoc, props.children);
     };
 
     const [translations, setTranslation] = useState({});

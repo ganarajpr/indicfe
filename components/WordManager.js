@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 `;
 
 const WordManager = (props) => {
-    const { word, language, script } = props;
+    const { word, language, script, wordInText } = props;
     const [translation, setTranslation] = useState('');
     const [storedTranslations, setStoredTranslations] = useState([]);
 
@@ -46,40 +46,40 @@ const WordManager = (props) => {
         setStoredTranslations(word.translations);
     };
 
-        return (<Grid columns={2} divided>
-                <Grid.Row stretched>
-                    <Grid.Column verticalAlign='middle'>
-                        <Grid columns='equal'>
-                            <Grid.Row>
-                                <Grid.Column>
-                                    <Wrapper>
-                                        {word?.text}
-                                    </Wrapper>
-                                </Grid.Column>
-                            </Grid.Row>
-                            <Grid.Row stretched>
-                                <Grid.Column>
-                                    <Comment.Group>
-                                        <Header as='h3' dividing>
-                                            Translations 
-                                        </Header>
-                                        {getTranslations()}
-                                    </Comment.Group>
-                                </Grid.Column>
-                            </Grid.Row>                    
-                        </Grid>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Form onSubmit={onFormSubmit} >
-                            <Form.Group widths='equal' >
-                                <Form.Input placeholder='Translation in English' 
-                                action='Translate'
-                                value={translation} onChange={handleInputChange}/>
-                            </Form.Group>
-                        </Form>
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>);    
+    return (<Grid columns={2} divided>
+        <Grid.Row stretched>
+            <Grid.Column verticalAlign='middle'>
+                <Grid columns='equal'>
+                    <Grid.Row>
+                        <Grid.Column>
+                            <Wrapper>
+                                {wordInText}
+                            </Wrapper>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row stretched>
+                        <Grid.Column>
+                            <Comment.Group>
+                                <Header as='h3' dividing>
+                                    Translations 
+                                </Header>
+                                {getTranslations()}
+                            </Comment.Group>
+                        </Grid.Column>
+                    </Grid.Row>                    
+                </Grid>
+            </Grid.Column>
+            <Grid.Column>
+                <Form onSubmit={onFormSubmit} >
+                    <Form.Group widths='equal' >
+                        <Form.Input placeholder='Translation in English' 
+                        action='Translate'
+                        value={translation} onChange={handleInputChange}/>
+                    </Form.Group>
+                </Form>
+            </Grid.Column>
+        </Grid.Row>
+    </Grid>);    
 };
 
 export default WordManager;
