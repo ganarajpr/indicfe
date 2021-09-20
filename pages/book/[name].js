@@ -1,44 +1,38 @@
+import { getBook } from "../../fetches/books";
+import Layout from "../../components/Layout";
+import { Container, Segment, List } from "semantic-ui-react";
+export default function Book({ bookContexts,bookName }) {
 
-import { gql } from "@apollo/client";
-import client from "../../apollo-client";
-import styles from '../../styles/Home.module.css'
+  const getBookContextList = () => {
+    if(bookContexts?.length) {
+      return bookContexts.map( (bc) => {
+        return (<List.Item key={bc}><a href={`/book/${bookName}/${bc}`}>{bc}</a></List.Item>)
+      });      
+    }
+  };
 
-export default function Book({ book }) {
   return (
-    <div className={styles.grid}>
-      <div className={styles.card}>
-        <h3>
-        {book.name}
-        </h3>
-        <p>
-        {book.author}
-        </p>
-      </div>
-      <a href="/">Go Home</a>
-  </div>
+    <Layout>
+      <Container>
+        <Segment>
+          <List>
+            {getBookContextList()}
+          </List>
+        </Segment>
+      </Container> 
+    </Layout>
   )
 }
 
 
 
 export async function getServerSideProps(context) {
-    const bookName = context.params.name;
-    const { data } = await client.query({
-      query: gql`
-        query Query($booksWhere: BookWhere) {
-          books(where: $booksWhere) {
-            name
-            author
-          }
-        }
-      `
-    }, {
-      $booksWhere: bookName
-    });
-  
-    return {
-      props: {
-        book: data.books[0]
-      },
-   };
+  const { name } = context.params;
+  const { bookContexts }  = await getBook(name);
+  return {
+    props: {
+      bookContexts,
+      bookName: name
+    }
+ };
 }

@@ -1,16 +1,28 @@
 import Layout from "../components/Layout";
 import { Container, List, Segment } from 'semantic-ui-react';
-export default function Home() {
+import { getBooks } from "../fetches/books";
+export default function Home({ books } ) {
+
+  const getBookList = () => {
+    if(books?.length) {
+      return books.map( (book) => {
+        return (<List.Item key={book}><a href={`/book/${book}`}>{book}</a></List.Item>)
+      });      
+    }
+  };
+  
   return (
     <Layout>
       <Container>
         <Segment>
           <List>
-            <List.Item>
-              <a href="/add-line">Add Line</a>
-            </List.Item>
-            <List.Item>
-              <a href="/line/6149011f11305edbe0d2cdfa">Show Line</a>
+            {getBookList()}
+          </List>
+        </Segment>
+        <Segment>
+          <List>
+            <List.Item key={'addLine'}>
+              <a href="/add-line">Add New Verse</a>
             </List.Item>
           </List>
         </Segment>
@@ -21,8 +33,10 @@ export default function Home() {
 
 
 export async function getServerSideProps() {
+  const { books }  = await getBooks();
   return {
     props: {
+      books
     }
  };
 }
