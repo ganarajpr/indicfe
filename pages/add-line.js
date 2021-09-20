@@ -49,7 +49,7 @@ const onSubmit = async () => {
     <Layout>
       <Container>
         <Segment>
-            <Form onSubmit={handleSubmit(onSubmit)}>
+            <Form onSubmit={onSubmit}>
             <Form.Field>
                 <Form.Select label="Script" value={script} onChange={onScriptChange} options={scriptOptions}>
                   </Form.Select>                

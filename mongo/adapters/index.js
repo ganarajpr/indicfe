@@ -12,8 +12,8 @@ exports.collections = {
 function MongoDBAdapter(options) {
     const { db, ObjectId } = options;
     const m = db();
-    const sessionMaxAge = 2*60*60* 1000;
-    const sessionUpdateAge = 1.8*60*60*1000;
+    const sessionMaxAge = 60*60*1000;
+    const sessionUpdateAge = 0.9*60*60*1000;
     // Converts from string to ObjectId
     const _id = (hex) => {
         if ((hex === null || hex === void 0 ? void 0 : hex.length) !== 24)
@@ -30,32 +30,27 @@ function MongoDBAdapter(options) {
     const getAdapter = async () => {
 
         const createUser = async (data) => {
-            console.log(data, 'creating user');
             const { id, ...rest } = data;
             const user = { id:id, ...rest };
             await Users.insertOne(user);
             return user;
         };
         const getUser = async (id) => {
-            console.log(id, 'getting user');
             const user = await Users.findOne({ id: id });
             if (!user)
                 return null;
             return user;
         };
         const getUserByEmail = async (email) => {
-            console.log(email, 'getting user by email');
             const user = await Users.findOne({ email });
             if (!user)
                 return null;
             return user;
         };
         const getUserByProviderAccountId = async (providerId, providerAccountId) => {
-            console.log(providerId,providerAccountId, 'getting user by account id');
             const account = await Accounts.findOne({id: providerAccountId });
             if (account) {
                 const user = await getUser(providerAccountId);
-                console.log('return user', user)
                 if (!user)
                     return null;
                 return user;
@@ -63,7 +58,6 @@ function MongoDBAdapter(options) {
             return null;                
         };
         async function updateUser(data) {
-            console.log('updating user', data);
             const { value: user } = await Users.findOneAndUpdate({ _id: _id(data.id) }, { $set: data });
             return user;
         }
@@ -81,13 +75,6 @@ function MongoDBAdapter(options) {
             refreshToken,
             accessToken,
             accessTokenExpires) => {
-            console.log('linking account', accountId,
-            providerId,
-            providerType,
-            providerAccountId,
-            refreshToken,
-            accessToken,
-            accessTokenExpires);
             const account = { userId: providerAccountId, id:accountId , providerId, accessToken };
             await Accounts.insertOne(account);
             return account;
@@ -97,7 +84,6 @@ function MongoDBAdapter(options) {
             return account;
         }
         async function getSession(sessionToken) {
-            console.log('getting session with token', sessionToken);
             const session = await Sessions.findOne({
                 sessionToken
             });
