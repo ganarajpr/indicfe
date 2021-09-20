@@ -2,25 +2,26 @@ import getDb from "../../../mongo";
 import corsWrapper from "../../../lib/corsWrapper";
 import { getSession } from 'next-auth/client';
 import { updateLine } from "./_core";
-const addLine = async (text,language,script,email) => {
+const addLine = async (text,language,script,book, bookContext, user) => {
     const db = await getDb();
-    const user = await db.collection('users').findOne({email});
     const lines = db.collection('lines');
     const line = await lines.findOne({text, language});
-    if(line) {
-        return line;
+    if(!user) {
+        throw(new Error('User not found'));
     }
-    if(user) {
+    if(!line) {
         await lines.insertOne({
             text,
             language,
             script,
+            book,
+            bookContext,
             createdBy: user.id,
             createdAt: new Date()
         });
         return lines.findOne({text});
     }
-    throw(new Error('User not found'));    
+    return line;
 };
 
 async function handler(req, res) {
@@ -28,9 +29,9 @@ async function handler(req, res) {
         if (req.method === 'POST') {
             const session = await getSession({ req });
             if(session) {
-                const { user: {email}} = session;
-                const { text, language, script } = req.body;
-                const line = await addLine(text,language,script,email);
+                const { user} = session;
+                const { text, language, script, book, bookContext } = req.body;
+                const line = await addLine(text,language,script,book, bookContext, user);
                 return res.json(line);
             } else {
                 return res.status(401).send('Not Authenticated');

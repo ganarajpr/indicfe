@@ -21,6 +21,8 @@ export default function Line({session}) {
   const [script, setScript] = useState('devanagari');
   const [language, setLanguage] = useState('sanskrit');
   const [line, setLine] = useState('');
+  const [book, setBook] = useState('');
+  const [bookContext, setBookContext] = useState('');
 
   const onScriptChange = (e, {value}) => {
     setScript(value);
@@ -34,16 +36,24 @@ export default function Line({session}) {
     setLanguage(value);
   };
 
-const onSubmit = async () => {
-  console.log(line, script, language);
-  try{
-    const resp = await addLine(line, script, language);
-    setLine('');
-  } catch (e) {
-    setResult("Error setting data" + e.toString());
-  }
-  
-}
+  const onBookChange = (e, {value}) => {
+    setBook(value);
+  };
+
+  const onBookContextChange = (e, {value}) => {
+    setBookContext(value);
+  };
+
+
+  const onSubmit = async () => {
+    console.log(line, script, language, book, bookContext);
+    try{
+      const resp = await addLine(line, script, language, book, bookContext);
+      setLine('');
+    } catch (e) {
+      setResult("Error setting data" + e.toString());
+    }  
+  };
 
   return (
     <Layout>
@@ -60,7 +70,15 @@ const onSubmit = async () => {
               </Form.Field>
               <Form.Field>
                 <Form.TextArea label="Paragraph" placeholder="1 Paragraph or Shloka or Mantra" value={line} onChange={onLineChange}>
-                  </Form.TextArea>                
+                </Form.TextArea>                
+              </Form.Field>
+              <Form.Field>
+                <Form.Input label="Book" placeholder="Book it belongs to" value={book} onChange={onBookChange}>
+                </Form.Input>
+              </Form.Field>
+              <Form.Field>
+                <Form.Input label="Book Context" placeholder="ex: 10.3.1" value={bookContext} onChange={onBookContextChange}>
+                </Form.Input>                  
               </Form.Field>
               <Form.Button>Add Paragraph</Form.Button>
             </Form>

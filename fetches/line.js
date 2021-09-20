@@ -1,10 +1,12 @@
 import axios from "axios";
 axios.defaults.baseURL = process.env.NEXTAUTH_URL;
-export const addLine = async (text, script, language) => {
+export const addLine = async (text, script, language, book, bookContext) => {
     const res = await axios.post('/api/line', {
         text,
         language,
-        script
+        script,
+        book,
+        bookContext
     });
     return res;
 };
