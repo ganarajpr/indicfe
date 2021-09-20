@@ -10,7 +10,7 @@ export default function Home() {
               <a href="/add-line">Add Line</a>
             </List.Item>
             <List.Item>
-              <a href="/line/613fb4e9c1a8e095654e5398">Show Line</a>
+              <a href="/line/6149011f11305edbe0d2cdfa">Show Line</a>
             </List.Item>
           </List>
         </Segment>

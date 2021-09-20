@@ -1,7 +1,7 @@
 
 import { getLine } from '../../fetches/line';
 import Layout from '../../components/Layout';
-import { Container, Grid, Segment } from 'semantic-ui-react';
+import { Container, Grid, Header, Segment } from 'semantic-ui-react';
 import Verse from '../../components/Verse';
 import { useState } from 'react';
 
@@ -35,6 +35,10 @@ export default function ShowLine({ line }) {
   return (
     <Layout>
       <Container>
+        <Segment textAlign='center'>
+          <Header as='h2'>{line.book}</Header>
+          <Header as='h3'>{line.bookContext}</Header>
+        </Segment>
         <Segment>
           <Grid centered columns={1}>
             {getLines()}     
