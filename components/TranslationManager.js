@@ -6,7 +6,6 @@ const TranslationManager = (props) => {
     const { translation, onDelete, word } = props;
 
     const handleDeleteTranslation = () => {
-        console.log(word, translation, 'on delete click');
         onDelete(word._id, translation.text);
     };
     return (        

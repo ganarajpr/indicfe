@@ -4,15 +4,10 @@ import Layout from '../../components/Layout';
 import { Container, Grid, Segment } from 'semantic-ui-react';
 import Verse from '../../components/Verse';
 import { useState } from 'react';
-import { addWordToLine } from '../../fetches/line';
-import { useRouter } from 'next/router';
 
 import WordManager from '../../components/WordManager';
 export default function ShowLine({ line }) {
-  const [transcribed, setTranscribed] = useState('');
   const [lineState, setLine] = useState({});
-  const router = useRouter();
-  const { lineId } = router.query;
   if(!lineState.lines) {
     const lines = line.text.split('\n');
     setLine({lines, ...line});  
@@ -25,7 +20,6 @@ export default function ShowLine({ line }) {
     setWordInText(selectedWord);
   };
 
-
   const getLines = () => {
     return lineState.lines?.map( (line) => {
       return (<Grid.Row centered columns={1} key={line}>
@@ -36,14 +30,6 @@ export default function ShowLine({ line }) {
         </Grid.Column>
       </Grid.Row>)
     });
-  };
-
-  const onSubmit = async ()=>{
-    await addWordToLine(lineId,transcribed);
-    const line = await getLine(lineId);    
-    const lines = line.text.split('\n');
-    setLine({lines, ...line});
-    setTranscribed('');
   };
 
   return (

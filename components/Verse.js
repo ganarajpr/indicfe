@@ -6,6 +6,7 @@ import { useState } from 'react';
 const Wrapper = styled.div`
     font-size: 2em;
     font-family: 'Vesper Libre', serif;
+    text-align: center;
 `;
 
 const StyledWord = styled.span`

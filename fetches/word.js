@@ -25,7 +25,6 @@ export const deleteTranslationForWord = async(wordId, translation) => {
     if(!wordId || !translation) {
         throw new Error('value missing in delete translation');
     }
-    console.log('delete transl', wordId, translation);
     const res = await axios.post(`/api/word/remove`, {
         wordId,
         translation

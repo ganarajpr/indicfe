@@ -10,7 +10,6 @@ const deleteTranslationForWord = async (wordId, translation, user) => {
     if(!user) {
         throw(new Error('User not found'));    
     }
-    console.log('attempting to delete executing pull');
     await words.updateOne({_id: ObjectId(wordId)},
             { $pull : { translations: { text: translation } } }
         )
@@ -24,7 +23,6 @@ async function handler(req, res) {
             if(session) {
                 const { user } = session;
                 const { wordId, translation } = req.body;
-                console.log('attempting to delete', wordId, translation);
                 const word = await deleteTranslationForWord(wordId, translation, user);
                 return res.json(word);
             } else {

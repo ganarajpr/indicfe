@@ -1,45 +1,73 @@
-import { useForm } from "react-hook-form";
 import { useState } from "react";
-// import { addLine } from "../queries/line";
 import { addLine } from '../fetches/line';
 import { getSession } from 'next-auth/client';
 import Layout from '../components/Layout';
 import AccessDenied from '../components/accessDenied';
+import { Container, Segment, Form } from "semantic-ui-react";
+
+const scriptOptions = [
+  { key: 'devanagari', text: 'Devanagari', value: 'devanagari' },
+  { key: 'roman', text: 'Roman', value: 'roman' }
+];
+
+const languageOptions = [
+  { key: 'sanskrit', text: 'Sanskrit', value: 'sanskrit' },
+  { key: 'english', text: 'english', value: 'english' }
+];
 
 export default function Line({session}) {
 
   if (!session) { return  <Layout><AccessDenied/></Layout> }
-  const { register, handleSubmit } = useForm();
-  const [result, setResult] = useState("");
+  const [script, setScript] = useState('devanagari');
+  const [language, setLanguage] = useState('sanskrit');
+  const [line, setLine] = useState('');
 
-  const onSubmit = async (data) => {
-    const { line, script, language } = data;
-    console.log(line, script, language);
-    try{
-      setResult(JSON.stringify(data));
-      const resp = await addLine(line, script, language);
-    } catch (e) {
-      setResult("Error setting data" + e.toString());
-    }
-    
+  const onScriptChange = (e, {value}) => {
+    setScript(value);
+  };
+
+  const onLineChange = (e, {value}) => {
+    setLine(value);
+  };
+
+  const onLanguageChange = (e, {value}) => {
+    setLanguage(value);
+  };
+
+const onSubmit = async () => {
+  console.log(line, script, language);
+  try{
+    const resp = await addLine(line, script, language);
+    setLine('');
+  } catch (e) {
+    setResult("Error setting data" + e.toString());
   }
+  
+}
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <textarea {...register("line")} placeholder="Line" />
-        <select {...register("script")}>
-          <option value="Devanagari">Devanagari</option>
-        </select>
-        <select {...register("language")}>
-          <option value="Sanskrit">Sanskrit</option>
-        </select>
-        <p>{result}</p>
-        <input type="submit" />
-      </form>
-      <a href="/">Go Home</a>
-  </div>
-  )
+    <Layout>
+      <Container>
+        <Segment>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+            <Form.Field>
+                <Form.Select label="Script" value={script} onChange={onScriptChange} options={scriptOptions}>
+                  </Form.Select>                
+              </Form.Field>
+              <Form.Field>
+                <Form.Select label="Language" options={languageOptions} value={language} onChange={onLanguageChange}>
+                  </Form.Select>                
+              </Form.Field>
+              <Form.Field>
+                <Form.TextArea label="Paragraph" placeholder="1 Paragraph or Shloka or Mantra" value={line} onChange={onLineChange}>
+                  </Form.TextArea>                
+              </Form.Field>
+              <Form.Button>Add Paragraph</Form.Button>
+            </Form>
+        </Segment>   
+      </Container>      
+    </Layout>    
+  );
 }
 
 
