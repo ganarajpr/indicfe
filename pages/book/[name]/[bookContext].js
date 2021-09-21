@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, Grid, Header, Segment } from 'semantic-ui-react';
+import { Container, Grid, Header, Segment, Form } from 'semantic-ui-react';
 
 import { getLine } from '../../../fetches/line';
 import Layout from '../../../components/Layout';
@@ -14,10 +14,19 @@ export default function ShowLine({ line }) {
   }
   const [selectedWord, setSelectedWord] = useState();
   const [wordInText, setWordInText] = useState('');
+  const [translation, setTranslation] = useState('');
 
   const onSelect = (w, selectedWord) => {
     setSelectedWord(w);
     setWordInText(selectedWord);
+  };
+
+  const onTranslationChange = (e, {value}) => setTranslation(value);
+
+  const onSubmit = async () => {
+    
+    setTranslation('');
+
   };
 
   const getLines = () => {
@@ -49,7 +58,18 @@ export default function ShowLine({ line }) {
             wordInText={wordInText}
             word={selectedWord} script={lineState.script} language={lineState.language}
             ></WordManager></Segment> : null
-        }        
+        }
+        <Segment>
+            <Form onSubmit={onSubmit}>
+            <Form.Field>
+              <Form.Field>
+                <Form.TextArea label="Full Translation" placeholder="Translation of full paragraph" value={translation} onChange={onTranslationChange}>
+                </Form.TextArea>                
+              </Form.Field>                 
+              </Form.Field>
+              <Form.Button>Add Full Translation</Form.Button>
+            </Form>
+        </Segment>         
       </Container>      
     </Layout>    
   )

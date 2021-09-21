@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { addLine } from '../fetches/line';
 import { getSession } from 'next-auth/client';
-import Layout from '../components/Layout';
 import AccessDenied from '../components/accessDenied';
-import { Container, Segment, Form } from "semantic-ui-react";
+import { Container, Segment, Form, Message, Accordion } from "semantic-ui-react";
+import Layout from '../components/Layout';
 
 const scriptOptions = [
   { key: 'devanagari', text: 'Devanagari', value: 'devanagari' },
@@ -14,6 +14,7 @@ const languageOptions = [
   { key: 'sanskrit', text: 'Sanskrit', value: 'sanskrit' },
   { key: 'english', text: 'english', value: 'english' }
 ];
+let positive = true;
 
 export default function Line({session}) {
 
@@ -23,6 +24,7 @@ export default function Line({session}) {
   const [line, setLine] = useState('');
   const [book, setBook] = useState('');
   const [bookContext, setBookContext] = useState('');
+  const [showMessage, setShowMessage] = useState(false);
 
   const onScriptChange = (e, {value}) => {
     setScript(value);
@@ -43,15 +45,61 @@ export default function Line({session}) {
   const onBookContextChange = (e, {value}) => {
     setBookContext(value);
   };
+  const handleDismiss = () => { setShowMessage(false); };
+
+  // const formFields = (<>
+  //   <Form.Field>
+  //     <Form.Select label="Script" value={script} onChange={onScriptChange} options={scriptOptions}>
+  //       </Form.Select>                
+  //   </Form.Field>
+  //   <Form.Field>
+  //     <Form.Select label="Language" options={languageOptions} value={language} onChange={onLanguageChange}>
+  //       </Form.Select>                
+  //   </Form.Field>
+  // </>);
+
+  // const panels = [
+  //   {
+  //     key: 'script details',
+  //     title: 'Optional Details',
+  //     content: formFields
+  //   }
+  // ];
+
+
+  const getMessage = () => {
+    if(positive) {
+      return (<Message positive
+        onDismiss={handleDismiss}
+        header='Submission Success!'
+        content='The paragraph was submitted successfully.'
+      />);
+    }
+    return (<Message negative
+      onDismiss={handleDismiss}
+      header='Something went wrong!'
+      content='There was a problem in submitting this paragraph.'
+    />);    
+    
+  };
 
 
   const onSubmit = async () => {
-    console.log(line, script, language, book, bookContext);
     try{
+      if(!book || !bookContext ) {
+        // show message that something is not submitted.
+        positive = false;
+        setShowMessage(true);
+        return;
+      }
       const resp = await addLine(line, script, language, book, bookContext);
       setLine('');
+      positive = true;
+      setShowMessage(true);
     } catch (e) {
-      setResult("Error setting data" + e.toString());
+      positive = false;
+      setShowMessage(true);
+      console.log('Error setting data', e.message);
     }  
   };
 
@@ -60,7 +108,9 @@ export default function Line({session}) {
       <Container>
         <Segment>
             <Form onSubmit={onSubmit}>
-            <Form.Field>
+              { showMessage ? getMessage() : null}
+            {/* <Accordion panels={panels}  defaultActiveIndex={-1} /> */}
+              <Form.Field>
                 <Form.Select label="Script" value={script} onChange={onScriptChange} options={scriptOptions}>
                   </Form.Select>                
               </Form.Field>
