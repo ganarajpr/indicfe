@@ -1,5 +1,4 @@
 import axios from "axios";
-axios.defaults.baseURL = process.env.NEXTAUTH_URL;
 export const addLine = async (text, script, language, book, bookContext) => {
     const res = await axios.post('/api/line', {
         text,
@@ -20,7 +19,7 @@ export const addWordToLine = async(id, word) => {
     return res;
 };
 
-export const getLine = async(lineId) => {
-    const res = await axios.get(`/api/line/${lineId}`);
+export const getLine = async(book, bookContext) => {
+    const res = await axios.get(`/api/line/${book}/${bookContext}`);
     return res.data;
 };

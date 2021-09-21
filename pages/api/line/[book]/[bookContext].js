@@ -1,19 +1,18 @@
 import getDb from "../../../../mongo";
 import corsWrapper from "../../../../lib/corsWrapper";
-import { ObjectId } from 'mongodb';
 
-const getLine = async (id) => {
+const getLine = async (book, bookContext) => {
     const db = await getDb();
     return db.collection('lines').findOne(
-            {_id:ObjectId(id)},
+            {book, bookContext},
             { projection: {createdBy: 0, createdAt: 0, _id: 0} }
         );
 }
 
 async function handler(req, res) {
     if (req.method === 'GET') {
-        const { id } = req.query;
-        const line = await getLine(id);
+        const { book, bookContext } = req.query;
+        const line = await getLine(book, bookContext);
         return res.json(line);
     } 
 }
