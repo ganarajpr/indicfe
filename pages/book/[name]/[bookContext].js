@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Container, Grid, Header, Segment, Form } from 'semantic-ui-react';
+import React, { useState, useEffect } from 'react';
+import { Container, Grid, Header, Segment, Form, Accordion, Icon } from 'semantic-ui-react';
 
 import { getLine, addFullTranslation } from '../../../fetches/line';
 import Layout from '../../../components/Layout';
@@ -8,13 +8,22 @@ import WordManager from '../../../components/WordManager';
 
 export default function ShowLine({ line }) {
   const [lineState, setLine] = useState({});
-  if(!lineState.lines) {
+
+  useEffect( () => {
     const lines = line.text.split('\n');
     setLine({lines, ...line});  
-  }
+  }, [line]);
+  
   const [selectedWord, setSelectedWord] = useState();
   const [wordInText, setWordInText] = useState('');
   const [translation, setTranslation] = useState('');
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleAccordionClick = (e, titleProps) => {
+    const { index } = titleProps
+    const newIndex = activeIndex === index ? -1 : index
+    setActiveIndex(newIndex);
+  }
 
   const onSelect = (w, selectedWord) => {
     setSelectedWord(w);
@@ -24,10 +33,11 @@ export default function ShowLine({ line }) {
   const onTranslationChange = (e, {value}) => setTranslation(value);
 
   const onSubmit = async () => {
-    console.log('on submit', line);
     if(translation) {
-      await addFullTranslation(line._id, translation);
-      setTranslation('');  
+      const updatedLine = await addFullTranslation(line._id, translation);
+      setTranslation(''); 
+      const lines = updatedLine.text.split('\n');
+      setLine({lines, ...updatedLine});  
     }
   };
 
@@ -40,6 +50,24 @@ export default function ShowLine({ line }) {
         <Grid.Column>      
         </Grid.Column>
       </Grid.Row>)
+    });
+  };
+
+  const getTranslations = () => {
+    return lineState.translations?.map( (t, i) => {
+      return (<React.Fragment key={t.text}>
+        <Accordion.Title
+          active={activeIndex === i+1}
+          index={i+1}
+          onClick={handleAccordionClick}
+        >
+          <Icon name='dropdown' />
+          {t.text.substr(0, 30) + '...'}
+        </Accordion.Title>
+        <Accordion.Content active={activeIndex === i+1}>
+          <p>{t.text}</p>
+        </Accordion.Content>
+        </React.Fragment>);
     });
   };
 
@@ -62,15 +90,27 @@ export default function ShowLine({ line }) {
             ></WordManager></Segment> : null
         }
         <Segment>
+        <Accordion fluid styled>
+          <Accordion.Title
+            active={activeIndex === 0}
+            index={0}
+            onClick={handleAccordionClick}
+          >
+            <Icon name='dropdown' />
+            Add Verse
+          </Accordion.Title>
+          <Accordion.Content active={activeIndex === 0}>
             <Form onSubmit={onSubmit}>
-            <Form.Field>
               <Form.Field>
                 <Form.TextArea label="Full Translation" placeholder="Translation of full paragraph" value={translation} onChange={onTranslationChange}>
                 </Form.TextArea>                
               </Form.Field>                 
-              </Form.Field>
               <Form.Button>Add Full Translation</Form.Button>
             </Form>
+          </Accordion.Content>
+          {getTranslations()}
+      </Accordion>
+            
         </Segment>         
       </Container>      
     </Layout>    
