@@ -1,5 +1,5 @@
-import { Container, Divider, Grid, Image } from 'semantic-ui-react';
-import { signIn, useSession } from 'next-auth/client';
+import { Container, Divider, Grid, Image, Dropdown } from 'semantic-ui-react';
+import { signIn, signOut, useSession } from 'next-auth/client';
 import styled from 'styled-components';
 
 const HeaderContainer = styled(Container)`
@@ -7,7 +7,7 @@ const HeaderContainer = styled(Container)`
 `;
 
 
-export default function Header (props) {
+export default function Header () {
   const [session] = useSession();
     const onClick = (e) => {
       e.preventDefault();
@@ -16,10 +16,22 @@ export default function Header (props) {
 
     const getSignIn = () => {
       if (session?.user?.name) {
-        return (<div>
-          <Image src={session.user.image}avatar />
-          <span>{session.user.name}</span>
-        </div>);
+        const trigger = (
+          <div> 
+            <Image src={session.user.image}avatar />
+            <span>{session.user.name}</span>
+          </div>
+        );
+        const options = [
+          { key: 'sign-out', text: 'Sign Out', icon: 'sign out' },
+        ]
+        return (<Dropdown
+          trigger={trigger}
+          options={options}
+          onChange={signOut}
+          pointing='top left'
+          icon={null}
+        />);
       }
       return (<a href="/api/auth/signin"
            onClick={onClick}>Sign In</a>

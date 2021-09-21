@@ -2,8 +2,13 @@ import { useState } from "react";
 import { addLine } from '../fetches/line';
 import { getSession } from 'next-auth/client';
 import AccessDenied from '../components/accessDenied';
-import { Container, Segment, Form, Message, Accordion } from "semantic-ui-react";
+import { Container, Segment, Form, Message, Accordion, Dropdown } from "semantic-ui-react";
 import Layout from '../components/Layout';
+import styled from 'styled-components';
+
+const InlineLabel = styled.label`
+  display:inline;
+`;
 
 const scriptOptions = [
   { key: 'devanagari', text: 'Devanagari', value: 'devanagari' },
@@ -12,7 +17,7 @@ const scriptOptions = [
 
 const languageOptions = [
   { key: 'sanskrit', text: 'Sanskrit', value: 'sanskrit' },
-  { key: 'english', text: 'english', value: 'english' }
+  { key: 'english', text: 'English', value: 'english' }
 ];
 let positive = true;
 
@@ -46,25 +51,6 @@ export default function Line({session}) {
     setBookContext(value);
   };
   const handleDismiss = () => { setShowMessage(false); };
-
-  // const formFields = (<>
-  //   <Form.Field>
-  //     <Form.Select label="Script" value={script} onChange={onScriptChange} options={scriptOptions}>
-  //       </Form.Select>                
-  //   </Form.Field>
-  //   <Form.Field>
-  //     <Form.Select label="Language" options={languageOptions} value={language} onChange={onLanguageChange}>
-  //       </Form.Select>                
-  //   </Form.Field>
-  // </>);
-
-  // const panels = [
-  //   {
-  //     key: 'script details',
-  //     title: 'Optional Details',
-  //     content: formFields
-  //   }
-  // ];
 
 
   const getMessage = () => {
@@ -109,25 +95,32 @@ export default function Line({session}) {
         <Segment>
             <Form onSubmit={onSubmit}>
               { showMessage ? getMessage() : null}
-            {/* <Accordion panels={panels}  defaultActiveIndex={-1} /> */}
-              <Form.Field>
-                <Form.Select label="Script" value={script} onChange={onScriptChange} options={scriptOptions}>
-                  </Form.Select>                
-              </Form.Field>
-              <Form.Field>
-                <Form.Select label="Language" options={languageOptions} value={language} onChange={onLanguageChange}>
-                  </Form.Select>                
-              </Form.Field>
-              <Form.Field>
-                <Form.TextArea label="Paragraph" placeholder="1 Paragraph or Shloka or Mantra" value={line} onChange={onLineChange}>
+              <Form.Field required inline>
+                
+                <Dropdown
+                  inline
+                  options={scriptOptions}
+                  onChange={onScriptChange}
+                  defaultValue={scriptOptions[0].value}
+                />
+                <Dropdown
+                  inline
+                  options={languageOptions}
+                  onChange={onLanguageChange}
+                  defaultValue={languageOptions[0].value}
+                />                
+                <label>&nbsp;&nbsp;Paragraph</label> 
+                <Form.TextArea rows={10} placeholder="1 Paragraph or Shloka or Mantra" value={line} onChange={onLineChange}>
                 </Form.TextArea>                
               </Form.Field>
-              <Form.Field>
-                <Form.Input label="Book" placeholder="Book it belongs to" value={book} onChange={onBookChange}>
+              <Form.Field  required>
+                <label>Book</label>
+                <Form.Input placeholder="Book it belongs to" value={book} onChange={onBookChange}>
                 </Form.Input>
               </Form.Field>
-              <Form.Field>
-                <Form.Input label="Book Context" placeholder="ex: 10.3.1" value={bookContext} onChange={onBookContextChange}>
+              <Form.Field  required>
+                <label>Chapter - Verse - Hymn - Shloka in Book</label>
+                <Form.Input placeholder="ex: 10.3.1" value={bookContext} onChange={onBookContextChange}>
                 </Form.Input>                  
               </Form.Field>
               <Form.Button>Add Paragraph</Form.Button>
