@@ -23,3 +23,11 @@ export const getLine = async(book, bookContext) => {
     const res = await axios.get(`/api/line/${book}/${bookContext}`);
     return res.data;
 };
+
+export const addFullTranslation = async(lineId, translation) => {
+    const res = await axios.put(`/api/line`, {
+        id: lineId,
+        translation
+    });
+    return res.data;
+};

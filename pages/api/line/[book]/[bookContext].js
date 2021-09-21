@@ -5,7 +5,7 @@ const getLine = async (book, bookContext) => {
     const db = await getDb();
     return db.collection('lines').findOne(
             {book, bookContext},
-            { projection: {createdBy: 0, createdAt: 0, _id: 0} }
+            { projection: {createdBy: 0, createdAt: 0} }
         );
 }
 

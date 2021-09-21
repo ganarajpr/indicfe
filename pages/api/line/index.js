@@ -39,14 +39,13 @@ async function handler(req, res) {
         } else if (req.method === 'PUT') {
             const session = await getSession({ req });
             if(session) {
-                const { user: {email}} = session;
-                const { id, word } = req.body;
+                const { user } = session;
+                const { id, translation } = req.body;
                 const updateObject = {
                     id,
-                    word,
-                    email
+                    translation
                 };
-                const line = await updateLine(updateObject);
+                const line = await updateLine(updateObject, user);
                 return res.json(line);
             } else {
                 return res.status(401).send('Not Authenticated');

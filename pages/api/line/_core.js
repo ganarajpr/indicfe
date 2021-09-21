@@ -1,5 +1,4 @@
 import getDb from "../../../mongo";
-import { upsertWord } from "../word/_core";
 import { ObjectId } from 'mongodb';
 
 export const getLineByTextAndLanguage = async (text, language) =>{
@@ -16,21 +15,25 @@ export const getLineByText = async (text) =>{
     return line;
 };
 
-export const updateLine = async (updateObject) => {
+export const getLineById = async (id) => {
     const db = await getDb();
     const lines = db.collection('lines');
-    const user = await db.collection('users').findOne({email: updateObject.email});
+    return lines.findOne({_id: ObjectId(id)});
+};
+
+export const updateLine = async (updateObject, user) => {
+    const db = await getDb();
+    const lines = db.collection('lines');
     const userId = user.id;
-    const word = await upsertWord(updateObject.word, updateObject.language, 
-        updateObject.script, userId);
-    lines.updateOne({_id: ObjectId(updateObject.id)}, {
+    await lines.updateOne({_id: ObjectId(updateObject.id)}, {
         $push: {
-            words: {
-                id: word._id,
-                text: word.text,
-                createdBy: userId
+            translations: {
+                text: updateObject.translation,
+                createdBy: userId,
+                createdAt: new Date()
             }
         }        
     });
+    return getLineById(updateObject.id);
 };
 

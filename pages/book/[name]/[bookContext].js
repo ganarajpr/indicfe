@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Container, Grid, Header, Segment, Form } from 'semantic-ui-react';
 
-import { getLine } from '../../../fetches/line';
+import { getLine, addFullTranslation } from '../../../fetches/line';
 import Layout from '../../../components/Layout';
 import Verse from '../../../components/Verse';
 import WordManager from '../../../components/WordManager';
@@ -24,9 +24,11 @@ export default function ShowLine({ line }) {
   const onTranslationChange = (e, {value}) => setTranslation(value);
 
   const onSubmit = async () => {
-    
-    setTranslation('');
-
+    console.log('on submit', line);
+    if(translation) {
+      await addFullTranslation(line._id, translation);
+      setTranslation('');  
+    }
   };
 
   const getLines = () => {
