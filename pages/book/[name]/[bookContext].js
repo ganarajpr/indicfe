@@ -8,16 +8,19 @@ import WordManager from '../../../components/WordManager';
 
 export default function ShowLine({ line }) {
   const [lineState, setLine] = useState({});
-
-  useEffect( () => {
-    const lines = line.text.split('\n');
-    setLine({lines, ...line});  
-  }, [line]);
-  
   const [selectedWord, setSelectedWord] = useState();
   const [wordInText, setWordInText] = useState('');
   const [translation, setTranslation] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect( () => {
+    const lines = line.text.split('\n');
+    setLine({lines, ...line});
+    if(line.translations?.length) {
+      setActiveIndex(1);
+    }  
+  }, [line]);
+
 
   const handleAccordionClick = (e, titleProps) => {
     const { index } = titleProps
@@ -53,7 +56,7 @@ export default function ShowLine({ line }) {
     });
   };
 
-  const getTranslations = () => {
+  const getTranslations = () => {    
     return lineState.translations?.map( (t, i) => {
       return (<React.Fragment key={t.text}>
         <Accordion.Title
@@ -97,7 +100,7 @@ export default function ShowLine({ line }) {
             onClick={handleAccordionClick}
           >
             <Icon name='dropdown' />
-            Add Verse
+            Add Translation
           </Accordion.Title>
           <Accordion.Content active={activeIndex === 0}>
             <Form onSubmit={onSubmit}>
