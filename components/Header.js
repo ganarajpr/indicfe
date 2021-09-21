@@ -1,5 +1,5 @@
 import { Container, Divider, Grid, Image } from 'semantic-ui-react';
-import { signIn, useSession } from 'next-auth/client'
+import { signIn, useSession } from 'next-auth/client';
 import styled from 'styled-components';
 
 const HeaderContainer = styled(Container)`

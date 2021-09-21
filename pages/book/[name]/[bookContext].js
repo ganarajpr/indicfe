@@ -5,6 +5,8 @@ import { getLine, addFullTranslation } from '../../../fetches/line';
 import Layout from '../../../components/Layout';
 import Verse from '../../../components/Verse';
 import WordManager from '../../../components/WordManager';
+import { signIn, useSession } from 'next-auth/client';
+
 
 export default function ShowLine({ line }) {
   const [lineState, setLine] = useState({});
@@ -12,6 +14,7 @@ export default function ShowLine({ line }) {
   const [wordInText, setWordInText] = useState('');
   const [translation, setTranslation] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
+  const [session] = useSession();
 
   useEffect( () => {
     const lines = line.text.split('\n');
@@ -31,6 +34,7 @@ export default function ShowLine({ line }) {
   const onSelect = (w, selectedWord) => {
     setSelectedWord(w);
     setWordInText(selectedWord);
+    setActiveIndex(-1);
   };
 
   const onTranslationChange = (e, {value}) => setTranslation(value);
