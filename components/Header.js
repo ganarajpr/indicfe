@@ -1,4 +1,4 @@
-import { Container, Divider, Grid, Image, Dropdown } from 'semantic-ui-react';
+import { Container, Divider, Grid, Image, Dropdown, Header } from 'semantic-ui-react';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import styled from 'styled-components';
 
@@ -6,8 +6,13 @@ const HeaderContainer = styled(Container)`
   margin-top:10px;
 `;
 
+const LogoLink = styled.a`
+  font-family: Samarkan;
 
-export default function Header () {
+`;
+
+
+export default function MyHeader () {
   const [session] = useSession();
     const onClick = (e) => {
       e.preventDefault();
@@ -39,9 +44,11 @@ export default function Header () {
     };
     return (
       <HeaderContainer>
-        <Grid columns='equal'>
-            <Grid.Column>
-                <a href='/'>Home</a>
+        <Grid relaxed columns='equal'>
+            <Grid.Column width={3}>
+            </Grid.Column>
+            <Grid.Column textAlign='center'>
+                <Header as='h1'><LogoLink href='/'>DHRTA</LogoLink></Header>
             </Grid.Column>
             <Grid.Column width={3}>
               {getSignIn()}

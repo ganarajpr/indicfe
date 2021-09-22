@@ -3,3 +3,8 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, 'Vesper Libre',
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
+
+@font-face { 
+  font-family: Samarkan; 
+  src: url('samarkhan.TTF'); 
+} 
