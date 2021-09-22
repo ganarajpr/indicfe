@@ -20,7 +20,6 @@ export const getLineById = async (id) => {
     const lines = db.collection('lines');
     return lines.findOne({_id: ObjectId(id)});
 };
-
 export const updateLine = async (updateObject, user) => {
     const db = await getDb();
     const lines = db.collection('lines');
@@ -30,7 +29,8 @@ export const updateLine = async (updateObject, user) => {
             translations: {
                 text: updateObject.translation,
                 createdBy: userId,
-                createdAt: new Date()
+                createdAt: new Date(),
+                _id: ObjectId()
             }
         }        
     });

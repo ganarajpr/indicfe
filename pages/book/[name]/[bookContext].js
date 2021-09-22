@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Grid, Header, Segment, Form, Accordion, Icon } from 'semantic-ui-react';
+import { Container, Grid, Header, Segment, Form,
+  Button,
+   Accordion, Icon } from 'semantic-ui-react';
 
-import { getLine, addFullTranslation } from '../../../fetches/line';
+import { getLine, addFullTranslation, deleteTranslationForLine } from '../../../fetches/line';
 import Layout from '../../../components/Layout';
 import Verse from '../../../components/Verse';
 import WordManager from '../../../components/WordManager';
@@ -15,6 +17,8 @@ export default function ShowLine({ line }) {
   const [translation, setTranslation] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
   const [session] = useSession();
+
+  const isLoggedIn = !!session?.user?.name;
 
   useEffect( () => {
     const lines = line.text.split('\n');
@@ -60,6 +64,13 @@ export default function ShowLine({ line }) {
     });
   };
 
+  const onDeleteClick = async (trId) => {
+    const updatedLine = await deleteTranslationForLine(line._id, trId);
+    setTranslation(''); 
+    const lines = updatedLine.text.split('\n');
+    setLine({lines, ...updatedLine});  
+  };
+
   const getTranslations = () => {    
     return lineState.translations?.map( (t, i) => {
       return (<React.Fragment key={t.text}>
@@ -70,9 +81,11 @@ export default function ShowLine({ line }) {
         >
           <Icon name='dropdown' />
           {t.text.substr(0, 30) + '...'}
+         
         </Accordion.Title>
         <Accordion.Content active={activeIndex === i+1}>
           <p>{t.text}</p>
+          { isLoggedIn && session.user.id === t.createdBy ? <Icon name='trash alternate outline' onClick={ () => { onDeleteClick(t._id)}}/> : null }           
         </Accordion.Content>
         </React.Fragment>);
     });

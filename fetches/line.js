@@ -31,3 +31,15 @@ export const addFullTranslation = async(lineId, translation) => {
     });
     return res.data;
 };
+
+
+export const deleteTranslationForLine = async(lineId, translationId) => {
+    if(!lineId || !translationId) {
+        throw new Error('value missing in delete translation for line');
+    }
+    const res = await axios.post(`/api/translation/remove`, {
+        lineId,
+        translationId
+    });
+    return res.data;
+};
