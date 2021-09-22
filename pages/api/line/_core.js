@@ -37,3 +37,11 @@ export const updateLine = async (updateObject, user) => {
     return getLineById(updateObject.id);
 };
 
+
+export const getLineByBookAndContext = async (book, bookContext) => {
+    const db = await getDb();
+    return db.collection('lines').findOne(
+            {book, bookContext},
+            { projection: {createdBy: 0, createdAt: 0} }
+        );
+};
