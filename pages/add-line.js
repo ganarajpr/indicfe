@@ -2,14 +2,8 @@ import { useState } from "react";
 import { addLine } from '../fetches/line';
 import { getSession } from 'next-auth/client';
 import AccessDenied from '../components/accessDenied';
-import { Container, Segment, Form, Message, Accordion, Dropdown } from "semantic-ui-react";
+import { Container, Segment, Form, Message, Dropdown } from "semantic-ui-react";
 import Layout from '../components/Layout';
-import styled from 'styled-components';
-
-const InlineLabel = styled.label`
-  display:inline;
-`;
-
 const scriptOptions = [
   { key: 'devanagari', text: 'Devanagari', value: 'devanagari' },
   { key: 'roman', text: 'Roman', value: 'roman' }
@@ -20,6 +14,15 @@ const languageOptions = [
   { key: 'english', text: 'English', value: 'english' }
 ];
 let positive = true;
+const numberOfHindiCharacters = 128;
+const unicodeShift = 0x0900;
+const hindiAlphabet = [];
+for(const i = 0; i < numberOfHindiCharacters; i++) {
+  hindiAlphabet.push("\\u0" + (unicodeShift + i).toString(16));
+}
+
+const devanagariRegex = new RegExp("(?:^|\\s)["+hindiAlphabet.join("")+"]+?(?:\\s|$)", "g");
+
 
 export default function Line({session}) {
 
@@ -85,7 +88,6 @@ export default function Line({session}) {
     } catch (e) {
       positive = false;
       setShowMessage(true);
-      console.log('Error setting data', e.message);
     }  
   };
 
@@ -96,7 +98,6 @@ export default function Line({session}) {
             <Form onSubmit={onSubmit}>
               { showMessage ? getMessage() : null}
               <Form.Field required inline>
-                
                 <Dropdown
                   inline
                   options={scriptOptions}
@@ -110,7 +111,8 @@ export default function Line({session}) {
                   defaultValue={languageOptions[0].value}
                 />                
                 <label>&nbsp;&nbsp;Paragraph</label> 
-                <Form.TextArea rows={10} placeholder="1 Paragraph or Shloka or Mantra" value={line} onChange={onLineChange}>
+                <Form.TextArea rows={10} placeholder="1 Paragraph or Shloka or Mantra" value={line} 
+                    onChange={onLineChange} onBlur={onTextAreaBlur}>
                 </Form.TextArea>                
               </Form.Field>
               <Form.Field  required>
