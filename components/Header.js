@@ -3,11 +3,14 @@ import { signIn, signOut, useSession } from 'next-auth/client';
 import styled from 'styled-components';
 
 const HeaderContainer = styled(Container)`
-  margin-top:10px;
+  margin-top:1rem;
+  background-color: #eee;
+  margin-bottom: 3rem;
 `;
 
 const LogoLink = styled.a`
   font-family: Samarkan;
+  color: #96290e;
 
 `;
 
@@ -22,10 +25,10 @@ export default function MyHeader () {
     const getSignIn = () => {
       if (session?.user?.name) {
         const trigger = (
-          <div> 
+          <> 
             <Image src={session.user.image}avatar />
             <span>{session.user.name}</span>
-          </div>
+          </>
         );
         const options = [
           { key: 'sign-out', text: 'Sign Out', icon: 'sign out' },
@@ -43,18 +46,17 @@ export default function MyHeader () {
         );
     };
     return (
-      <HeaderContainer>
-        <Grid relaxed columns='equal'>
+      <HeaderContainer fluid>
+        <Grid stretched columns='equal'>
             <Grid.Column width={3}>
             </Grid.Column>
-            <Grid.Column textAlign='center'>
+            <Grid.Column textAlign='center' verticalAlign="middle">
                 <Header as='h1'><LogoLink href='/'>DHRTA</LogoLink></Header>
             </Grid.Column>
-            <Grid.Column width={3}>
+            <Grid.Column width={3} textAlign='center' verticalAlign="middle">
               {getSignIn()}
             </Grid.Column>    
         </Grid>
-          <Divider/>
       </HeaderContainer>
     )
   }
