@@ -1,6 +1,7 @@
 import getDb from '../../../mongo';
 import { clamp } from 'lodash-es';
 import { deleteTranslationForLocation } from '../word/_core';
+import { ObjectId } from 'bson';
 
 export const getVoteOnTranslationLocation = async (translationId, book, bookContext, userId) => {
     const db = await getDb();
@@ -25,10 +26,38 @@ export const addVoteOnTranslationLocation = async (translationId, book, bookCont
     }
 }
 
+
+export const countVotes = async (translationId, book, bookContext) => {
+    const db = await getDb();
+    const agg  = [
+        {
+            '$match': {
+                translationId: ObjectId(translationId),
+                book,
+                bookContext
+            }
+        },
+        {
+          '$group': {
+                '_id': {
+                    'book': '$book', 
+                    'bookContext': '$bookContext'
+                }, 
+                'totalVote': {
+                    '$sum': '$value'
+                }
+            }
+        }
+    ];
+    const [{totalVote}] = await db.collection('votes').aggregate(agg).toArray();
+    return totalVote;
+};
+
 export const removeVoteOnTranslationLocation = async (translationId, book, bookContext, userId) => {
     const db = await getDb();
-    await db.collection('votes').deleteOne({ translationId, book, bookContext, userId});
-    //get vote count for translation location
-    // if vote <= 0
-    //await deleteTranslationForLocation(translationId, book, bookContext);
+    const totalVote = await countVotes(translationId, book, bookContext);    
+    await db.collection('votes').deleteOne({ translationId: ObjectId(translationId), book, bookContext, userId});
+    if(totalVote <= 0) {
+        await deleteTranslationForLocation(translationId, book, bookContext);
+    }
 }

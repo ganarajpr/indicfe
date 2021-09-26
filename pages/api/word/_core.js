@@ -49,7 +49,7 @@ export const getWordById = async (id) => {
     const agg = [
         {
             '$match': {
-                _id:ObjectId(id)
+                _id: ObjectId(id)
             }
         },
         {
@@ -65,7 +65,19 @@ export const getWordById = async (id) => {
                 'locations.createdBy': 0,
                 'locations.createdAt': 0,
                 'createdBy': 0,
-                'createdAt': 0
+                'createdAt': 0,
+                'user._id': 0,
+                'user.email': 0
+            }
+        },
+        {
+            '$unwind': {
+                path: '$user'
+            }
+        },
+        {
+            '$unwind': {
+                path: '$locations'
             }
         }
     ];

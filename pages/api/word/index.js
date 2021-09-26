@@ -59,7 +59,7 @@ const addWord = async (text, lang, script, translation, book, bookContext, user)
             createdAt: new Date()
         });
         const word = await getWordByText(text);
-        await addVoteOnTranslationLocation(word._id, book, bookContext,user.id, 1);
+        await addVoteOnTranslationLocation(word.translations[0]._id, book, bookContext,user.id, 1);
         return word;
     }
 };
