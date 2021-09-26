@@ -72,3 +72,20 @@ export const getWordById = async (id) => {
     const translations = await db.collection('words').aggregate(agg).toArray();
     return { translations } ;
 }
+
+export const deleteTranslationForLocation = async (wordId, book, bookContext) => {
+    const db = await getDb();
+    const words = db.collection('words');
+    await words.updateOne({_id: ObjectId(wordId)}, {
+        $pull: {
+            locations: {
+                book,
+                bookContext
+            }
+        }
+    });
+    const word = await words.findOne({_id: ObjectId(wordId)});
+    if(word.locations.length === 0) {
+        await words.deleteOne({_id: ObjectId(wordId)});
+    }
+};

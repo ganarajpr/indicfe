@@ -3,6 +3,8 @@ import corsWrapper from "../../../../lib/corsWrapper";
 import { getSession } from 'next-auth/client';
 import { ObjectId } from 'mongodb';
 import { getWordById } from "../_core";
+import _ from "lodash-es";
+import { removeVoteOnTranslationLocation } from "../../votes/_core";
 
 const deleteTranslationForWord = async (wordId, book, bookContext, user) => {
     const db = await getDb();
@@ -10,19 +12,12 @@ const deleteTranslationForWord = async (wordId, book, bookContext, user) => {
     if(!user) {
         throw(new Error('User not found'));    
     }
-
     const word = await words.findOne({_id: ObjectId(wordId)});
-    if(word.locations.length === 1) {
-        if(word.votes <= 1) {
-            await words.deleteOne({_id: ObjectId(wordId)});
-        } else { // someone has voted for this meaning 
-            //delete this guy from creator 
-            // set voter as creator            
-        }
-    } else { // word translation has more than 1 location
-
+    const index = _.find(word.locations, { book, bookContext});
+    if(index < 0) {
+        return;        
     }
-    
+    await removeVoteOnTranslationLocation(wordId, book, bookContext, user.id);
     return getWordById(wordId);
 };
 
