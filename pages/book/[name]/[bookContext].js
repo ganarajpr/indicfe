@@ -8,6 +8,7 @@ import Layout from '../../../components/Layout';
 import Verse from '../../../components/Verse';
 import WordManager from '../../../components/WordManager';
 import { signIn, useSession } from 'next-auth/client';
+import LoggedInContent from '../../../components/LoggedInContent';
 
 
 export default function ShowLine({ line }) {
@@ -120,13 +121,15 @@ export default function ShowLine({ line }) {
             Add Translation
           </Accordion.Title>
           <Accordion.Content active={activeIndex === 0}>
-            <Form onSubmit={onSubmit}>
-              <Form.Field>
-                <Form.TextArea label="Full Translation" placeholder="Translation of full paragraph" value={translation} onChange={onTranslationChange}>
-                </Form.TextArea>                
-              </Form.Field>                 
-              <Form.Button primary>Add Full Translation</Form.Button>
-            </Form>
+            <LoggedInContent linkText="Sign in to add full translation">
+              <Form onSubmit={onSubmit}>
+                <Form.Field>
+                  <Form.TextArea label="Full Translation" placeholder="Translation of full paragraph" value={translation} onChange={onTranslationChange}>
+                  </Form.TextArea>                
+                </Form.Field>                 
+                <Form.Button primary>Add Full Translation</Form.Button>
+              </Form>
+            </LoggedInContent>
           </Accordion.Content>
           {getTranslations()}
       </Accordion>
