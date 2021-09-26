@@ -24,10 +24,23 @@ const Word = (props) => {
     if(props.children === '|' || props.children === '||') {
         return (<span>{props.children}&nbsp;</span>);    
     }
+    const handleTranslations = (word, availableTranslations) => {
+        if(availableTranslations) {
+            const tr = availableTranslations.map( (translation) => {
+                const { votes, translation: text, _id } = translation;
+                return {
+                    text,
+                    votes,
+                    _id
+                }
+            });        
+            setTranslation({...translations, [word]: tr});    
+        }
+    };
     const onClick = async () => {
         const wordDoc = await getWord(props.children);
-        const translation = wordDoc.translations?.length > 0 ? wordDoc.translations : undefined;
-        setTranslation({...translations, [props.children]: translation});
+        const availableTranslations = wordDoc.translations?.length > 0 ? wordDoc.translations : undefined;
+        handleTranslations(props.children, availableTranslations);
         props.onSelect(wordDoc, props.children);
     };
 
@@ -37,7 +50,7 @@ const Word = (props) => {
         if(!translations[word]) {
             const wordDoc = await getWord(word);
             const translation = wordDoc.translations?.length > 0 ? wordDoc.translations : undefined;
-            setTranslation({...translations, [word]: translation});
+            handleTranslations(props.children, translation);
         }
     };
     return (

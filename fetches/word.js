@@ -35,14 +35,15 @@ export const getWord = async(text) => {
 };
 
 
-export const deleteTranslationForWord = async(wordId, translation) => {
-    if(!wordId || !translation) {
+export const deleteTranslationForWord = async(wordId, book, bookContext) => {
+    if(!wordId || !book || !bookContext) {
         throw new Error('value missing in delete translation');
     }
     try {
         const res = await axios.post(`/api/word/remove`, {
             wordId,
-            translation
+            book,
+            bookContext
         });
         return res.data;    
     } catch(e) {

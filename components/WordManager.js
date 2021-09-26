@@ -13,7 +13,6 @@ const WordManager = (props) => {
     const { word, line: {script, language, book, bookContext}, wordInText } = props;
     const [translation, setTranslation] = useState('');
     const [storedTranslations, setStoredTranslations] = useState([]);
-    const [storedWord, setStoredWord] = useState();
 
     const handleInputChange = (e, {value}) =>{
         setTranslation(value);
@@ -28,7 +27,7 @@ const WordManager = (props) => {
     const getTranslations = () => {
         if (storedTranslations && storedTranslations.length ) {
             return storedTranslations.map( (t) => {
-                return (<TranslationManager key={t.text} word={storedWord} translation={t} onDelete={onDeleteTranslation}/>)
+                return (<TranslationManager key={t.translation} translation={t} onDelete={onDeleteTranslation}/>)
             });
         }
         return null;
@@ -36,20 +35,18 @@ const WordManager = (props) => {
     
     useEffect(() => {        
         setStoredTranslations(word.translations);
-        setStoredWord(word);
     }, [wordInText]);
 
     
     const onAddTranslation = async (word, translation) => {
         const wordWithTranslation = await addWord(word, script, language, translation, book, bookContext);
         setStoredTranslations(wordWithTranslation.translations);
-        setStoredWord(wordWithTranslation);
     };
 
-    const onDeleteTranslation = async (wordId, translation) => {
-        const word = await deleteTranslationForWord(wordId, translation);
+    const onDeleteTranslation = async (translationId) => {
+        console.log(book, bookContext, 'book and context');
+        const word = await deleteTranslationForWord(translationId, book, bookContext);
         setStoredTranslations(word.translations);
-        setStoredWord(word);
     };
 
     return (<Grid columns={2} divided>

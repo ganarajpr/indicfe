@@ -14,14 +14,14 @@ const languageOptions = [
   { key: 'english', text: 'English', value: 'english' }
 ];
 let positive = true;
-const numberOfHindiCharacters = 128;
-const unicodeShift = 0x0900;
-const hindiAlphabet = [];
-for(const i = 0; i < numberOfHindiCharacters; i++) {
-  hindiAlphabet.push("\\u0" + (unicodeShift + i).toString(16));
-}
+// const numberOfHindiCharacters = 128;
+// const unicodeShift = 0x0900;
+// const hindiAlphabet = [];
+// for(const i = 0; i < numberOfHindiCharacters; i++) {
+//   hindiAlphabet.push("\\u0" + (unicodeShift + i).toString(16));
+// }
 
-const devanagariRegex = new RegExp("(?:^|\\s)["+hindiAlphabet.join("")+"]+?(?:\\s|$)", "g");
+// const devanagariRegex = new RegExp("(?:^|\\s)["+hindiAlphabet.join("")+"]+?(?:\\s|$)", "g");
 
 
 export default function Line({session}) {
@@ -108,7 +108,7 @@ export default function Line({session}) {
                 />                
                 <label>&nbsp;&nbsp;Paragraph</label> 
                 <Form.TextArea rows={10} placeholder="1 Paragraph or Shloka or Mantra" value={line} 
-                    onChange={onLineChange} onBlur={onTextAreaBlur}>
+                    onChange={onLineChange}>
                 </Form.TextArea>                
               </Form.Field>
               <Form.Field  required>

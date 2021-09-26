@@ -27,10 +27,10 @@ const addTranslationToWord = async (word, book, bookContext, user) => {
     }
 };
 
-const addWord = async (text,language,script, translation, book, bookContext, user) => {
+const addWord = async (text,lang,script, translation, book, bookContext, user) => {
     const db = await getDb();
     const words = db.collection('words');
-    const word = await words.findOne({text, language, translation});
+    const word = await words.findOne({text, lang, translation});
     if(!user) {
         throw(new Error('User not found'));    
     }
@@ -40,7 +40,7 @@ const addWord = async (text,language,script, translation, book, bookContext, use
     } else {
         await words.insertOne({
             text,
-            language,
+            lang,
             script,
             translation,
             locations: [

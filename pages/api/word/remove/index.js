@@ -4,15 +4,25 @@ import { getSession } from 'next-auth/client';
 import { ObjectId } from 'mongodb';
 import { getWordById } from "../_core";
 
-const deleteTranslationForWord = async (wordId, translation, user) => {
+const deleteTranslationForWord = async (wordId, book, bookContext, user) => {
     const db = await getDb();
     const words = db.collection('words');
     if(!user) {
         throw(new Error('User not found'));    
     }
-    await words.updateOne({_id: ObjectId(wordId)},
-            { $pull : { translations: { text: translation } } }
-        )
+
+    const word = await words.findOne({_id: ObjectId(wordId)});
+    if(word.locations.length === 1) {
+        if(word.votes <= 1) {
+            await words.deleteOne({_id: ObjectId(wordId)});
+        } else { // someone has voted for this meaning 
+            //delete this guy from creator 
+            // set voter as creator            
+        }
+    } else { // word translation has more than 1 location
+
+    }
+    
     return getWordById(wordId);
 };
 
@@ -22,8 +32,8 @@ async function handler(req, res) {
             const session = await getSession({ req });            
             if(session) {
                 const { user } = session;
-                const { wordId, translation } = req.body;
-                const word = await deleteTranslationForWord(wordId, translation, user);
+                const { wordId, book, bookContext } = req.body;
+                const word = await deleteTranslationForWord(wordId, book, bookContext, user);
                 return res.json(word);
             } else {
                 return res.status(401).send('Not Authenticated');
