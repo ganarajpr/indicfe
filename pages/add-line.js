@@ -42,13 +42,9 @@ export default function Line({session}) {
     setLine(value);
   };
 
-  const onLanguageChange = (e, {value}) => {
-    setLanguage(value);
-  };
+  const onLanguageChange = (e, {value}) => { setLanguage(value); };
 
-  const onBookChange = (e, {value}) => {
-    setBook(value);
-  };
+  const onBookChange = (e, {value}) => { setBook(value); };
 
   const onBookContextChange = (e, {value}) => {
     setBookContext(value);
@@ -125,7 +121,7 @@ export default function Line({session}) {
                 <Form.Input placeholder="ex: 10.3.1" value={bookContext} onChange={onBookContextChange}>
                 </Form.Input>                  
               </Form.Field>
-              <Form.Button>Add Paragraph</Form.Button>
+              <Form.Button primary>Add Paragraph</Form.Button>
             </Form>
         </Segment>   
       </Container>      

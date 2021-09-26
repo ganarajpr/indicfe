@@ -106,7 +106,7 @@ export default function ShowLine({ line }) {
         {
           selectedWord ? <Segment><WordManager 
             wordInText={wordInText}
-            word={selectedWord} script={lineState.script} language={lineState.language}
+            word={selectedWord} line={lineState}
             ></WordManager></Segment> : null
         }
         <Segment>
@@ -125,7 +125,7 @@ export default function ShowLine({ line }) {
                 <Form.TextArea label="Full Translation" placeholder="Translation of full paragraph" value={translation} onChange={onTranslationChange}>
                 </Form.TextArea>                
               </Form.Field>                 
-              <Form.Button>Add Full Translation</Form.Button>
+              <Form.Button primary>Add Full Translation</Form.Button>
             </Form>
           </Accordion.Content>
           {getTranslations()}

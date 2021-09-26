@@ -5,8 +5,7 @@ import { keyBy, uniq } from "lodash-es";
 const getWord = async (req) => {
     const { text } = req.query;    
     const db = await getDb();
-    const word = await db.collection('words').findOne({text});
-    const translations = word.translations;
+    const translations = await db.collection('words').find({text}).toArray();
     
     if(translations && translations.length) {
         const userIds = translations.map( (t) => t.createdBy);

@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 `;
 
 const WordManager = (props) => {
-    const { word, language, script, wordInText } = props;
+    const { word, line: {script, language, book, bookContext}, wordInText } = props;
     const [translation, setTranslation] = useState('');
     const [storedTranslations, setStoredTranslations] = useState([]);
     const [storedWord, setStoredWord] = useState();
@@ -41,7 +41,7 @@ const WordManager = (props) => {
 
     
     const onAddTranslation = async (word, translation) => {
-        const wordWithTranslation = await addWord(word, script, language, translation);
+        const wordWithTranslation = await addWord(word, script, language, translation, book, bookContext);
         setStoredTranslations(wordWithTranslation.translations);
         setStoredWord(wordWithTranslation);
     };

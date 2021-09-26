@@ -11,7 +11,6 @@ const HeaderContainer = styled(Container)`
 const LogoLink = styled.a`
   font-family: Samarkan;
   color: #96290e;
-
 `;
 
 
@@ -59,4 +58,15 @@ export default function MyHeader () {
         </Grid>
       </HeaderContainer>
     )
+  }
+
+
+  const abcd = {
+    word: '',
+    translation: '',
+    book: '',
+    bookContext: '',
+    votes: 0,
+    createdBy: '',
+    createdAt: ''
   }
