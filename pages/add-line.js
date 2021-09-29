@@ -14,17 +14,19 @@ const languageOptions = [
   { key: 'english', text: 'English', value: 'english' }
 ];
 let positive = true;
-// const numberOfHindiCharacters = 128;
-// const unicodeShift = 0x0900;
-// const hindiAlphabet = [];
-// for(const i = 0; i < numberOfHindiCharacters; i++) {
-//   hindiAlphabet.push("\\u0" + (unicodeShift + i).toString(16));
-// }
+const numberOfHindiCharacters = 128;
+const unicodeShift = 0x0900;
+const hindiAlphabet = [];
+for(let i = 0; i < numberOfHindiCharacters; i++) {
+  hindiAlphabet.push("\\u0" + (unicodeShift + i).toString(16));
+}
 
-// const devanagariRegex = new RegExp("(?:^|\\s)["+hindiAlphabet.join("")+"]+?(?:\\s|$)", "g");
+const devanagariRegex = new RegExp("(?:^|\\s)["+hindiAlphabet.join("")+"]+?(?:\\s|$)", "g");
 
 
 export default function Line({session}) {
+
+  let errorMessage = 'Have you filled all required fields, Is the content in devanagari script?';
 
   if (!session) { return  <Layout><AccessDenied/></Layout> }
   const [script, setScript] = useState('devanagari');
@@ -63,7 +65,7 @@ export default function Line({session}) {
     return (<Message negative
       onDismiss={handleDismiss}
       header='Something went wrong!'
-      content='There was a problem in submitting this paragraph.'
+      content={errorMessage}
     />);    
     
   };
@@ -76,6 +78,12 @@ export default function Line({session}) {
         positive = false;
         setShowMessage(true);
         return;
+      }
+      if(!/^[^a-zA-Z]+$/.test(line) || !devanagariRegex.test(line) ){
+        positive = false;
+        errorMessage = 'Content is not devanagari';
+        setShowMessage(true);
+        return;        
       }
       const resp = await addLine(line, script, language, book, bookContext);
       setLine('');
