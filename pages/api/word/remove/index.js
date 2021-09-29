@@ -2,9 +2,8 @@ import getDb from "../../../../mongo";
 import corsWrapper from "../../../../lib/corsWrapper";
 import { getSession } from 'next-auth/client';
 import { ObjectId } from 'mongodb';
-import { getWordById } from "../_core";
+import { getWordById, downVoteLocation } from "../_core";
 import _ from "lodash-es";
-import { removeVoteOnTranslationLocation } from "../../votes/_core";
 
 const deleteTranslationForWord = async (wordId, book, bookContext, user) => {
     const db = await getDb();
@@ -13,11 +12,13 @@ const deleteTranslationForWord = async (wordId, book, bookContext, user) => {
         throw(new Error('User not found'));    
     }
     const word = await words.findOne({_id: ObjectId(wordId)});
-    const index = _.find(word.locations, { book, bookContext});
-    if(index < 0) {
-        return;        
+    if(word.createdBy === user.id) {
+        // I am the creator
+        if(word.locations.length === 1 && word.votes === 1) {
+            // only 1 location and only 1 vote - so its safe to delete
+            await words.deleteOne({_id: ObjectId(wordId)});
+        }
     }
-    await removeVoteOnTranslationLocation(wordId, book, bookContext, user.id);
     return getWordById(wordId);
 };
 

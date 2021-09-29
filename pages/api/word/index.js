@@ -3,7 +3,6 @@ import corsWrapper from "../../../lib/corsWrapper";
 import { getSession } from 'next-auth/client';
 import { ObjectId } from 'mongodb';
 import { getWordById, getWordByText } from "./_core";
-import { addVoteOnTranslationLocation } from "../votes/_core";
 
 const addTranslationToWord = async (word, book, bookContext, user) => {
     const db = await getDb();
@@ -11,7 +10,6 @@ const addTranslationToWord = async (word, book, bookContext, user) => {
     const wordInLocation = word.locations.filter ( location => {
         return location.book === book && location.bookContext === bookContext; 
     });
-    await addVoteOnTranslationLocation(word._id, book, bookContext,user.id, 1);
     if(wordInLocation.length) {
         return word;
     } else {
@@ -21,6 +19,8 @@ const addTranslationToWord = async (word, book, bookContext, user) => {
                     book,
                     bookContext,
                     votes: 1,
+                    like:[user.id],
+                    dislike: [],
                     createdBy: user.id,
                     createdAt: new Date()
                 }
@@ -50,16 +50,19 @@ const addWord = async (text, lang, script, translation, book, bookContext, user)
                     book,
                     bookContext,
                     votes: 1,
+                    like:[user.id],
+                    dislike: [],
                     createdBy: user.id,
                     createdAt: new Date()
                 }
             ],
             votes: 1,
+            like:[user.id],
+            dislike: [],
             createdBy: user.id,
             createdAt: new Date()
         });
         const word = await getWordByText(text);
-        await addVoteOnTranslationLocation(word.translations[0]._id, book, bookContext,user.id, 1);
         return word;
     }
 };

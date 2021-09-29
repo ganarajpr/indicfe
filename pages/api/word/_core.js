@@ -101,3 +101,15 @@ export const deleteTranslationForLocation = async (wordId, book, bookContext) =>
         await words.deleteOne({_id: ObjectId(wordId)});
     }
 };
+
+export const downVoteLocation = async (wordId, book, bookContext, userId) => {
+    const db = await getDb();
+    const words = db.collection('words');
+    await words.updateOne(
+        {_id: ObjectId(wordId), "locations.book": book, "locations.bookContext": bookContext },
+        {
+            $pull: { "locations.$.like": userId },
+            $inc: { "locations.$.votes": -1 }
+        }
+    );
+};
