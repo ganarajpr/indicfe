@@ -2,71 +2,76 @@ import { Container, Divider, Grid, Image, Dropdown, Header } from 'semantic-ui-r
 import { signIn, signOut, useSession } from 'next-auth/client';
 import styled from 'styled-components';
 
-const HeaderContainer = styled(Container)`
-  margin-top:1rem;
-  background-color: #eee;
-  margin-bottom: 3rem;
-`;
-
-const LogoLink = styled.a`
-  font-family: Samarkan;
-  color: #96290e;
-`;
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import SignInMenu from './SignInMenu';
 
 
-export default function MyHeader () {
-  const [session] = useSession();
-    const onClick = (e) => {
-      e.preventDefault();
-      signIn();
-    };
+export default function MyHeader() {
+//   const [session] = useSession();
+//   const onClick = (e) => {
+//     e.preventDefault();
+//     signIn();
+//   };
 
-    const getSignIn = () => {
-      if (session?.user?.name) {
-        const trigger = (
-          <> 
-            <Image src={session.user.image}avatar />
-            <span>{session.user.name}</span>
-          </>
-        );
-        const options = [
-          { key: 'sign-out', text: 'Sign Out', icon: 'sign out' },
-        ]
-        return (<Dropdown
-          trigger={trigger}
-          options={options}
-          onChange={signOut}
-          pointing='top left'
-          icon={null}
-        />);
-      }
-      return (<a href="/api/auth/signin"
-           onClick={onClick}>Sign In</a>
-        );
-    };
-    return (
-      <HeaderContainer fluid>
-        <Grid stretched columns='equal'>
-            <Grid.Column width={3}>
-            </Grid.Column>
-            <Grid.Column textAlign='center' verticalAlign="middle">
-                <Header as='h1'><LogoLink href='/'>DHRTA</LogoLink></Header>
-            </Grid.Column>
-            <Grid.Column width={3} textAlign='center' verticalAlign="middle">
-              {getSignIn()}
-            </Grid.Column>    
-        </Grid>
-      </HeaderContainer>
-    )
-  }
+//   const getSignIn = () => {
+//     if (session?.user?.name) {
+//       //   const trigger = (
+//       //     <>
+//       //       <Image src={session.user.image} avatar />
+//       //       <span>{session.user.name}</span>
+//       //     </>
+//       //   );
+//       //   const options = [
+//       //     { key: 'sign-out', text: 'Sign Out', icon: 'sign out' },
+//       //   ]
+//       //   return (<Dropdown
+//       //     trigger={trigger}
+//       //     options={options}
+//       //     onChange={signOut}
+//       //     pointing='top left'
+//       //     icon={null}
+//       //   />);
+//       return (<SignInMenu onSignOut={signOut}/>);
+//     }
+//     return (<Button color="inherit" onClick={onClick}>Login</Button>);
+//   };
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography align="center" variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            dhrta
+          </Typography>
+          {/* <Button color="inherit" onClick={onClick}>Login</Button> */}
+          <SignInMenu/>
+        </Toolbar>
+      </AppBar>
+    </Box>
+  )
+}
 
 
-  const abcd = {
-    word: '',
-    translation: '',
-    book: '',
-    bookContext: '',
-    votes: 0,
-    createdBy: '',
-    createdAt: ''
-  }
+const abcd = {
+  word: '',
+  translation: '',
+  book: '',
+  bookContext: '',
+  votes: 0,
+  createdBy: '',
+  createdAt: ''
+}
