@@ -1,20 +1,20 @@
 import { getBook } from "../../../fetches/books";
 import Layout from "../../../components/Layout";
-import { Segment } from "semantic-ui-react";
 import Container from '@mui/material/Container';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
-
+import Link from 'next/link';
 export default function Book({ bookContexts,bookName }) {
 
   const getBookContextList = () => {
     if(bookContexts?.length) {
       return bookContexts.map( (bc) => {
         return (<ListItem key={bc}>
-            <Button href={`/book/${bookName}/${bc}`}>{bc}</Button>
-        </ListItem>);
+                <Link href={`/book/${bookName}/${bc}`}>
+                    <Button>{bc}</Button>
+                </Link>
+            </ListItem>);
       });      
     }
   };

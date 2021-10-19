@@ -1,32 +1,36 @@
 import Layout from "../components/Layout";
-import { Container, List, Segment } from 'semantic-ui-react';
 import { getBooks } from "../fetches/books";
+import Container from '@mui/material/Container';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Button from '@mui/material/Button';
+import Link from 'next/link';
 export default function Home({ books } ) {
 
   const getBookList = () => {
     if(books?.length) {
       return books.map( (book) => {
-        return (<List.Item key={book}><a href={`/book/${book}`}>{book}</a></List.Item>)
+        return (<ListItem key={book}>
+            <Link href={`/book/${book}`}>
+                    <Button>{book}</Button>
+            </Link>
+        </ListItem>)
       });      
     }
   };
   
   return (
     <Layout>
-      <Container>
-        <Segment>
-          <List>
-            {getBookList()}
-          </List>
-        </Segment>
-        <Segment>
-          <List>
-            <List.Item key={'addLine'}>
-              <a href="/add-line">Add New Verse</a>
-            </List.Item>
-          </List>
-        </Segment>
-      </Container> 
+        <Container maxWidth="sm">
+            <List>
+                {getBookList()}
+                <ListItem key={'addLine'}>
+                <Link href="/add-line">
+                    <Button variant="contained">Add New Verse</Button>
+                </Link>
+                </ListItem>
+            </List>
+        </Container> 
     </Layout>
   )
 }
