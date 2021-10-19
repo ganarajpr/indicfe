@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { signIn, signOut, useSession } from 'next-auth/client';
@@ -44,7 +44,7 @@ export default function MenuAppBar() {
               onClick={handleMenu}
               color="inherit"
             >
-              <AccountCircle />
+              <Avatar alt={session.user.name} src={session.user.image} />
               &nbsp;{session.user.name}
             </IconButton>
             <Menu
@@ -84,9 +84,13 @@ export default function MenuAppBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, justifyContent: 'center', textAlign: 'center' }}>
-            Dhrta
-          </Typography>
+          <Box sx={{ flexGrow: 1, justifyContent: 'center', textAlign: 'center' }}>
+            <Link href="/">
+                <Typography variant="h6" component="div" sx={{ cursor: 'pointer'}} >
+                    DHRTA
+                </Typography>
+                </Link>
+            </Box>
           {getSignIn()}
         </Toolbar>
       </AppBar>

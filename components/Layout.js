@@ -5,7 +5,7 @@ export default function Layout (props) {
     return (
     <Box sx={{ flexGrow: 1 }}>
       <Header/>
-      <Container maxWidth="sm">
+      <Container maxWidth="sm" sx={{paddingTop: 2}}>
           {props.children}
       </Container>
       </Box>
