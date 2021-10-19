@@ -1,46 +1,76 @@
-import { Container, Divider, Grid, Image, Dropdown, Header } from 'semantic-ui-react';
-import { signIn, signOut, useSession } from 'next-auth/client';
-import styled from 'styled-components';
-
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
-import SignInMenu from './SignInMenu';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import { signIn, signOut, useSession } from 'next-auth/client';
+import { useState } from 'react';
+import Link from 'next/link';
 
+export default function MenuAppBar() {
+  const [session] = useSession();
+  const [anchorEl, setAnchorEl] = useState(null);
 
-export default function MyHeader() {
-//   const [session] = useSession();
-//   const onClick = (e) => {
-//     e.preventDefault();
-//     signIn();
-//   };
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-//   const getSignIn = () => {
-//     if (session?.user?.name) {
-//       //   const trigger = (
-//       //     <>
-//       //       <Image src={session.user.image} avatar />
-//       //       <span>{session.user.name}</span>
-//       //     </>
-//       //   );
-//       //   const options = [
-//       //     { key: 'sign-out', text: 'Sign Out', icon: 'sign out' },
-//       //   ]
-//       //   return (<Dropdown
-//       //     trigger={trigger}
-//       //     options={options}
-//       //     onChange={signOut}
-//       //     pointing='top left'
-//       //     icon={null}
-//       //   />);
-//       return (<SignInMenu onSignOut={signOut}/>);
-//     }
-//     return (<Button color="inherit" onClick={onClick}>Login</Button>);
-//   };
+  const onSignOut = () => {
+    signOut();
+    setAnchorEl(null);
+  };
+  const onSignInClick = (e) => {
+    e.preventDefault();
+    signIn();
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const getSignIn = () => {
+    
+    if(session?.user?.name) {
+        return (<div>
+            <IconButton
+              size="small"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <AccountCircle />
+              &nbsp;{session.user.name}
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={onSignOut}>Sign Out</MenuItem>
+            </Menu>
+          </div>);
+    }
+    return (<Link onClick={onSignInClick} href="/api/auth/signin">
+            <Button color="inherit">Login</Button>
+        </Link>);
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -54,24 +84,12 @@ export default function MyHeader() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography align="center" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            dhrta
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, justifyContent: 'center', textAlign: 'center' }}>
+            Dhrta
           </Typography>
-          {/* <Button color="inherit" onClick={onClick}>Login</Button> */}
-          <SignInMenu/>
+          {getSignIn()}
         </Toolbar>
       </AppBar>
     </Box>
-  )
-}
-
-
-const abcd = {
-  word: '',
-  translation: '',
-  book: '',
-  bookContext: '',
-  votes: 0,
-  createdBy: '',
-  createdAt: ''
+  );
 }

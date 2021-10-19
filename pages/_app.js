@@ -1,8 +1,9 @@
-import 'semantic-ui-css/semantic.min.css'
-import '../styles/globals.css';
+// import 'semantic-ui-css/semantic.min.css'
+// import '../styles/globals.css';
 import { Provider } from 'next-auth/client'
 import Head from 'next/head';
 import axios from "axios";
+import CssBaseline from '@mui/material/CssBaseline';
 axios.defaults.baseURL = process.env.NEXTAUTH_URL;
 export default function App ({ Component, pageProps }) {
   return (
@@ -12,9 +13,12 @@ export default function App ({ Component, pageProps }) {
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
       <link href="https://fonts.googleapis.com/css2?family=Vesper+Libre&display=swap" rel="stylesheet"/>
       </Head>
+      <CssBaseline>
       <Provider session={pageProps.session}>
         <Component {...pageProps} />
       </Provider>
+      </CssBaseline>
+      
     </>
   )
 }

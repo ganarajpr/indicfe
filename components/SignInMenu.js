@@ -8,23 +8,41 @@ import {
   bindTrigger,
   bindMenu,
 } from 'material-ui-popup-state/hooks'
+import { useState } from 'react';
 
 const SignInMenu = () => {
   const [session] = useSession();
-  const popupState = usePopupState({ variant: 'popover', popupId: 'signInMenu' })
-  const onSignOut = () => {
-    signOut();
-    popupState.close();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
   if(session?.user?.name) {
     return (
         <div>
-          <Button {...bindTrigger(popupState)}>
-            Username
-          </Button>
-          <Menu {...bindMenu(popupState)}>
-            <MenuItem onClick={onSignOut}>SignOut</MenuItem>
-          </Menu>
+          <Button
+        id="basic-button"
+        aria-controls="basic-menu"
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+        Ganaraj
+      </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleClose}>Sign Out</MenuItem>
+      </Menu>
         </div>
       )
   }
