@@ -1,12 +1,13 @@
-import { Container } from 'semantic-ui-react';
 import Header from './Header';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 export default function Layout (props) {
     return (
-      <>
+    <Box sx={{ flexGrow: 1 }}>
       <Header/>
-      <Container>
+      <Container maxWidth="sm">
           {props.children}
       </Container>
-      </>
+      </Box>
     )
   }
