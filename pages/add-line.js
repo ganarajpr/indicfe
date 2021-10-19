@@ -1,70 +1,30 @@
-import { useState } from "react";
 import { addLine } from '../fetches/line';
 import { getSession } from 'next-auth/client';
 import AccessDenied from '../components/accessDenied';
-import { Form, Message, Dropdown } from "semantic-ui-react";
 import Layout from '../components/Layout';
 import Container from '@mui/material/Container';
 import AddLineForm from "../components/AddLineForm";
+import { useSession } from 'next-auth/client';
 
-const scriptOptions = [
-  { key: 'devanagari', text: 'Devanagari', value: 'devanagari' },
-  { key: 'roman', text: 'Roman', value: 'roman' }
-];
+export default function Line() {
+    const [session] = useSession();
 
-const languageOptions = [
-  { key: 'sanskrit', text: 'Sanskrit', value: 'sanskrit' },
-  { key: 'english', text: 'English', value: 'english' }
-];
-let positive = true;
-const numberOfHindiCharacters = 128;
-const unicodeShift = 0x0900;
-const hindiAlphabet = [];
-for(let i = 0; i < numberOfHindiCharacters; i++) {
-  hindiAlphabet.push("\\u0" + (unicodeShift + i).toString(16));
-}
+    if (!session) { return  <Layout><AccessDenied/></Layout> }
 
-const devanagariRegex = new RegExp("(?:^|\\s)["+hindiAlphabet.join("")+"]+?(?:\\s|$)", "g");
+    const onSubmit = async ({line, script, language, book, bookContext}) => {
+        try{
+        const resp = await addLine(line, script, language, book, bookContext);
+        } catch (e) {
+        }  
+    };
 
-
-export default function Line({session}) {
-
-  let errorMessage = 'Have you filled all required fields, Is the content in devanagari script?';
-
-  if (!session) { return  <Layout><AccessDenied/></Layout> }
-
-
-  const onSubmit = async () => {
-    try{
-      if(!book || !bookContext ) {
-        // show message that something is not submitted.
-        positive = false;
-        setShowMessage(true);
-        return;
-      }
-      if(!/^[^a-zA-Z]+$/.test(line) || !devanagariRegex.test(line) ){
-        positive = false;
-        errorMessage = 'Content is not devanagari';
-        setShowMessage(true);
-        return;        
-      }
-      const resp = await addLine(line, script, language, book, bookContext);
-      setLine('');
-      positive = true;
-      setShowMessage(true);
-    } catch (e) {
-      positive = false;
-      setShowMessage(true);
-    }  
-  };
-
-  return (
-    <Layout>
-        <Container maxWidth="sm">
-            <AddLineForm/>
-        </Container>      
-    </Layout>    
-  );
+    return (
+        <Layout>
+            <Container maxWidth="sm">
+                <AddLineForm onSubmit={onSubmit}/>
+            </Container>      
+        </Layout>    
+    );
 }
 
 

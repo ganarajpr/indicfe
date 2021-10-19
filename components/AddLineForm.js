@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Select, MenuItem } from "@material-ui/core";
 import { useForm, Controller } from "react-hook-form";
 import Box from '@mui/material/Box';
@@ -14,7 +14,6 @@ const defaultValues = {
   bookContext: ""
 };
 
-
 const scriptOptions = [
     { key: 'devanagari', text: 'Devanagari', value: 'devanagari' },
     { key: 'roman', text: 'Roman', value: 'roman' },
@@ -27,12 +26,19 @@ const scriptOptions = [
     { key: 'kannada', text: 'Kannada', value: 'kannada' }
 ];
 
-export default function AddLineForm() {
-  const { handleSubmit, reset, control, register } = useForm({ defaultValues });
-  const onSubmit = data => console.log(data);
+export default function AddLineForm(props) {
+  const { handleSubmit, reset, control, register, formState: { errors }, 
+    getValues } = useForm({ defaultValues, mode: "onBlur" });
+  const onSubmit = async (data) => {
+      await props.onSubmit(data);
+      reset(defaultValues);
+  };
+  const onError = (errors, e) => console.log(errors, e);
 
   return (
-    <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{
+    <Box component="form" 
+        noValidate
+        onSubmit={handleSubmit(onSubmit, onError)} sx={{
         '& .MuiFormControl-root': { m: 1, p: 0 }
       }}>
         <Typography variant="h6" component="span" >
@@ -68,65 +74,96 @@ export default function AddLineForm() {
             name="script"
         />
         <Box sx={{paddingTop: 1}}>
-            <Controller
-                render={
-                ({ field }) => <TextField
+            <TextField
                 id="line-paragraph"
                 label="Paragraph or Shloka or Mantra"
                 variant="standard"
                 multiline
                 required
                 fullWidth
-                placeholder="1 Paragraph or Shloka or Mantra or Verse"
-                maxRows={8}
-                rows={8}
                 {
-                    ...field
+                    ...errors.line ? {error:true} : null
                 }
-                />
-                }
-                control={control}
-                name="line"
+                helperText={errors?.line?.message}
+                placeholder="1 Paragraph or Shloka or Mantra or Verse"
+                rows={8}
+                {...register("line", {
+                    required: {
+                        value: true,
+                        message: 'Paragraph is required'
+                    },
+                    minLength: {
+                        value: 20,
+                        message: 'Paragraph should be atleast 20 length'
+                    },
+                    validate: {
+                        isDevanagari: (v) => {
+                            const lang = getValues('language');
+                            if(lang === 'sanskrit') {
+                                return /^[\u0900-\u097f\s\W\d]+$/.test(v) 
+                                    || 'Paragraph should be in devanagari';
+                            }
+                            return true;
+                        }
+                    }
+                  })
+                } 
             />
         </Box>
         <Box sx={{paddingTop: 1}}>
-            <Controller
-                render={
-                ({ field }) => <TextField
+            <TextField
                 id="line-book"
                 label="Book"
                 placeholder="ex: RigVeda"
                 variant="standard"
                 fullWidth
                 required
-                size="Normal"
                 {
-                    ...field
+                    ...errors.book ? {error:true} : null
                 }
-                />
-                }
-                control={control}
-                name="book"
+                helperText={errors?.book?.message}
+                size="large"
+                {...register("book", {
+                    required: {
+                        value: true,
+                        message: 'Book is required'
+                    },
+                    minLength: {
+                        value: 4,
+                        message: 'Book should be atleast 4 length'
+                    }
+                  })
+                } 
             />
         </Box>
         <Box sx={{paddingTop: 1}}>
             <TextField
-                id="line-book"
+                id="line-bookContext"
                 label="BookContext"
                 variant="standard"
                 placeholder="ex: 10.5.3 for chapter 10 hymn 5 verse 3"
                 fullWidth
                 required
+                {
+                    ...errors.bookContext ? {error:true} : null
+                }
+                helperText={errors?.bookContext?.message}
                 size="large"
                 {...register("bookContext", {
-                    required: true,
-                    pattern: /^(\d+\.)+\d+$/
+                    required: {
+                        value: true,
+                        message: 'Book is required'
+                    },
+                    pattern: {
+                        value: /^(\d+\.)+\d+$/,
+                        message: 'Book Context is not a valid format ( ex: 1.2)'
+                    }
                   })
                 } 
             />
         </Box>
         <Box sx={{paddingTop: 3, paddingLeft: 1}}>
-            <Button type="submit" variant="contained" fullWidth>Add Verse</Button>
+            <Button type="submit" variant="contained" size="large" fullWidth>Add Verse</Button>
         </Box>
     </Box>
   );
