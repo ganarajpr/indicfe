@@ -33,12 +33,11 @@ export default function AddLineForm(props) {
       await props.onSubmit(data);
       reset(defaultValues);
   };
-  const onError = (errors, e) => console.log(errors, e);
 
   return (
     <Box component="form" 
         noValidate
-        onSubmit={handleSubmit(onSubmit, onError)} sx={{
+        onSubmit={handleSubmit(onSubmit)} sx={{
         '& .MuiFormControl-root': { m: 1, p: 0 }
       }}>
         <Typography variant="h6" component="span" >

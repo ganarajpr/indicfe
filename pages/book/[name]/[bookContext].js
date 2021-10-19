@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Grid, Header, Segment, Form,
-  Button,
-   Accordion, Icon } from 'semantic-ui-react';
+import {  Accordion, Icon } from 'semantic-ui-react';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import { useForm } from "react-hook-form";
 
 import { getLine, addFullTranslation, deleteTranslationForLine } from '../../../fetches/line';
 import Layout from '../../../components/Layout';
@@ -10,58 +15,45 @@ import WordManager from '../../../components/WordManager';
 import { signIn, useSession } from 'next-auth/client';
 import LoggedInContent from '../../../components/LoggedInContent';
 
-
+const defaultValues = {
+    translation: ""
+  };
 export default function ShowLine({ line }) {
-  const [lineState, setLine] = useState({});
-  const [selectedWord, setSelectedWord] = useState();
-  const [wordInText, setWordInText] = useState('');
-  const [translation, setTranslation] = useState('');
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [session] = useSession();
+    const [lineState, setLine] = useState({});
+    const [selectedWord, setSelectedWord] = useState();
+    const [wordInText, setWordInText] = useState('');
+    const [translation, setTranslation] = useState('');
+    const [session] = useSession();
+
+    const { handleSubmit, reset, register, formState: { errors }, 
+    getValues } = useForm({ defaultValues, mode: "onBlur" });
 
   const isLoggedIn = !!session?.user?.name;
 
   useEffect( () => {
     const lines = line.text.split('\n');
-    setLine({lines, ...line});
-    if(line.translations?.length) {
-      setActiveIndex(1);
-    }  
+    setLine({lines, ...line});  
   }, [line]);
-
-
-  const handleAccordionClick = (e, titleProps) => {
-    const { index } = titleProps
-    const newIndex = activeIndex === index ? -1 : index
-    setActiveIndex(newIndex);
-  }
 
   const onSelect = (w, selectedWord) => {
     setSelectedWord(w);
     setWordInText(selectedWord);
-    setActiveIndex(-1);
   };
 
   const onTranslationChange = (e, {value}) => setTranslation(value);
 
   const onSubmit = async () => {
-    if(translation) {
+
       const updatedLine = await addFullTranslation(line._id, translation);
-      setTranslation(''); 
-      const lines = updatedLine.text.split('\n');
-      setLine({lines, ...updatedLine});  
-    }
+      reset();
+    //   setTranslation(''); 
+    //   const lines = updatedLine.text.split('\n');
+    //   setLine({lines, ...updatedLine});  
   };
 
   const getLines = () => {
     return lineState.lines?.map( (line) => {
-      return (<Grid.Row centered columns={1} key={line}>
-        <Grid.Column>
-          <Verse line={line} onSelect={onSelect}></Verse>
-        </Grid.Column>  
-        <Grid.Column>      
-        </Grid.Column>
-      </Grid.Row>)
+      return (<Verse line={line} onSelect={onSelect}></Verse>)
     });
   };
 
@@ -74,67 +66,94 @@ export default function ShowLine({ line }) {
 
   const getTranslations = () => {    
     return lineState.translations?.map( (t, i) => {
-      return (<React.Fragment key={t.text}>
-        <Accordion.Title
-          active={activeIndex === i+1}
-          index={i+1}
-          onClick={handleAccordionClick}
-        >
-          <Icon name='dropdown' />
-          {t.text.substr(0, 30) + '...'}
-         
-        </Accordion.Title>
-        <Accordion.Content active={activeIndex === i+1}>
-          <p>{t.text}</p>
-          { isLoggedIn && session.user.id === t.createdBy ? <Icon name='trash alternate outline' onClick={ () => { onDeleteClick(t._id)}}/> : null }           
-        </Accordion.Content>
-        </React.Fragment>);
+      return (
+        <Paper elevation={3} sx={{ p: 4, mt: 2, overflowWrap: "break-word" }}>
+            <Typography variant="p" component="p" >
+                    {t.text}        
+            </Typography>
+            { isLoggedIn && session.user.id === t.createdBy ? <Icon name='trash alternate outline' onClick={ () => { onDeleteClick(t._id)}}/> : null }           
+        </Paper>);
     });
   };
 
   return (
     <Layout>
-      <Container>
-        <Segment textAlign='center'>
-          <Header as='h2'>{line.book}</Header>
-          <Header as='h3'>{line.bookContext}</Header>
-        </Segment>
-        <Segment>
-          <Grid centered columns={1}>
-            {getLines()}     
-          </Grid>
-        </Segment>
+      <Container maxWidth="lg" minWidth="sm">
+        <Box
+            sx={{
+                    flexGrow: 1,
+                    justifyContent: 'center',
+                    textAlign: 'center'
+                }}
+            >
+            <Paper elevation={3}>
+                <Typography variant="h3" component="div" >
+                    {line.book}        
+                </Typography>
+                <Typography variant="h4" component="div" >
+                    {line.bookContext}        
+                </Typography>
+            </Paper>
+        </Box> 
+        <Box sx={{
+                flexGrow: 1,
+                justifyContent: 'center',
+                textAlign: 'center',
+                mt: 5
+            }}
+        >
+            <Paper elevation={3} sx={{ p: 4, overflowWrap: "break-word" }}>
+                {getLines()}
+            </Paper>
+        </Box>  
         {
-          selectedWord ? <Segment><WordManager 
-            wordInText={wordInText}
-            word={selectedWord} line={lineState}
-            ></WordManager></Segment> : null
+          selectedWord ? <Paper elevation={3} sx={{ p: 1, mt: 2 }}>
+              <WordManager 
+                wordInText={wordInText}
+                word={selectedWord} line={lineState}
+                ></WordManager></Paper> : null
         }
-        <Segment>
-        <Accordion fluid styled>
-          <Accordion.Title
-            active={activeIndex === 0}
-            index={0}
-            onClick={handleAccordionClick}
-          >
-            <Icon name='dropdown' />
-            Add Translation
-          </Accordion.Title>
-          <Accordion.Content active={activeIndex === 0}>
+        {getTranslations()}
+        <Paper elevation={3} sx={{ p: 1, mt: 2}}>
             <LoggedInContent linkText="Sign in to add full translation">
-              <Form onSubmit={onSubmit}>
-                <Form.Field>
-                  <Form.TextArea label="Full Translation" placeholder="Translation of full paragraph" value={translation} onChange={onTranslationChange}>
-                  </Form.TextArea>                
-                </Form.Field>                 
-                <Form.Button primary>Add Full Translation</Form.Button>
-              </Form>
+                <Box component="form" 
+                        noValidate
+                        onSubmit={handleSubmit(onSubmit)} sx={{
+                        '& .MuiFormControl-root': { m: 1, p: 0 }
+                    }}>
+                    <Box sx={{paddingTop: 1, paddingRight: 1}}>
+                        <TextField
+                            id="translation"
+                            label="Full Translation"
+                            variant="standard"
+                            multiline
+                            required
+                            fullWidth
+                            {
+                                ...errors.translation ? {error:true} : null
+                            }
+                            helperText={errors?.translation?.message}
+                            placeholder="Full Translation of the verse"
+                            rows={8}
+                            {...register("translation", {
+                                required: {
+                                    value: true,
+                                    message: 'Full translation is required'
+                                },
+                                minLength: {
+                                    value: 100,
+                                    message: 'Full Translation should be atleast 100 chars in length'
+                                }
+                            })
+                            } 
+                        />
+                    </Box>
+                    <Box sx={{paddingTop: 3, paddingLeft: 1}}>
+                        <Button type="submit" variant="contained" size="large" fullWidth>Add Translation</Button>
+                    </Box>
+                </Box>
             </LoggedInContent>
-          </Accordion.Content>
-          {getTranslations()}
-      </Accordion>
-            
-        </Segment>         
+        </Paper>         
       </Container>      
     </Layout>    
   )
