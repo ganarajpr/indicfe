@@ -1,5 +1,6 @@
 import getDb from "../../../mongo";
 import { ObjectId } from 'mongodb';
+import { getWordforAllText } from "../word/_core";
 
 export const getLineByTextAndLanguage = async (text, language) =>{
     const db = await getDb();
@@ -40,8 +41,12 @@ export const updateLine = async (updateObject, user) => {
 
 export const getLineByBookAndContext = async (book, bookContext) => {
     const db = await getDb();
-    return db.collection('lines').findOne(
+    const lines = await  db.collection('lines').findOne(
             {book, bookContext},
             { projection: {createdBy: 0, createdAt: 0} }
         );
+    const words = lines.text.split('\n').join(' ').split(' ');
+    const wordTranslations = await getWordforAllText(words);
+    lines.words = wordTranslations;
+    return lines;
 };

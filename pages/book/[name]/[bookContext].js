@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import {  Accordion, Icon } from 'semantic-ui-react';
+import { useState, useEffect } from 'react';
+import { Icon } from 'semantic-ui-react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -7,26 +7,27 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useForm } from "react-hook-form";
-
+import _ from 'lodash';
+import Divider from '@mui/material/Divider';
 import { getLine, addFullTranslation, deleteTranslationForLine } from '../../../fetches/line';
 import Layout from '../../../components/Layout';
-import Verse from '../../../components/Verse';
-import WordManager from '../../../components/WordManager';
-import { signIn, useSession } from 'next-auth/client';
+import Verse from '../../../components/HighlightLine';
+import { useSession } from 'next-auth/client';
 import LoggedInContent from '../../../components/LoggedInContent';
+import WordTranslations from '../../../components/WordTranslations';
+import WordInteractionForm from '../../../components/WordInteractionForm';
+import { addWord } from '../../../fetches/word';
 
 const defaultValues = {
     translation: ""
   };
 export default function ShowLine({ line }) {
     const [lineState, setLine] = useState({});
-    const [selectedWord, setSelectedWord] = useState();
-    const [wordInText, setWordInText] = useState('');
     const [translation, setTranslation] = useState('');
     const [session] = useSession();
 
-    const { handleSubmit, reset, register, formState: { errors }, 
-    getValues } = useForm({ defaultValues, mode: "onBlur" });
+    const { handleSubmit, reset, register, 
+        formState: { errors } } = useForm({ defaultValues });
 
   const isLoggedIn = !!session?.user?.name;
 
@@ -35,26 +36,29 @@ export default function ShowLine({ line }) {
     setLine({lines, ...line});  
   }, [line]);
 
-  const onSelect = (w, selectedWord) => {
-    setSelectedWord(w);
-    setWordInText(selectedWord);
+  const onSubmit = async () => {
+      await addFullTranslation(line._id, translation);
+      reset(); 
   };
 
-  const onTranslationChange = (e, {value}) => setTranslation(value);
-
-  const onSubmit = async () => {
-
-      const updatedLine = await addFullTranslation(line._id, translation);
-      reset();
-    //   setTranslation(''); 
-    //   const lines = updatedLine.text.split('\n');
-    //   setLine({lines, ...updatedLine});  
+  const onAddTranslation = async (data) => {
+    await addWord(data.word, lineState.script, lineState.language, data.translation, lineState.book, lineState.bookContext);
+    const line = await getLine(lineState.book, lineState.bookContext);
+    const lines = line.text.split('\n');
+    setLine({lines, ...line}); 
   };
 
   const getLines = () => {
     return lineState.lines?.map( (line) => {
-      return (<Verse line={line} onSelect={onSelect}></Verse>)
+      return (<Verse line={line} words={lineState.words} key={line}></Verse>)
     });
+  };
+
+  const getWords = () => {
+    const wordArray =  lineState.lines?.map( (line) => {
+        return line.split(' ');
+    });
+    return _.flatten(wordArray);
   };
 
   const onDeleteClick = async (trId) => {
@@ -67,18 +71,21 @@ export default function ShowLine({ line }) {
   const getTranslations = () => {    
     return lineState.translations?.map( (t, i) => {
       return (
-        <Paper elevation={3} sx={{ p: 4, mt: 2, overflowWrap: "break-word" }}>
+        <Paper elevation={3} sx={{ p: 4, mt: 2, overflowWrap: "break-word" }} key={t.text}>
             <Typography variant="p" component="p" >
                     {t.text}        
             </Typography>
-            { isLoggedIn && session.user.id === t.createdBy ? <Icon name='trash alternate outline' onClick={ () => { onDeleteClick(t._id)}}/> : null }           
+            { isLoggedIn && session.user.id === t.createdBy ? 
+                <Icon name='trash alternate outline' onClick={ () => { onDeleteClick(t._id)}}/> 
+                : null 
+            }           
         </Paper>);
     });
   };
 
   return (
     <Layout>
-      <Container maxWidth="lg" minWidth="sm">
+      <Container maxWidth="lg">
         <Box
             sx={{
                     flexGrow: 1,
@@ -106,13 +113,13 @@ export default function ShowLine({ line }) {
                 {getLines()}
             </Paper>
         </Box>  
-        {
-          selectedWord ? <Paper elevation={3} sx={{ p: 1, mt: 2 }}>
-              <WordManager 
-                wordInText={wordInText}
-                word={selectedWord} line={lineState}
-                ></WordManager></Paper> : null
-        }
+        <Paper elevation={3} sx={{ p: 1, mt: 2 }}>
+            <WordTranslations words={getWords()} translations={lineState?.words?.translations}/>
+            <Divider sx={{mb: 3, mt: 3}}/>
+            <WordInteractionForm words={getWords()} 
+                translations={lineState?.words?.translations}
+                onSubmit={onAddTranslation}/>
+        </Paper> 
         {getTranslations()}
         <Paper elevation={3} sx={{ p: 1, mt: 2}}>
             <LoggedInContent linkText="Sign in to add full translation">

@@ -12,7 +12,7 @@ const Wrapper = styled.div`
 `;
 
 const WordManager = (props) => {
-    const { word, line: {script, language, book, bookContext}, wordInText } = props;
+    const { line: {script, language, book, bookContext, words}, word } = props;
     const [translation, setTranslation] = useState('');
     const [storedTranslations, setStoredTranslations] = useState([]);
     const [session] = useSession();
