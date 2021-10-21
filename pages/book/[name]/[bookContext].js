@@ -40,7 +40,7 @@ export default function ShowLine({ line }) {
       const line = await addFullTranslation(lineState._id, data.translation);
       const lines = line.text.split('\n');
       setLine({lines, ...line}); 
-      reset(); 
+      reset(defaultValues); 
   };
 
   const onAddTranslation = async (data) => {
@@ -97,10 +97,10 @@ export default function ShowLine({ line }) {
                 }}
             >
             <Paper elevation={3}>
-                <Typography variant="h3" component="div" >
+                <Typography variant="h3" component="h3" >
                     {line.book}        
                 </Typography>
-                <Typography variant="h4" component="div" >
+                <Typography variant="h4" component="h4" >
                     {line.bookContext}        
                 </Typography>
             </Paper>

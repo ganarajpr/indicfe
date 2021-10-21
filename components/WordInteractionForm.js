@@ -30,7 +30,7 @@ export default function WordInteractionForm (props) {
 
     const onSubmit = async (data) => {
         await onFormSubmit(data);
-        reset();
+        reset({translation: ""});
     };
 
     return ( 
