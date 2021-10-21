@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import { useForm } from "react-hook-form";
 import _ from 'lodash';
 import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 
 import { getLine, addFullTranslation, deleteTranslationForLine } from '../../../fetches/line';
 import Layout from '../../../components/Layout';
@@ -77,9 +78,9 @@ export default function ShowLine({ line }) {
                     {t.text}        
             </Typography>
             { isLoggedIn && session.user.id === t.createdBy ? 
-                <Button variant="contained" color="error" onClick={ () => { onDeleteClick(t._id)}}>
+                <IconButton variant="contained" color="error" onClick={ () => { onDeleteClick(t._id)}}>
                     <DeleteIcon/>
-                </Button>
+                </IconButton>
                 : null 
             }           
         </Paper>);
