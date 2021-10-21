@@ -10,7 +10,6 @@ const deleteTranslationForLine = async (lineId, translationId, user) => {
     if(!user) {
         throw(new Error('User not found'));    
     }
-    console.log('attmt', lineId, translationId);
     await lines.updateOne({_id: ObjectId(lineId)},
             { $pull : { translations: { _id: ObjectId(translationId) } } }
         )

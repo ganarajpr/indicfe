@@ -11,7 +11,6 @@ const Wrapper = styled.div`
 const StyledWord = styled.span`
     &:hover {
         background-color: #ecc3fa;
-        cursor: pointer;
     }
 `;
 
@@ -28,7 +27,7 @@ const Word = (props) => {
 
     const getTranslationForToolTip = () => {
         return translations?.length ? translations[0]:  
-            <Italicized>No Translations; Click to add</Italicized>;
+            <Italicized>No available Translations</Italicized>;
     };
     return (<Tooltip title={getTranslationForToolTip()} arrow placement="top">
             <StyledWord>{props.children}&nbsp;</StyledWord>

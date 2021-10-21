@@ -6,20 +6,34 @@ export const getLineByTextAndLanguage = async (text, language) =>{
     const db = await getDb();
     const lines = db.collection('lines');
     const line = await lines.findOne({text, language});
-    return line;
+    return getWordsofLine(line);
+};
+
+const getWordsofLine = async (lines) => {
+    const words = lines.text.split('\n').join(' ').split(' ');
+    const wordTranslations = await getWordforAllText(words);
+    lines.words = wordTranslations;
+    return lines;
 };
 
 export const getLineByText = async (text) =>{
     const db = await getDb();
     const lines = db.collection('lines');
-    const line = await lines.findOne({text});
-    return line;
+    const line = await lines.findOne(
+        {text},
+        { projection: {createdBy: 0, createdAt: 0} }
+    );
+    return getWordsofLine(line);
 };
 
 export const getLineById = async (id) => {
     const db = await getDb();
     const lines = db.collection('lines');
-    return lines.findOne({_id: ObjectId(id)});
+    const line = await lines.findOne(
+        {_id: ObjectId(id)},
+        { projection: {createdBy: 0, createdAt: 0} }
+    );
+    return getWordsofLine(line);
 };
 export const updateLine = async (updateObject, user) => {
     const db = await getDb();
@@ -45,8 +59,5 @@ export const getLineByBookAndContext = async (book, bookContext) => {
             {book, bookContext},
             { projection: {createdBy: 0, createdAt: 0} }
         );
-    const words = lines.text.split('\n').join(' ').split(' ');
-    const wordTranslations = await getWordforAllText(words);
-    lines.words = wordTranslations;
-    return lines;
+    return getWordsofLine(lines);
 };

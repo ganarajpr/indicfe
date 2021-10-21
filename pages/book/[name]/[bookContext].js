@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Icon } from 'semantic-ui-react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -9,6 +8,7 @@ import Button from '@mui/material/Button';
 import { useForm } from "react-hook-form";
 import _ from 'lodash';
 import Divider from '@mui/material/Divider';
+
 import { getLine, addFullTranslation, deleteTranslationForLine } from '../../../fetches/line';
 import Layout from '../../../components/Layout';
 import Verse from '../../../components/HighlightLine';
@@ -17,13 +17,13 @@ import LoggedInContent from '../../../components/LoggedInContent';
 import WordTranslations from '../../../components/WordTranslations';
 import WordInteractionForm from '../../../components/WordInteractionForm';
 import { addWord } from '../../../fetches/word';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const defaultValues = {
     translation: ""
   };
 export default function ShowLine({ line }) {
     const [lineState, setLine] = useState({});
-    const [translation, setTranslation] = useState('');
     const [session] = useSession();
 
     const { handleSubmit, reset, register, 
@@ -36,8 +36,10 @@ export default function ShowLine({ line }) {
     setLine({lines, ...line});  
   }, [line]);
 
-  const onSubmit = async () => {
-      await addFullTranslation(line._id, translation);
+  const onSubmit = async (data) => {
+      const line = await addFullTranslation(lineState._id, data.translation);
+      const lines = line.text.split('\n');
+      setLine({lines, ...line}); 
       reset(); 
   };
 
@@ -63,7 +65,6 @@ export default function ShowLine({ line }) {
 
   const onDeleteClick = async (trId) => {
     const updatedLine = await deleteTranslationForLine(line._id, trId);
-    setTranslation(''); 
     const lines = updatedLine.text.split('\n');
     setLine({lines, ...updatedLine});  
   };
@@ -72,11 +73,13 @@ export default function ShowLine({ line }) {
     return lineState.translations?.map( (t, i) => {
       return (
         <Paper elevation={3} sx={{ p: 4, mt: 2, overflowWrap: "break-word" }} key={t.text}>
-            <Typography variant="p" component="p" >
+            <Typography variant="p" component="p" sx={{display: "inline", mr: 4}}>
                     {t.text}        
             </Typography>
             { isLoggedIn && session.user.id === t.createdBy ? 
-                <Icon name='trash alternate outline' onClick={ () => { onDeleteClick(t._id)}}/> 
+                <Button variant="contained" color="error" onClick={ () => { onDeleteClick(t._id)}}>
+                    <DeleteIcon/>
+                </Button>
                 : null 
             }           
         </Paper>);
@@ -112,14 +115,22 @@ export default function ShowLine({ line }) {
             <Paper elevation={3} sx={{ p: 4, overflowWrap: "break-word" }}>
                 {getLines()}
             </Paper>
-        </Box>  
+        </Box>
+        <Divider sx={{mb: 3, mt: 3}}/>
+        <Typography variant="h5" component="h5" sx={{fontStyle: "italic", mb: 5, color: 'text.secondary'}}>
+            Words and Meanings
+        </Typography>
         <Paper elevation={3} sx={{ p: 1, mt: 2 }}>
             <WordTranslations words={getWords()} translations={lineState?.words?.translations}/>
             <Divider sx={{mb: 3, mt: 3}}/>
             <WordInteractionForm words={getWords()} 
                 translations={lineState?.words?.translations}
                 onSubmit={onAddTranslation}/>
-        </Paper> 
+        </Paper>
+        <Divider sx={{mb: 3, mt: 3}}/>
+        <Typography variant="h5" component="h5" sx={{fontStyle: "italic", mb: 5, color: 'text.secondary'}}>
+            Full Translations
+        </Typography> 
         {getTranslations()}
         <Paper elevation={3} sx={{ p: 1, mt: 2}}>
             <LoggedInContent linkText="Sign in to add full translation">
@@ -148,7 +159,7 @@ export default function ShowLine({ line }) {
                                     message: 'Full translation is required'
                                 },
                                 minLength: {
-                                    value: 100,
+                                    value: 50,
                                     message: 'Full Translation should be atleast 100 chars in length'
                                 }
                             })
