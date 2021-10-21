@@ -1,4 +1,5 @@
 import { signIn, useSession } from 'next-auth/client'
+import Link from 'next/link';
 
 export default function LoggedInContent (props) {
     const [session] = useSession();
@@ -7,11 +8,11 @@ export default function LoggedInContent (props) {
     }
     return (
         <p>
-            <a href="/api/auth/signin"
+            <Link href="/api/auth/signin"
             onClick={(e) => {
             e.preventDefault()
             signIn()
-            }}>{ props.linkText } </a>
+            }}>{ props.linkText } </Link>
         </p>
     )
 }

@@ -15,8 +15,7 @@ export default function WordTranslations (props) {
     }, {});
 
     return ( <>
-        <Grid sx={{ flexGrow: 1 }} container spacing={{ xs: 2, md: 3 }} 
-            sx={{pl: 2}}
+        <Grid sx={{ flexGrow: 1, pl: 2 }} container spacing={{ xs: 2, md: 3 }} 
             columns={{ xs: 4, md: 12 }}>
             {words && words.map( (word) => {
                 if(wordTranslationMap[word]) {
