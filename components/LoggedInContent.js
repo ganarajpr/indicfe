@@ -12,7 +12,7 @@ export default function LoggedInContent (props) {
             onClick={(e) => {
             e.preventDefault()
             signIn()
-            }}>{ props.linkText } </Link>
+            }}>{ props.linkText }</Link>
         </p>
     )
 }

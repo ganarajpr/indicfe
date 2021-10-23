@@ -12,7 +12,7 @@ export default function Home({ books } ) {
       return books.map( (book) => {
         return (<ListItem key={book}>
             <Link href={`/book/${book}`}>
-                    <Button>{book}</Button>
+                <Button>{book}</Button>
             </Link>
         </ListItem>)
       });      

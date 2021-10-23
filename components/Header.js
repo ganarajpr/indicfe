@@ -66,8 +66,8 @@ export default function MenuAppBar() {
             </Menu>
           </div>);
     }
-    return (<Link onClick={onSignInClick} href="/api/auth/signin">
-            <Button color="inherit">Login</Button>
+    return (<Link  href="/api/auth/signin">
+            <Button onClick={onSignInClick} color="inherit">Login</Button>
         </Link>);
   };
 
@@ -86,10 +86,10 @@ export default function MenuAppBar() {
           </IconButton>
           <Box sx={{ flexGrow: 1, justifyContent: 'center', textAlign: 'center' }}>
             <Link href="/">
-                <Typography variant="h6" component="div" sx={{ cursor: 'pointer'}} >
+                <Typography variant="h6" component="h6" sx={{ cursor: 'pointer'}} >
                     DHRTA
                 </Typography>
-                </Link>
+            </Link>
             </Box>
           {getSignIn()}
         </Toolbar>

@@ -16,6 +16,10 @@ const defaultValues = {
 export default function WordInteractionForm (props) {
     const { words, translations, onSubmit: onFormSubmit } = props;
 
+    const acceptableWords = words?.filter( word => {
+        return word !== '|' && word !== '||' &&  !/\s/.test(word) && word !== '';
+    });
+
     const wordTranslationMap = _.reduce( translations, (acc,n) => {
         if(acc[`${n.text}`] && acc[n.text].length) {
             acc[n.text].push(n.translation);
@@ -55,7 +59,7 @@ export default function WordInteractionForm (props) {
                         variant="standard" 
                         defaultValue={words[0]}
                     >
-                        {words.map( (wrd) => {
+                        {acceptableWords.map( (wrd) => {
                             return (<option key={wrd} value={wrd}>
                                 {wrd}
                             </option>);
