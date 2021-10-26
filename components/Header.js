@@ -87,7 +87,7 @@ export default function MenuAppBar() {
           <Box sx={{ flexGrow: 1, justifyContent: 'center', textAlign: 'center' }}>
             <Link href="/">
                 <Typography variant="h6" component="h6" sx={{ cursor: 'pointer'}} >
-                    DHRTA
+                    SMRTHI
                 </Typography>
             </Link>
             </Box>

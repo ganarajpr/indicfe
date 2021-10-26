@@ -20,8 +20,8 @@ const getEmbedResponse = async (url) => {
         "width": 240,
         "height": 160,
         "title": `${book} ${bookContext}`,
-        "provider_name": "dhrta",
-        "provider_url": "http://www.dhrta.com/",
+        "provider_name": "smrthi",
+        "provider_url": "http://www.smrthi.com/",
         "html":
 		`<object width=\"425\" height=\"344\">
 			<param name=\"movie\" value=\"https://www.youtube.com/v/M3r2XDceM6A&fs=1\"></param>
