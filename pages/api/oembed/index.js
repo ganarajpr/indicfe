@@ -47,3 +47,15 @@ async function handler(req, res) {
 }
 
 export default corsWrapper(handler);
+
+
+```
+<blockquote class="twitter-tweet">
+    <p lang="en" dir="ltr">Now what is this? After Yoga is Exercises, Deepavali is just Festival of Lights, Pranayam is Rhythmic Breathing, Mahabharata is just a Story which is non-Hindu and predates Hinduism apparently 😳 <br><br>There&#39;s got to be a
+     limit to <a href="https://twitter.com/hashtag/Hindumisia?src=hash&amp;ref_src=twsrc%5Etfw">#Hindumisia</a> 
+     <a href="https://twitter.com/hashtag/Hinduphobia?src=hash&amp;ref_src=twsrc%5Etfw">#Hinduphobia</a>
+      <a href="https://t.co/4VtqRVozPb">https://t.co/4VtqRVozPb</a>
+    </p>&mdash; Rati #ProtectWithPen (@ratihegde) <a href="https://twitter.com/ratihegde/status/1453191079272988672?ref_src=twsrc%5Etfw">October 27, 2021</a>
+</blockquote>
+ <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+```

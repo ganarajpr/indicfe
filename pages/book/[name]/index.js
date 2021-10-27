@@ -4,27 +4,38 @@ import Container from '@mui/material/Container';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 import Link from 'next/link';
+import _ from 'lodash-es';
+
 export default function Book({ bookContexts,bookName }) {
 
   const getBookContextList = () => {
     if(bookContexts?.length) {
-      return bookContexts.map( (bc) => {
-        return (<ListItem key={bc}>
-                <Link href={`/book/${bookName}/${bc}`}>
-                    <Button>{bc}</Button>
-                </Link>
-            </ListItem>);
-      });      
+        const bcSplits = _.groupBy(bookContexts, (bc) => { 
+            const sp = bc.split('.'); 
+            return _.take(sp, sp.length - 1).join(""); 
+        });
+        return _.map(_.keys(bcSplits), (spl) => {
+            const curContext = bcSplits[spl];
+            const current = curContext.map( (spl) => {
+                return (<ListItem key={spl}>
+                    <Link href={`/book/${bookName}/${spl}`}>
+                        <Button>{spl}</Button>
+                    </Link>
+                </ListItem>);
+            }); 
+            return (<Grid item xs={2}><List>{current}</List></Grid>);
+        });
     }
   };
 
   return (
     <Layout>
       <Container maxWidth="sm">
-          <List>
+          <Grid container spacing={2}>
             {getBookContextList()}
-          </List>
+          </Grid>
       </Container> 
     </Layout>
   )
