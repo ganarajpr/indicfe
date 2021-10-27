@@ -19,13 +19,12 @@ export default function Book({ bookContexts,bookName }) {
         return _.map(_.keys(bcSplits), (spl) => {
             const curContext = bcSplits[spl];
             const current = curContext.map( (spl) => {
-                return (<ListItem key={spl}>
+                return (
                     <Link href={`/book/${bookName}/${spl}`}>
                         <Button>{spl}</Button>
-                    </Link>
-                </ListItem>);
+                    </Link>);
             }); 
-            return (<Grid item xs={2}><List>{current}</List></Grid>);
+            return (<Grid item  xs={2}>{current}</Grid>);
         });
     }
   };
@@ -33,7 +32,7 @@ export default function Book({ bookContexts,bookName }) {
   return (
     <Layout>
       <Container maxWidth="sm">
-          <Grid container spacing={2}>
+          <Grid container direction="column" spacing={2}>
             {getBookContextList()}
           </Grid>
       </Container> 
