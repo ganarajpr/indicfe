@@ -20,7 +20,7 @@ export default function Book({ bookContexts,bookName }) {
             const curContext = bcSplits[spl];
             const current = curContext.map( (spl) => {
                 return (
-                    <Link href={`/book/${bookName}/${spl}`}>
+                    <Link href={`/book/${bookName}/${spl}`} key={spl}>
                         <Button>{spl}</Button>
                     </Link>);
             }); 
