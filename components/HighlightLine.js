@@ -37,6 +37,7 @@ const Word = (props) => {
 const Verse = (props) => {
     const { line, words } = props;
     const wordsInLine = line.split(' ');
+    const cleaned = _.filter(wordsInLine, (word) => word !== ' ' && word !== '');
     const wordTranslationMap = _.reduce(words.translations, (acc,n) => {
         if(acc[`${n.text}`] && acc[n.text].length) {
             acc[n.text].push(n.translation);
@@ -45,9 +46,10 @@ const Verse = (props) => {
         }
         return acc;
     }, {});
+    console.log(cleaned);
     return (<>
         <Wrapper>
-        {wordsInLine.map((word) => <Word key={word} 
+        {cleaned.map((word) => <Word key={word} 
             translations={wordTranslationMap[word]}>{word}</Word>)}
         </Wrapper>
     </>)    
