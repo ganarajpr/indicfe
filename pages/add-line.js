@@ -5,6 +5,7 @@ import Layout from '../components/Layout';
 import Container from '@mui/material/Container';
 import AddLineForm from "../components/AddLineForm";
 import { useSession } from 'next-auth/client';
+import Head from 'next/head';
 
 export default function Line() {
     const [session] = useSession();
@@ -20,6 +21,9 @@ export default function Line() {
 
     return (
         <Layout>
+            <Head>
+                <title>Smrithi - Add a new Verse</title>
+            </Head>
             <Container maxWidth="sm">
                 <AddLineForm onSubmit={onSubmit}/>
             </Container>      

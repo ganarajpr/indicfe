@@ -5,6 +5,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
+import Head from 'next/head';
+
 export default function Home({ books } ) {
 
   const getBookList = () => {
@@ -21,6 +23,9 @@ export default function Home({ books } ) {
   
   return (
     <Layout>
+        <Head>
+            <title>Smrithi</title>
+        </Head>
         <Container maxWidth="sm">
             <List>
                 {getBookList()}

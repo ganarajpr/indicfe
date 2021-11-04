@@ -1,12 +1,11 @@
 import { getBook } from "../../../fetches/books";
 import Layout from "../../../components/Layout";
 import Container from '@mui/material/Container';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Link from 'next/link';
 import _ from 'lodash-es';
+import Head from 'next/head';
 
 export default function Book({ bookContexts,bookName }) {
 
@@ -31,11 +30,14 @@ export default function Book({ bookContexts,bookName }) {
 
   return (
     <Layout>
-      <Container maxWidth="sm">
-          <Grid container direction="column" spacing={2}>
-            {getBookContextList()}
-          </Grid>
-      </Container> 
+        <Head>
+            <title>Smrithi - {bookName}</title>
+        </Head>
+        <Container maxWidth="sm">
+            <Grid container direction="column" spacing={2}>
+                {getBookContextList()}
+            </Grid>
+        </Container> 
     </Layout>
   )
 }

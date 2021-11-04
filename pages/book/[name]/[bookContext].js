@@ -19,6 +19,8 @@ import WordTranslations from '../../../components/WordTranslations';
 import WordInteractionForm from '../../../components/WordInteractionForm';
 import { addWord } from '../../../fetches/word';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Head from 'next/head';
+
 
 const defaultValues = {
     translation: ""
@@ -89,6 +91,12 @@ export default function ShowLine({ line }) {
 
   return (
     <Layout>
+        <Head>
+            <title>Smrithi - {line.book} {line.bookContext}</title>
+            <link rel="alternate" type="application/json+oembed"
+                href={`http://smrthi.com/api/oembed?url=http%3A%2F%2Fsmrthi.com%2Fbook%2F${line.book}%2F${line.bookContext}&format=json`}
+                title={`${line.book} ${line.bookContext}`} />
+        </Head>
       <Container maxWidth="lg">
         <Box
             sx={{
