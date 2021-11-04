@@ -14,16 +14,16 @@ const parseBookAndContext = (url) => {
 
 const getEmbedResponse = async (url) => {
     const {book, bookContext} = parseBookAndContext(url);
+    const line = await getLineByBookAndContext(book, bookContext);
     const resp = {
         "version": "1.0",
         "type": "rich",
-        "width": 240,
-        "height": 160,
+        "width": 550,
+        "height": null,
         "title": `${book} ${bookContext}`,
         "provider_name": "smrthi",
         "provider_url": "http://www.smrthi.com/",
-        "html": `this is my test`,
-
+        "html": `<p>${line.text}</p><p>${line.book} ${line.bookContext}</p>`
     };
     return resp;
 };
