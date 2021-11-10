@@ -19,10 +19,14 @@ const getEmbedResponse = async (url) => {
         "type": "rich",
         "width": 550,
         "height": 300,
+        "thumbnail_width": 550,
+        "thumbnail_height": 300,
+        "thumbnail_url": "http://www.smrthi.com/",    
         "title": `${book} ${bookContext}`,
         "provider_name": "smrthi",
         "provider_url": "http://www.smrthi.com/",
         "author_name": "smrthi",
+        "author_url": "https://www.smrthi.com",
         "html": `<iframe width='550' height='250' 
         src=\"https://www.smrthi.com/embed/${book}/${bookContext}\">`
     };
