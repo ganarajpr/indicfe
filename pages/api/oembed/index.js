@@ -18,10 +18,11 @@ const getEmbedResponse = async (url) => {
         "version": "1.0",
         "type": "rich",
         "width": 550,
-        "height": null,
+        "height": 300,
         "title": `${book} ${bookContext}`,
         "provider_name": "smrthi",
         "provider_url": "http://www.smrthi.com/",
+        "author_name": "smrthi",
         "html": `<iframe width='550' height='250' 
         src=\"https://www.smrthi.com/embed/${book}/${bookContext}\">`
     };
