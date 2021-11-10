@@ -14,7 +14,6 @@ const parseBookAndContext = (url) => {
 
 const getEmbedResponse = async (url) => {
     const {book, bookContext} = parseBookAndContext(url);
-    const line = await getLineByBookAndContext(book, bookContext);
     const resp = {
         "version": "1.0",
         "type": "rich",
@@ -23,7 +22,8 @@ const getEmbedResponse = async (url) => {
         "title": `${book} ${bookContext}`,
         "provider_name": "smrthi",
         "provider_url": "http://www.smrthi.com/",
-        "html": `<p>${line.text}</p><p>${line.book} ${line.bookContext}</p>`
+        "html": `<iframe width='550' height='250' 
+        src=\"https://www.smrthi.com/embed/${book}/${bookContext}\">`
     };
     return resp;
 };
