@@ -17,6 +17,11 @@ export default function Book({ bookContexts,bookName }) {
         });
         return _.map(_.keys(bcSplits), (spl) => {
             const curContext = bcSplits[spl];
+            curContext.sort((a, b) => {
+                const numa = a.replace(/\./g, '');
+                const numb = b.replace(/\./g, '');
+                return numa - numb;
+            })
             const current = curContext.map( (spl) => {
                 return (
                     <Link href={`/book/${bookName}/${spl}`} key={spl}>

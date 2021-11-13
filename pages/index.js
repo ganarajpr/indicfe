@@ -24,7 +24,7 @@ export default function Home({ books } ) {
   return (
     <Layout>
         <Head>
-            <title>Smrithi</title>
+            <title>Smrthi</title>
         </Head>
         <Container maxWidth="sm">
             <List>
