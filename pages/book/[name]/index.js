@@ -45,7 +45,7 @@ export default function Book({ bookContexts,bookName }) {
             <title>Smrithi - {bookName}</title>
         </Head>
         <Container maxWidth="sm">
-            <Grid container direction="column" spacing={2}>
+            <Grid container direction="rows" spacing={2}>
                 {getBookContextList()}
             </Grid>
         </Container> 
