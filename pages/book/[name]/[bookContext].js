@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import _ from 'lodash';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import Link from 'next/link';
 
 import { getLine, addFullTranslation, deleteTranslationForLine } from '../../../fetches/line';
 import Layout from '../../../components/Layout';
@@ -105,11 +106,13 @@ export default function ShowLine({ line }) {
                     textAlign: 'center'
                 }}
             >
-            <Paper elevation={3}>
-                <Typography variant="h3" component="h3" >
-                    {line.book}        
-                </Typography>
-                <Typography variant="h4" component="h4" >
+            <Paper elevation={1}>
+                <Link href={`/book/${line.book}`}>
+                    <Typography variant="h3" component="h3" sx={{'cursor': 'pointer', color: '#999', ':hover': { color: '#666'}}}>
+                        {line.book}        
+                    </Typography>
+                </Link>
+                <Typography variant="h4" component="h4" sx={{ color: '#666'}}>
                     {line.bookContext}        
                 </Typography>
             </Paper>
@@ -121,7 +124,7 @@ export default function ShowLine({ line }) {
                 mt: 5
             }}
         >
-            <Paper elevation={3} sx={{ p: 4, overflowWrap: "break-word" }}>
+            <Paper elevation={1} sx={{ p: 4, overflowWrap: "break-word" }}>
                 {getLines()}
             </Paper>
         </Box>
@@ -129,7 +132,7 @@ export default function ShowLine({ line }) {
         <Typography variant="h5" component="h5" sx={{fontStyle: "italic", mb: 5, color: 'text.secondary'}}>
             Words and Meanings
         </Typography>
-        <Paper elevation={3} sx={{ p: 1, mt: 2 }}>
+        <Paper elevation={1} sx={{ p: 1, mt: 2 }}>
             <WordTranslations words={getWords()} translations={lineState?.words?.translations}/>
             <Divider sx={{mb: 3, mt: 3}}/>
             <WordInteractionForm words={getWords()} 
@@ -141,7 +144,7 @@ export default function ShowLine({ line }) {
             Full Translations
         </Typography> 
         {getTranslations()}
-        <Paper elevation={3} sx={{ p: 1, mt: 2}}>
+        <Paper elevation={1} sx={{ p: 1, mt: 2}}>
             <LoggedInContent linkText="Sign in to add full translation">
                 <Box component="form" 
                         noValidate
