@@ -36,7 +36,7 @@ const getLines = (para) => {
 const displayLines = (paragraphs) => {
     return paragraphs.map( para => {
         return (
-            <Box sx={{
+            <Box key={para.bookContext} sx={{
                 flexGrow: 1,
                 justifyContent: 'center',
                 textAlign: 'center',
