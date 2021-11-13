@@ -79,7 +79,7 @@ export default function WordInteractionForm (props) {
                         variant="standard" 
                     >
                     </TextField >
-                    <Button sx={{m: 0, ml: 1}} type="submit" variant="contained">Translate</Button>
+                    <Button color='secondary' sx={{m: 0, ml: 1}} type="submit" variant="contained">Translate</Button>
                 </Box>
             </Grid>
         </Grid>          

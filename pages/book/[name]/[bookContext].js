@@ -179,7 +179,7 @@ export default function ShowLine({ line }) {
                         />
                     </Box>
                     <Box sx={{paddingTop: 3, paddingLeft: 1}}>
-                        <Button type="submit" variant="contained" size="large" fullWidth>Add Translation</Button>
+                        <Button color='secondary' type="submit" variant="contained" size="large" fullWidth>Add Translation</Button>
                     </Box>
                 </Box>
             </LoggedInContent>

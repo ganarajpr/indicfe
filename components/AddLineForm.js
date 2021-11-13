@@ -162,7 +162,7 @@ export default function AddLineForm(props) {
             />
         </Box>
         <Box sx={{paddingTop: 3, paddingLeft: 1}}>
-            <Button type="submit" variant="contained" size="large" fullWidth>Add Verse</Button>
+            <Button color='secondary' type="submit" variant="contained" size="large" fullWidth>Add Verse</Button>
         </Box>
     </Box>
   );

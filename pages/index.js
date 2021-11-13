@@ -31,7 +31,7 @@ export default function Home({ books } ) {
                 {getBookList()}
                 <ListItem key={'addLine'}>
                 <Link href="/add-line">
-                    <Button variant="contained">Add New Verse</Button>
+                    <Button color='secondary' variant="contained">Add New Verse</Button>
                 </Link>
                 </ListItem>
             </List>
