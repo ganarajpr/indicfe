@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
+import { getSum } from '../../../../lib/util';
 
 const getLines = (para) => {
     const lines = para.text.split('\n');
@@ -34,6 +35,11 @@ const getLines = (para) => {
 }
 
 const displayLines = (paragraphs) => {
+    paragraphs.sort((a, b) => {
+        const numa = getSum(a.bookContext);
+        const numb = getSum(b.bookContext);
+        return numa - numb;
+    });
     return paragraphs.map( para => {
         return (
             <Box key={para.bookContext} sx={{

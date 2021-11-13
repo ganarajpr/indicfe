@@ -6,16 +6,9 @@ import Grid from '@mui/material/Grid';
 import Link from 'next/link';
 import _ from 'lodash-es';
 import Head from 'next/head';
+import { getSum } from "../../../lib/util";
 
 
-const getSum = (c) => {
-    return _.sum(
-        c.split('.')
-            .map((s, i, all) => {
-                return i < all.length -1 ? +s*Math.pow(10, 3-i) : +s;
-            })
-    );
-}
 export default function Book({ bookContexts,bookName }) {
 
   const getBookContextList = () => {
