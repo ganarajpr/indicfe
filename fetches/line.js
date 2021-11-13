@@ -24,6 +24,11 @@ export const getLine = async(book, bookContext) => {
     return res.data;
 };
 
+export const getBookChapter = async(book, chapter) => {
+    const res = await axios.get(`/api/chapter/${book}/${chapter}`);
+    return res.data;
+};
+
 export const addFullTranslation = async(lineId, translation) => {
     const res = await axios.put(`/api/line`, {
         id: lineId,

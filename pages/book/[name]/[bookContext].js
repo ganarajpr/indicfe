@@ -10,6 +10,7 @@ import _ from 'lodash';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Link from 'next/link';
+import Sanscript from '@sanskrit-coders/sanscript';
 
 import { getLine, addFullTranslation, deleteTranslationForLine } from '../../../fetches/line';
 import Layout from '../../../components/Layout';
