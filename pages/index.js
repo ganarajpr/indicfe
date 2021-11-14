@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
+import Sanscript from '@sanskrit-coders/sanscript';
 export default function Home({ books } ) {
 
   const getBookList = () => {
@@ -18,7 +19,10 @@ export default function Home({ books } ) {
                 <Link href={`/book/${book}`}>
                     <CardActionArea>
                         <CardContent>
-                            <Typography sx={{ }} color="text.secondary">
+                            <Typography color="text.secondary">
+                                { Sanscript.t(book, 'hk', 'devanagari') }
+                            </Typography>
+                            <Typography color="text.secondary">
                                 { book }
                             </Typography>
                         </CardContent>
