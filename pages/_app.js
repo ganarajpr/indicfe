@@ -13,6 +13,19 @@ export default function App ({ Component, pageProps }) {
             <link rel="preconnect" href="https://fonts.googleapis.com"/>
             <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin/>
             <link href="https://fonts.googleapis.com/css2?family=Vesper+Libre&display=swap" rel="stylesheet"/>
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-YMJXKTXSRF"></script>
+            <script
+                    dangerouslySetInnerHTML={{
+                    __html: `
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', 'G-YMJXKTXSRF', {
+                    page_path: window.location.pathname,
+                    });
+                `,
+                }}
+            />
         </Head>
         <CssBaseline>
           <ThemeProvider theme={theme}>

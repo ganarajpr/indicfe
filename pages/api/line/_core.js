@@ -77,7 +77,4 @@ export const getBookChapter = async (book, chapter) => {
         { projection: {createdBy: 0, createdAt: 0} }
     ).toArray();
     return lines;
-    // return Promise.all(
-    //     lines.map( async (line) => getWordsofLine(line) )
-    // );
 };

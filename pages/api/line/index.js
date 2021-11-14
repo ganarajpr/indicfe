@@ -17,7 +17,8 @@ const addLine = async (text,language,script,book, bookContext, user) => {
             book,
             bookContext,
             createdBy: user.id,
-            createdAt: new Date()
+            createdAt: new Date(),
+            approved: false
         });
         return lines.findOne({text});
     }
