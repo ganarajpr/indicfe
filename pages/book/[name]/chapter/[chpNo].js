@@ -11,6 +11,7 @@ import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import { getSum } from '../../../../lib/util';
+import Sanscript from '@sanskrit-coders/sanscript';
 
 const getLines = (para) => {
     const lines = para.text.split('\n');
@@ -74,7 +75,7 @@ export default function Book({ lines, bookName, chpNo }) {
                         <Link href={`/book/${lines[0].book}`}>
                             <Typography variant="h3" component="h3" 
                                 sx={{'cursor': 'pointer', color: '#999', ':hover': { color: '#666'}}}>
-                                {lines[0].book + ' ' + chpNo}        
+                                {Sanscript.t(lines[0].book, 'iast', 'devanagari') + ' ' + chpNo}        
                             </Typography>
                         </Link>
                     </Paper>
