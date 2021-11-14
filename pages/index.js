@@ -23,7 +23,7 @@ export default function Home({ books } ) {
                                 { Sanscript.t(book, 'hk', 'devanagari') }
                             </Typography>
                             <Typography color="text.secondary">
-                                { book }
+                                { Sanscript.t(book, 'hk', 'iast') }
                             </Typography>
                         </CardContent>
                     </CardActionArea>
