@@ -110,7 +110,7 @@ export default function ShowLine({ line }) {
             <Paper elevation={1}>
                 <Link href={`/book/${line.book}`}>
                     <Typography variant="h3" component="h3" sx={{'cursor': 'pointer', color: '#999', ':hover': { color: '#666'}}}>
-                        { Sanscript.t(line.book, 'iast', 'devanagari') }     
+                        { Sanscript.t(line.book, 'hk', 'devanagari') }     
                     </Typography>
                 </Link>
                 <Typography variant="h4" component="h4" sx={{ color: '#666'}}>

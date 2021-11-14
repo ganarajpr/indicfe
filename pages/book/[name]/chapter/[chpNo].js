@@ -75,7 +75,7 @@ export default function Book({ lines, bookName, chpNo }) {
                         <Link href={`/book/${lines[0].book}`}>
                             <Typography variant="h3" component="h3" 
                                 sx={{'cursor': 'pointer', color: '#999', ':hover': { color: '#666'}}}>
-                                {Sanscript.t(lines[0].book, 'iast', 'devanagari') + ' ' + chpNo}        
+                                {Sanscript.t(lines[0].book, 'hk', 'devanagari') + ' ' + chpNo}        
                             </Typography>
                         </Link>
                     </Paper>
