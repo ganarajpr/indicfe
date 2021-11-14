@@ -1,40 +1,48 @@
 import Layout from "../components/Layout";
 import { getBooks } from "../fetches/books";
 import Container from '@mui/material/Container';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Button from '@mui/material/Button';
 import Link from 'next/link';
 import Head from 'next/head';
-
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
+import CardContent from '@mui/material/CardContent';
 export default function Home({ books } ) {
 
   const getBookList = () => {
     if(books?.length) {
       return books.map( (book) => {
-        return (<ListItem key={book}>
-            <Link href={`/book/${book}`}>
-                <Button>{book}</Button>
-            </Link>
-        </ListItem>)
+        return (<Grid item xs={4} key={book}>
+            <Card variant="outlined" sx={{ overflowWrap: "break-word" }}>
+                <Link href={`/book/${book}`}>
+                    <CardActionArea>
+                        <CardContent>
+                            <Typography sx={{ }} color="text.secondary">
+                                { book }
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
+                </Link>
+            </Card>
+        </Grid>)
       });      
     }
   };
+  {/* <Link href="/add-line">
+        <Button color='secondary' variant="contained">Add New Verse</Button>
+    </Link> */}
   
   return (
     <Layout>
         <Head>
             <title>Smrthi</title>
         </Head>
-        <Container maxWidth="sm">
-            <List>
+        <Container maxWidth="lg">
+            <Grid container spacing={2}>
                 {getBookList()}
-                <ListItem key={'addLine'}>
-                <Link href="/add-line">
-                    <Button color='secondary' variant="contained">Add New Verse</Button>
-                </Link>
-                </ListItem>
-            </List>
+
+            </Grid>
         </Container> 
     </Layout>
   )
