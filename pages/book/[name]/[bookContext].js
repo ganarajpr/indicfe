@@ -106,7 +106,7 @@ export default function ShowLine({ line }) {
             <meta property="og:image" content="https://www.smrthi.com/logo.png"/>
             <meta property="twitter:card" content="summary_large_image"/>
             <meta property="twitter:url" content={`https://www.smrthi.com/book/${line.book}/${line.bookContext}`}/>
-            <meta property="twitter:title" content={line.text}/>
+            <meta property="twitter:title" content={`${line.book} ${line.bookContext}`}/>
             <meta property="twitter:description" content={line.text}/>
             <meta property="twitter:image" content="https://www.smrthi.com/logo.png"/>
         </Head>
