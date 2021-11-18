@@ -1,4 +1,3 @@
-import getDb from "../../../../mongo";
 import corsWrapper from "../../../../lib/corsWrapper";
 import { getLineByBookAndContext } from '../_core';
 
