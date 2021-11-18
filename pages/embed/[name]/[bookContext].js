@@ -10,6 +10,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import Sanscript from '@sanskrit-coders/sanscript';
 
 export default function ShowLine({ line }) {
     const [lineState, setLine] = useState({});
@@ -39,7 +40,7 @@ export default function ShowLine({ line }) {
                 <Link href={`/book/${line.book}/${line.bookContext}`}>
                     <CardActionArea>
                     <CardHeader
-                        title={line.book}
+                        title={Sanscript.t(line.book, 'hk', 'devanagari')}
                         subheader={line.bookContext}                        
                     />
                         <CardContent>

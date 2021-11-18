@@ -103,12 +103,12 @@ export default function ShowLine({ line }) {
             <meta property="og:url" content={`https://www.smrthi.com/book/${line.book}/${line.bookContext}`}/>
             <meta property="og:title" content={`Smrithi - ${line.book} ${line.bookContext}`}/>
             <meta property="og:description" content={line.text}/>
-            <meta property="og:image" content={`https://www.smrthi.com/api/image/${line.book}/${line.bookContext}`}/>
+            <meta property="og:image" content={`https://www.smrthi.com/api/image/${line.book}/${line.bookContext}.jpg`}/>
             <meta property="twitter:card" content="summary_large_image"/>
             <meta property="twitter:url" content={`https://www.smrthi.com/book/${line.book}/${line.bookContext}`}/>
             <meta property="twitter:title" content={`${line.book} ${line.bookContext}`}/>
             <meta property="twitter:description" content={line.text}/>
-            <meta property="twitter:image" content={`https://www.smrthi.com/api/image/${line.book}/${line.bookContext}`}/>
+            <meta property="twitter:image" content={`https://www.smrthi.com/api/image/${line.book}/${line.bookContext}.jpg`}/>
         </Head>
       <Container maxWidth="lg">
         <Box
