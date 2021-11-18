@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import _ from 'lodash';
 import { getLine } from '../../../fetches/line';
 import Verse from '../../../components/HighlightLine';
 import Link from 'next/link';
+import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 
 export default function ShowLine({ line }) {
     const [lineState, setLine] = useState({});
@@ -28,16 +32,25 @@ export default function ShowLine({ line }) {
                 flexGrow: 1,
                 justifyContent: 'center',
                 textAlign: 'center',
-                mt: 5
+                mt: 1
             }}
         >
-            <Paper elevation={3} sx={{ p: 4, overflowWrap: "break-word" }}>
-                {getLines()}
-                <Link href={`/book/${line.book}/${line.bookContext}`} target="_blank">
-                    <a>{line.book} {line.bookContext}</a> 
+            <Card variant="outlined" sx={{ overflowWrap: "break-word" }}>
+                <Link href={`/book/${line.book}/${line.bookContext}`}>
+                    <CardActionArea>
+                    <CardHeader
+                        title={line.book}
+                        subheader={line.bookContext}                        
+                    />
+                        <CardContent>
+                            {getLines()}
+                            <Typography sx={{ mb: 1.5, textAlign: 'right', fontStyle: 'italic' }} color="text.secondary">
+                                www.smrthi.com
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
                 </Link>
-                
-            </Paper>
+            </Card>
         </Box>       
       </Container>      
   )

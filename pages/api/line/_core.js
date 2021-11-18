@@ -62,13 +62,21 @@ export const getLineByBookAndContext = async (book, bookContext) => {
     return getWordsofLine(lines);
 };
 
+export const getOnlyLine = async (book, bookContext) => {
+    const db = await getDb();
+    const lines = await  db.collection('lines').findOne(
+            {book, bookContext},
+            { projection: {createdBy: 0, createdAt: 0} }
+        );
+    return lines;
+};
+
 function escapeRegExp(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 }
 
 export const getBookChapter = async (book, chapter) => {
     const db = await getDb();
-    console.log('getting book chapter');
     const lines = await db.collection('lines').find(
         {   
             book,
