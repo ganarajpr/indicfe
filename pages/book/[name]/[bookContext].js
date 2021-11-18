@@ -77,7 +77,7 @@ export default function ShowLine({ line }) {
   const getTranslations = () => {    
     return lineState.translations?.map( (t, i) => {
       return (
-        <Paper elevation={3} sx={{ p: 4, mt: 2, overflowWrap: "break-word" }} key={t.text}>
+        <Paper elevation={1} sx={{ p: 4, mt: 2, overflowWrap: "break-word" }} key={t.text}>
             <Typography variant="p" component="p" sx={{display: "inline", mr: 4}}>
                     {t.text}        
             </Typography>
@@ -94,7 +94,7 @@ export default function ShowLine({ line }) {
   return (
     <Layout>
         <Head>
-            <title>Smrithi - {line.book} {line.bookContext}</title>
+            <title>Smrthi - {line.book} {line.bookContext}</title>
             <link rel="alternate" type="application/json+oembed"
                 href={`http://smrthi.com/api/oembed?url=http%3A%2F%2Fsmrthi.com%2Fbook%2F${line.book}%2F${line.bookContext}&format=json`}
                 title={`${line.book} ${line.bookContext}`} />

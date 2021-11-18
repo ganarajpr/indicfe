@@ -35,7 +35,7 @@ export default function Book({ bookContexts,bookName }) {
   return (
     <Layout>
         <Head>
-            <title>Smrithi - {bookName}</title>
+            <title>Smrthi - {bookName}</title>
         </Head>
         <Container maxWidth="sm">
             <Grid container direction="rows" spacing={2}>

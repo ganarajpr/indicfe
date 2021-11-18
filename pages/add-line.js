@@ -22,7 +22,7 @@ export default function Line() {
     return (
         <Layout>
             <Head>
-                <title>Smrithi - Add a new Verse</title>
+                <title>Smrthi - Add a new Verse</title>
             </Head>
             <Container maxWidth="sm">
                 <AddLineForm onSubmit={onSubmit}/>

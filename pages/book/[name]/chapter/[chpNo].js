@@ -61,7 +61,7 @@ export default function Book({ lines, bookName, chpNo }) {
     return (
         <Layout>
             <Head>
-                <title>Smrithi - {bookName} - {chpNo}</title>
+                <title>Smrthi - {bookName} - {chpNo}</title>
             </Head>
             <Container maxWidth="lg">
                 <Box
