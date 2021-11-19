@@ -25,6 +25,14 @@ export default function ShowLine({ line }) {
     });
   };
 
+    const header = (<Typography variant="h5" component="h5" sx={{ color: '#666' }}>
+        {Sanscript.t(line.book, 'hk', 'devanagari')}
+        </Typography>);
+
+    const subheader = (<Typography variant="p" component="p" color="text.secondary">
+        {line.bookContext}
+    </Typography>);
+
 
 
   return (
@@ -40,8 +48,9 @@ export default function ShowLine({ line }) {
                 <Link href={`/book/${line.book}/${line.bookContext}`}>
                     <CardActionArea>
                     <CardHeader
-                        title={Sanscript.t(line.book, 'hk', 'devanagari')}
-                        subheader={line.bookContext}                        
+                        disableTypography={true}
+                        title={header}
+                        subheader={subheader}                        
                     />
                         <CardContent>
                             {getLines()}
