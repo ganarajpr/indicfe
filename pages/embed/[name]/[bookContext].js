@@ -25,7 +25,7 @@ export default function ShowLine({ line }) {
     });
   };
 
-    const header = (<Typography variant="h5" component="h5" sx={{ color: '#666' }}>
+    const header = (<Typography variant="h5" component="h5" sx={{ color: '#666', fontFamily: "'Vesper Libre', serif;" }}>
         {Sanscript.t(line.book, 'hk', 'devanagari')}
         </Typography>);
 
