@@ -25,7 +25,8 @@ export default function ShowLine({ line }) {
     });
   };
 
-    const header = (<Typography variant="h5" component="h5" sx={{ color: '#666', fontFamily: "'Vesper Libre', serif;" }}>
+    const header = (<Typography variant="h5" component="h5" 
+        sx={{ color: '#666', fontFamily: "'Vesper Libre', serif;" }}>
         {Sanscript.t(line.book, 'hk', 'devanagari')}
         </Typography>);
 
@@ -44,9 +45,10 @@ export default function ShowLine({ line }) {
                 mt: 1
             }}
         >
-            <Card variant="outlined" sx={{ overflowWrap: "break-word" }}>
+            <Card sx={{ overflowWrap: "break-word" }}>
                 <Link href={`/book/${line.book}/${line.bookContext}`}>
                     <CardActionArea>
+                    <img src="/logo.png" width="200"/>
                     <CardHeader
                         disableTypography={true}
                         title={header}
@@ -54,6 +56,7 @@ export default function ShowLine({ line }) {
                     />
                         <CardContent>
                             {getLines()}
+                            
                             <Typography sx={{ mb: 1.5, textAlign: 'right', fontStyle: 'italic' }} color="text.secondary">
                                 www.smrthi.com
                             </Typography>
