@@ -36,6 +36,17 @@ export default function Book({ bookContexts,bookName }) {
     <Layout>
         <Head>
             <title>Smrthi - {bookName}</title>
+            <meta name="description" content={ "Chapters of " + Sanscript.t(bookName, 'hk', 'devanagari') }/>
+            <meta property="og:type" content="website"/>
+            <meta property="og:url" content={`https://www.smrthi.com/book/${bookName}`}/>
+            <meta property="og:title" content={`Smrithi - ${Sanscript.t(bookName, 'hk', 'devanagari')} `}/>
+            <meta property="og:description" content={ "Chapters of " + Sanscript.t(bookName, 'hk', 'devanagari') }/>
+            <meta property="og:image" content={`https://www.smrthi.com/logo.jpg`}/>
+            <meta property="twitter:card" content="summary"/>
+            <meta property="twitter:url" content={`https://www.smrthi.com/book/${bookName}`}/>
+            <meta property="twitter:title" content={`${Sanscript.t(bookName, 'hk', 'devanagari')}`}/>
+            <meta property="twitter:description" content={ "Chapters of " + Sanscript.t(bookName, 'hk', 'devanagari') }/>
+            <meta property="twitter:image" content={`https://www.smrthi.com/logo.jpg`}/>
         </Head>
         <Container maxWidth="sm">
             <Grid container direction="rows" spacing={2}>
