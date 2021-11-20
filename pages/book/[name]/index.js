@@ -7,6 +7,7 @@ import Link from 'next/link';
 import _ from 'lodash-es';
 import Head from 'next/head';
 import { getSum } from "../../../lib/util";
+import Sanscript from '@sanskrit-coders/sanscript';
 
 
 export default function Book({ bookContexts,bookName }) {

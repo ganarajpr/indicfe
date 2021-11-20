@@ -46,7 +46,6 @@ const Verse = (props) => {
         }
         return acc;
     }, {});
-    console.log(cleaned);
     return (<>
         <Wrapper>
         {cleaned.map((word) => <Word key={word} 

@@ -14,7 +14,6 @@ import Sanscript from '@sanskrit-coders/sanscript';
 
 import { getLine, addFullTranslation, deleteTranslationForLine } from '../../../fetches/line';
 import Layout from '../../../components/Layout';
-import Verse from '../../../components/HighlightLine';
 import { useSession } from 'next-auth/client';
 import LoggedInContent from '../../../components/LoggedInContent';
 import WordTranslations from '../../../components/WordTranslations';
@@ -22,24 +21,30 @@ import WordInteractionForm from '../../../components/WordInteractionForm';
 import { addWord } from '../../../fetches/word';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Head from 'next/head';
-
+import OriginalText from './_OriginalText';
 
 const defaultValues = {
     translation: ""
   };
+const editingForm = {
+    originalText: "" 
+};
+
 export default function ShowLine({ line }) {
     const [lineState, setLine] = useState({});
     const [session] = useSession();
 
     const { handleSubmit, reset, register, 
         formState: { errors } } = useForm({ defaultValues });
-
+    
   const isLoggedIn = !!session?.user?.name;
 
   useEffect( () => {
     const lines = line.text.split('\n');
     setLine({lines, ...line});  
   }, [line]);
+
+  
 
   const onSubmit = async (data) => {
       const line = await addFullTranslation(lineState._id, data.translation);
@@ -53,12 +58,6 @@ export default function ShowLine({ line }) {
     const line = await getLine(lineState.book, lineState.bookContext);
     const lines = line.text.split('\n');
     setLine({lines, ...line}); 
-  };
-
-  const getLines = () => {
-    return lineState.lines?.map( (line) => {
-      return (<Verse line={line} words={lineState.words} key={line}></Verse>)
-    });
   };
 
   const getWords = () => {
@@ -90,6 +89,7 @@ export default function ShowLine({ line }) {
         </Paper>);
     });
   };
+
 
   return (
     <Layout>
@@ -129,17 +129,7 @@ export default function ShowLine({ line }) {
                 </Typography>
             </Paper>
         </Box> 
-        <Box sx={{
-                flexGrow: 1,
-                justifyContent: 'center',
-                textAlign: 'center',
-                mt: 5
-            }}
-        >
-            <Paper elevation={1} sx={{ p: 4, overflowWrap: "break-word" }}>
-                {getLines()}
-            </Paper>
-        </Box>
+        <OriginalText line={line}/>
         <Divider sx={{mb: 3, mt: 3}}/>
         <Typography variant="h5" component="h5" sx={{fontStyle: "italic", mb: 5, color: 'text.secondary'}}>
             Words and Meanings

@@ -23,6 +23,7 @@ export default async (req, res) => {
                 // Send properties to the client, like an access_token from a provider.
                 //console.log('session callback', session, user);
                 session.user.id = user.id;
+                session.user.authorised = !!user.authorised;
                 return session
             }
         }

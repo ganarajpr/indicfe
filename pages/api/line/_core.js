@@ -53,6 +53,18 @@ export const updateLine = async (updateObject, user) => {
 };
 
 
+export const updateLineText = async (updateObject) => {
+    const db = await getDb();
+    const lines = db.collection('lines');
+    await lines.updateOne({_id: ObjectId(updateObject.id)}, {
+        $set: {
+            text: updateObject.text
+        }        
+    });
+    return getLineById(updateObject.id);
+};
+
+
 export const getLineByBookAndContext = async (book, bookContext) => {
     const db = await getDb();
     const lines = await  db.collection('lines').findOne(

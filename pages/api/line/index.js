@@ -1,7 +1,8 @@
 import getDb from "../../../mongo";
 import corsWrapper from "../../../lib/corsWrapper";
 import { getSession } from 'next-auth/client';
-import { updateLine } from "./_core";
+import { updateLine, updateLineText } from "./_core";
+import { ServerSession } from "mongodb";
 const addLine = async (text,language,script,book, bookContext, user) => {
     const db = await getDb();
     const lines = db.collection('lines');
@@ -41,13 +42,25 @@ async function handler(req, res) {
             const session = await getSession({ req });
             if(session) {
                 const { user } = session;
-                const { id, translation } = req.body;
-                const updateObject = {
-                    id,
-                    translation
-                };
-                const line = await updateLine(updateObject, user);
-                return res.json(line);
+                const { id, translation = '', text= '' } = req.body;
+                if(translation != '') {
+                    const updateObject = {
+                        id,
+                        translation
+                    };
+                    const line = await updateLine(updateObject, user);
+                    return res.json(line);
+                } else if(text != '') {
+                    const updateObject = {
+                        id,
+                        text
+                    };
+                    console.log('attempting to update text:  user authorization', user.authorised);                    
+                    if(user.authorised) {
+                        const line = await updateLineText(updateObject);
+                        return res.json(line);    
+                    }
+                }                
             } else {
                 return res.status(401).send('Not Authenticated');
             }

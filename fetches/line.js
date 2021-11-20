@@ -11,14 +11,6 @@ export const addLine = async (text, script, language, book, bookContext) => {
 };
 
 
-export const addWordToLine = async(id, word) => {
-    const res = await axios.put(`/api/line`, {
-        id,
-        word
-    });
-    return res;
-};
-
 export const getLine = async(book, bookContext) => {
     const res = await axios.get(`/api/line/${book}/${bookContext}`);
     return res.data;
@@ -33,6 +25,14 @@ export const addFullTranslation = async(lineId, translation) => {
     const res = await axios.put(`/api/line`, {
         id: lineId,
         translation
+    });
+    return res.data;
+};
+
+export const updateLine = async(id, text) => {
+    const res = await axios.put(`/api/line`, {
+        id,
+        text
     });
     return res.data;
 };
