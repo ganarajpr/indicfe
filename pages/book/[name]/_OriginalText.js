@@ -5,6 +5,8 @@ import Paper from '@mui/material/Paper';
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
 import Verse from '../../../components/HighlightLine';
+import { useSession } from 'next-auth/client';
+
 import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import Button from '@mui/material/Button';
@@ -21,6 +23,7 @@ const fabStyle = {
 export default function OriginalText({ line, words }) {
     const [lineState, setLine] = useState({});
     const [editMode, setEditMode] = useState(false);
+    const [session] = useSession();
     const { handleSubmit, reset, register, 
         formState, setValue, getValues } = useForm({ defaultValues });
     
@@ -96,6 +99,7 @@ export default function OriginalText({ line, words }) {
         <Paper elevation={1} sx={{ p: 4, overflowWrap: "break-word", position: "relative" }}>
             {getLines()}
             {
+                session?.user?.authorised &&
                 !editMode && (<Fab color="secondary" aria-label="edit" sx={fabStyle} size="small" onClick={() => setEditMode(true)}>
                     <EditIcon />
                 </Fab>) 
