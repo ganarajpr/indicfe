@@ -45,7 +45,7 @@ export default function ShowLine({ line }) {
                 mt: 1
             }}
         >
-            <Card sx={{ overflowWrap: "break-word" }}>
+            <Card elevation={0} sx={{ overflowWrap: "break-word" }}>
                 <Link href={`/book/${line.book}/${line.bookContext}`}>
                     <CardActionArea>
                     <img src="/logo.png" width="200"/>
