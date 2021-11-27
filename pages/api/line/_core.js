@@ -1,6 +1,8 @@
 import getDb from "../../../mongo";
 import { ObjectId } from 'mongodb';
 import { getWordforAllText } from "../word/_core";
+import _ from 'lodash-es';
+import { KeyboardSharp } from "@mui/icons-material";
 
 export const getLineByTextAndLanguage = async (text, language) =>{
     const db = await getDb();
@@ -93,16 +95,23 @@ export const getOnlyLine = async (book, bookContext) => {
     return lines;
 };
 
-function escapeRegExp(text) {
-    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-}
+const convertToQueryFormat = (context, root) => {
+    const keys = _.keys(context);
+    const query = keys.reduce((prev, cur) => {
+        prev[`${root}.${cur}`] = context[cur];
+        return prev;
+    }, {});
+    return query;
+};
 
 export const getBookChapter = async (book, chapter) => {
     const db = await getDb();
+    const context = extractBookContext(chapter);
+    const queryFormat = convertToQueryFormat(context, 'context');
     const lines = await db.collection('lines').find(
         {   
             book,
-            bookContext: { $regex: '^'+escapeRegExp(chapter+'.') }
+            ...queryFormat
         },
         { projection: {createdBy: 0, createdAt: 0} }
     ).toArray();
