@@ -10,7 +10,8 @@ import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import Sanscript from '@sanskrit-coders/sanscript';
-
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 
 export default function Book({ bookContexts,bookName }) {
 
@@ -51,6 +52,21 @@ export default function Book({ bookContexts,bookName }) {
             <meta property="twitter:image" content={`https://www.smrthi.com/logo.jpg`}/>
         </Head>
         <Container maxWidth="sm">
+                  <Box
+                    sx={{
+                            flexGrow: 1,
+                            justifyContent: 'center',
+                            textAlign: 'center',
+                            mb: 2
+                        }}
+                    >
+                    <Paper elevation={0}>
+                            <Typography variant="h3" component="h3" 
+                                sx={{ color: '#999' }}>
+                                {Sanscript.t(bookName, 'hk', 'devanagari')}        
+                            </Typography>
+                    </Paper>
+                </Box>
             <Grid container direction="rows" spacing={2}>
                 {getBookContextList()}
             </Grid>
