@@ -64,11 +64,20 @@ export const updateLineText = async (updateObject) => {
     return getLineById(updateObject.id);
 };
 
+const extractBookContext = (bookContext) => {
+    const context = bookContext.split('.');
+    const levels = context.reduce((prev,cur,index) => {
+        prev[`L${index+1}`] = +cur;
+        return prev;
+    },{});
+    return levels;    
+};
 
 export const getLineByBookAndContext = async (book, bookContext) => {
     const db = await getDb();
+    const context = extractBookContext(bookContext);
     const lines = await  db.collection('lines').findOne(
-            {book, bookContext},
+            {book, context},
             { projection: {createdBy: 0, createdAt: 0} }
         );
     return getWordsofLine(lines);
@@ -76,8 +85,9 @@ export const getLineByBookAndContext = async (book, bookContext) => {
 
 export const getOnlyLine = async (book, bookContext) => {
     const db = await getDb();
+    const context = extractBookContext(bookContext);
     const lines = await  db.collection('lines').findOne(
-            {book, bookContext},
+            {book, context},
             { projection: {createdBy: 0, createdAt: 0} }
         );
     return lines;
