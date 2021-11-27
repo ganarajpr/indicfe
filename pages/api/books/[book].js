@@ -3,7 +3,7 @@ import corsWrapper from "../../../lib/corsWrapper";
 
 const getBook = async (book) => {
     const db = await getDb();
-    return db.collection('lines').distinct('bookContext', {book} );
+    return db.collection('lines').distinct('context.L1', {book} );
 };
 
 async function handler(req, res) {

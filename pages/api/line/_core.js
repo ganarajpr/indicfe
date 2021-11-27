@@ -104,16 +104,36 @@ const convertToQueryFormat = (context, root) => {
     return query;
 };
 
+const getNextLevel = (context) => {
+    const max = _.keys(context).length;
+    return `L${max+1}`;
+};
+
 export const getBookChapter = async (book, chapter) => {
     const db = await getDb();
     const context = extractBookContext(chapter);
     const queryFormat = convertToQueryFormat(context, 'context');
-    const lines = await db.collection('lines').find(
-        {   
-            book,
-            ...queryFormat
-        },
-        { projection: {createdBy: 0, createdAt: 0} }
-    ).toArray();
-    return lines;
+    const line = await db.collection('lines').findOne({book, ...queryFormat}, {projection: { context: 1}});
+    if( _.keys(line.context).length === _.keys(queryFormat).length + 1) {
+        const lines = await db.collection('lines').find(
+            {   
+                book,
+                ...queryFormat
+            },
+            { projection: {createdBy: 0, createdAt: 0} }
+        ).toArray();
+        return lines;
+    } else {
+        const nextLevel = getNextLevel(context);
+        const lines = await db.collection('lines').find(
+            {   
+                book,
+                ...queryFormat,
+                [`context.${nextLevel}`]: 1
+            },
+            { projection: {createdBy: 0, createdAt: 0} }
+        ).toArray();
+        return lines;
+    }
+
 };

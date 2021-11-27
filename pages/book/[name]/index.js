@@ -14,16 +14,7 @@ export default function Book({ bookContexts,bookName }) {
 
   const getBookContextList = () => {
     if(bookContexts?.length) {
-        const chapters = _.uniq(_.map(bookContexts, (bc) => {
-            const sp = bc.split('.'); 
-            return _.take(sp, sp.length - 1).join(".");
-        }));
-        chapters.sort((a, b) => {
-            const numa = getSum(a);
-            const numb = getSum(b);
-            return numa - numb;
-        });
-        return _.map(chapters, (spl) => {
+        return _.map(bookContexts, (spl) => {
             return (<Grid item  xs={2}>
                 <Link href={`/book/${bookName}/chapter/${spl}`} key={spl}>
                     <Button color='secondary'>{spl}</Button>
