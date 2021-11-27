@@ -1,12 +1,14 @@
 import { getBook } from "../../../fetches/books";
 import Layout from "../../../components/Layout";
 import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Link from 'next/link';
 import _ from 'lodash-es';
 import Head from 'next/head';
-import { getSum } from "../../../lib/util";
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
+import CardContent from '@mui/material/CardContent';
 import Sanscript from '@sanskrit-coders/sanscript';
 
 
@@ -15,10 +17,18 @@ export default function Book({ bookContexts,bookName }) {
   const getBookContextList = () => {
     if(bookContexts?.length) {
         return _.map(bookContexts, (spl) => {
-            return (<Grid item  xs={2}>
-                <Link href={`/book/${bookName}/chapter/${spl}`} key={spl}>
-                    <Button color='secondary'>{spl}</Button>
-                </Link>
+            return (<Grid item xs={12} lg={4} md={3}>
+                <Card variant="outlined">
+                  <Link href={`/book/${bookName}/chapter/${spl}`} key={spl}>
+                      <CardActionArea>
+                          <CardContent>
+                              <Typography color="text.secondary">
+                                  { spl }
+                              </Typography>
+                          </CardContent>
+                      </CardActionArea>
+                  </Link>
+                </Card>
             </Grid>);
         });
     }
