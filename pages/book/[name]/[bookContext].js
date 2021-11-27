@@ -90,6 +90,8 @@ export default function ShowLine({ line }) {
     });
   };
 
+  const chapter = _.initial(line.bookContext.split('.')).join('.');
+
 
   return (
     <Layout>
@@ -119,7 +121,7 @@ export default function ShowLine({ line }) {
                 }}
             >
             <Paper elevation={1}>
-                <Link href={`/book/${line.book}`}>
+                <Link href={`/book/${line.book}/chapter/${chapter}`}>
                     <Typography variant="h3" component="h3" sx={{'cursor': 'pointer', color: '#999', ':hover': { color: '#666'}}}>
                         { Sanscript.t(line.book, 'hk', 'devanagari') }     
                     </Typography>
