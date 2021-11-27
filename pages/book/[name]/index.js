@@ -18,9 +18,9 @@ export default function Book({ bookContexts,bookName }) {
   const getBookContextList = () => {
     if(bookContexts?.length) {
         return _.map(bookContexts, (spl) => {
-            return (<Grid item xs={12} lg={4} md={3}>
+            return (<Grid item xs={12} lg={4} md={3} key={spl}>
                 <Card variant="outlined">
-                  <Link href={`/book/${bookName}/chapter/${spl}`} key={spl}>
+                  <Link href={`/book/${bookName}/chapter/${spl}`}>
                       <CardActionArea>
                           <CardContent>
                               <Typography color="text.secondary">
@@ -67,7 +67,7 @@ export default function Book({ bookContexts,bookName }) {
                             </Typography>
                     </Paper>
                 </Box>
-            <Grid container direction="rows" spacing={2}>
+            <Grid container spacing={2}>
                 {getBookContextList()}
             </Grid>
         </Container> 
