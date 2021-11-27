@@ -111,29 +111,39 @@ const getNextLevel = (context) => {
 
 export const getBookChapter = async (book, chapter) => {
     const db = await getDb();
-    const context = extractBookContext(chapter);
-    const queryFormat = convertToQueryFormat(context, 'context');
-    const line = await db.collection('lines').findOne({book, ...queryFormat}, {projection: { context: 1}});
-    if( _.keys(line.context).length === _.keys(queryFormat).length + 1) {
-        const lines = await db.collection('lines').find(
-            {   
-                book,
-                ...queryFormat
-            },
-            { projection: {createdBy: 0, createdAt: 0} }
-        ).toArray();
-        return lines;
-    } else {
+    try {
+        const context = extractBookContext(chapter);
+        const queryFormat = convertToQueryFormat(context, 'context');
         const nextLevel = getNextLevel(context);
-        const lines = await db.collection('lines').find(
-            {   
-                book,
-                ...queryFormat,
-                [`context.${nextLevel}`]: 1
-            },
+        const agg = await db.collection('lines')
+            .aggregate([
+                {
+                    $match: {
+                        book,
+                        ...queryFormat
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        minNextLevel: { $min: `$context.${nextLevel}`}
+                    }
+                }
+            ]).toArray();
+        const nxt = agg.length ? agg[0].minNextLevel: null;
+        const query = {   
+            book,
+            ...queryFormat
+        };
+        if(nxt !== null) {
+            query[`context.${nextLevel}`] = nxt;
+        }
+        const lines = await db.collection('lines').find( query,
             { projection: {createdBy: 0, createdAt: 0} }
         ).toArray();
-        return lines;
+        const chp = nxt ? `${chapter}.${nxt}`: chapter;
+        return { lines, chapter: chp };
+    } catch(e) {
+        return e;
     }
-
 };

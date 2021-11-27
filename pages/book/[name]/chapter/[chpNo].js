@@ -56,12 +56,12 @@ const displayLines = (paragraphs) => {
     });
 };
 
-export default function Book({ lines, bookName, chpNo }) {
+export default function Book({ lines, bookName, chapter }) {
 
     return (
         <Layout>
             <Head>
-                <title>Smrthi - {bookName} - {chpNo}</title>
+                <title>Smrthi - {bookName} - {chapter}</title>
             </Head>
             <Container maxWidth="lg">
                 <Box
@@ -75,7 +75,7 @@ export default function Book({ lines, bookName, chpNo }) {
                         <Link href={`/book/${lines[0].book}`}>
                             <Typography variant="h3" component="h3" 
                                 sx={{'cursor': 'pointer', color: '#999', ':hover': { color: '#666'}}}>
-                                {Sanscript.t(lines[0].book, 'hk', 'devanagari') + ' ' + chpNo}        
+                                {Sanscript.t(lines[0].book, 'hk', 'devanagari') + ' ' + chapter}        
                             </Typography>
                         </Link>
                     </Paper>
@@ -90,11 +90,11 @@ export default function Book({ lines, bookName, chpNo }) {
 
 export async function getServerSideProps(context) {
   const { name, chpNo } = context.params;
-  const lines   = await getBookChapter(name, chpNo);
+  const { lines, chapter }    = await getBookChapter(name, chpNo);
   return {
     props: {
       lines,
-      chpNo,
+      chapter,
       bookName: name
     }
  };
