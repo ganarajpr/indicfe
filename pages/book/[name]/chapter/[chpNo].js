@@ -12,6 +12,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import { getSum } from '../../../../lib/util';
 import Sanscript from '@sanskrit-coders/sanscript';
+import { Divider } from "@mui/material";
 
 const getLines = (para) => {
     const lines = para.text.split('\n');
@@ -56,7 +57,7 @@ const displayLines = (paragraphs) => {
     });
 };
 
-export default function Book({ lines, bookName, chapter }) {
+export default function Book({ lines, bookName, chapter, nextContext, prevContext }) {
 
     return (
         <Layout>
@@ -81,6 +82,32 @@ export default function Book({ lines, bookName, chapter }) {
                     </Paper>
                 </Box>
                 {displayLines(lines)} 
+
+                <Divider sx={{mt: 2, mb: 2}}/> 
+                <Box
+                    sx={{
+                            flexGrow: 1
+                        }}
+                    >
+                     { prevContext &&
+                        <Link href={`/book/${lines[0].book}/chapter/${prevContext}`}>
+                            <Typography variant="h5" component="h5" 
+                                sx={{'cursor': 'pointer', display: 'inline-block', color: '#999', ':hover': { color: '#666'}, textAlign: 'left'}}>
+                                Prev        
+                            </Typography>
+                        </Link>
+                    }
+                    {
+                        nextContext && 
+                        <Link href={`/book/${lines[0].book}/chapter/${nextContext}`}>
+                            <Typography variant="h5" component="h5" 
+                                sx={{'cursor': 'pointer', display: 'inline-block', color: '#999', ':hover': { color: '#666'}, float: 'right'}}>
+                                Next        
+                            </Typography>
+                        </Link> 
+                    }
+                    
+                </Box>                
             </Container> 
         </Layout>
     );
@@ -90,12 +117,14 @@ export default function Book({ lines, bookName, chapter }) {
 
 export async function getServerSideProps(context) {
   const { name, chpNo } = context.params;
-  const { lines, chapter }    = await getBookChapter(name, chpNo);
+  const { lines, chapter, nextContext, prevContext }    = await getBookChapter(name, chpNo);
   return {
     props: {
       lines,
       chapter,
-      bookName: name
+      bookName: name,
+      nextContext,
+      prevContext
     }
  };
 }

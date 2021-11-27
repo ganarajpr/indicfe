@@ -108,8 +108,61 @@ const getNextLevel = (context) => {
     return `L${max+1}`;
 };
 
-const getNextContext = async (context) => {
-    const max = _.keys(context).length;
+
+const getNextContext = async (book, l1, l2, l3, l4) => {
+    const db = await getDb();
+    const levels = [];
+    if(l4) {
+        levels.push([l1, l2, l3, l4+1]);
+    }
+    if(l3) {
+        levels.push([l1, l2, l3+1]);
+    }
+    if(l2) {
+        levels.push([l1, l2+1]);
+    }
+    if(l1) {
+        levels.push( [l1+1] );
+    }
+    let i = 0;
+    while( i < levels.length ) {
+        const context = extractBookContext(levels[i].join('.'));
+        const queryFormat = convertToQueryFormat(context, 'context');
+        const count = await db.collection("lines").countDocuments({book, ...queryFormat});
+        if(count > 0) {
+            return levels[i].join('.');
+        }
+        i++;
+    }
+    return null;
+};
+
+const getPrevContext = async (book, l1, l2, l3, l4) => {
+    const db = await getDb();
+    const levels = [];
+    if(l4 && l4 > 0) {
+        levels.push([l1, l2, l3, l4-1]);
+    }
+    if(l3 && l3 > 1) {
+        levels.push([l1, l2, l3-1]);
+    }
+    if(l2 && l2 > 1) {
+        levels.push([l1, l2-1]);
+    }
+    if(l1 && l1 > 1) {
+        levels.push( [l1-1] );
+    }
+    let i = 0;
+    while( i < levels.length ) {
+        const context = extractBookContext(levels[i].join('.'));
+        const queryFormat = convertToQueryFormat(context, 'context');
+        const count = await db.collection("lines").countDocuments({book, ...queryFormat});
+        if(count > 0) {
+            return levels[i].join('.');
+        }
+        i++;
+    }
+    return null;
 };
 
 const getMinNextLevel = async (book, context) => {
@@ -131,7 +184,6 @@ const getMinNextLevel = async (book, context) => {
                 }
             }
         ]).toArray();
-    console.log(agg);
     const nxt = agg.length ? agg[0].minNextLevel: null;
     return nxt;
 };
@@ -140,26 +192,28 @@ export const getBookChapter = async (book, chapter) => {
     const db = await getDb();
     try {
         const context = extractBookContext(chapter);
-        console.log(context);
         const queryFormat = convertToQueryFormat(context, 'context');
-        console.log(queryFormat);
         const nextLevel = getNextLevel(context);
-        console.log(nextLevel);
-        const nxt = await getMinNextLevel(book, context);
-        console.log(nxt);
+        const line = await db.collection('lines').findOne({book, ...queryFormat}, {projection: { context: 1}});
+        let nxt = null;
         const query = {   
             book,
             ...queryFormat
         };
+        if(_.keys(line.context).length > _.keys(context).length + 1) {
+            nxt = await getMinNextLevel(book, context);
+        }
         if(nxt !== null) {
             query[`context.${nextLevel}`] = nxt;
+            context[nextLevel] = nxt;
         }
-        console.log('qery',query);
         const lines = await db.collection('lines').find( query,
             { projection: {createdBy: 0, createdAt: 0} }
         ).toArray();
         const chp = nxt ? `${chapter}.${nxt}`: chapter;
-        return { lines, chapter: chp };
+        const nextContext = await getNextContext(book, context.L1, context.L2, context.L3, context.L4);
+        const prevContext = await getPrevContext(book, context.L1, context.L2, context.L3, context.L4);
+        return { lines, chapter: chp, nextContext, prevContext };
     } catch(e) {
         console.log(e);
         return e;
