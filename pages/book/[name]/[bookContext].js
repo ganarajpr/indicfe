@@ -130,9 +130,35 @@ export default function ShowLine({ line }) {
                     {line.bookContext}        
                 </Typography>
             </Paper>
-        </Box> 
+        </Box>
+        <Divider sx={{mt: 2, mb: 2}}/> 
+       
         <OriginalText line={line}/>
-        <Divider sx={{mb: 3, mt: 3}}/>
+        <Box
+            sx={{
+                    flexGrow: 1,
+                    mb: 3, mt: 3
+                }}
+            >
+                { line.prevContext &&
+                <Link href={`/book/${line.book}/${line.prevContext}`}>
+                    <Typography variant="h5" component="h5" 
+                        sx={{'cursor': 'pointer', display: 'inline-block', color: 'primary.main', ':hover': { color: 'secondary.main'}, textAlign: 'left'}}>
+                        Prev        
+                    </Typography>
+                </Link>
+            }
+            {
+                line.nextContext && 
+                <Link href={`/book/${line.book}/${line.nextContext}`}>
+                    <Typography variant="h5" component="h5" 
+                        sx={{'cursor': 'pointer', display: 'inline-block', color: 'primary.main', ':hover': { color: 'secondary.main'}, float: 'right'}}>
+                        Next        
+                    </Typography>
+                </Link> 
+            }
+            
+        </Box> 
         <Typography variant="h5" component="h5" sx={{fontStyle: "italic", mb: 5, color: 'text.secondary'}}>
             Words and Meanings
         </Typography>

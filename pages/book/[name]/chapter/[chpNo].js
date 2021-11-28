@@ -92,7 +92,7 @@ export default function Book({ lines, bookName, chapter, nextContext, prevContex
                      { prevContext &&
                         <Link href={`/book/${lines[0].book}/chapter/${prevContext}`}>
                             <Typography variant="h5" component="h5" 
-                                sx={{'cursor': 'pointer', display: 'inline-block', color: '#999', ':hover': { color: '#666'}, textAlign: 'left'}}>
+                                sx={{'cursor': 'pointer', display: 'inline-block', color: 'primary.main', ':hover': { color: 'secondary.main'}, textAlign: 'left'}}>
                                 Prev        
                             </Typography>
                         </Link>
@@ -101,7 +101,7 @@ export default function Book({ lines, bookName, chapter, nextContext, prevContex
                         nextContext && 
                         <Link href={`/book/${lines[0].book}/chapter/${nextContext}`}>
                             <Typography variant="h5" component="h5" 
-                                sx={{'cursor': 'pointer', display: 'inline-block', color: '#999', ':hover': { color: '#666'}, float: 'right'}}>
+                                sx={{'cursor': 'pointer', display: 'inline-block', color: 'primary.main', ':hover': { color: 'secondary.main'}, float: 'right'}}>
                                 Next        
                             </Typography>
                         </Link> 
