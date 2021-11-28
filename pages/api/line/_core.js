@@ -103,117 +103,112 @@ const convertToQueryFormat = (context, root) => {
     return query;
 };
 
-const getNextLevel = (context) => {
+const convertToBookContext = (context) => {
+    const keys = _.keys(context);
+    let i =0;
+    const ctx = [];
+    while(i< keys.length) {
+        ctx.push(context[`L${i+1}`]);
+        i++;
+    }
+    return ctx.join('.');
+};
+
+const getChapterOfLine = (context) => {
     const max = _.keys(context).length;
-    return `L${max+1}`;
+    if (max > 1 ) {
+        return _.omit(context, `L${max}` );
+    }    
+    return context;
 };
 
-
-const getNextContext = async (book, l1, l2, l3, l4) => {
-    const db = await getDb();
-    const levels = [];
-    if(l4) {
-        levels.push([l1, l2, l3, l4+1]);
-    }
-    if(l3) {
-        levels.push([l1, l2, l3+1]);
-    }
-    if(l2) {
-        levels.push([l1, l2+1]);
-    }
-    if(l1) {
-        levels.push( [l1+1] );
-    }
-    let i = 0;
-    while( i < levels.length ) {
-        const context = extractBookContext(levels[i].join('.'));
-        const queryFormat = convertToQueryFormat(context, 'context');
-        const count = await db.collection("lines").countDocuments({book, ...queryFormat});
-        if(count > 0) {
-            return levels[i].join('.');
-        }
-        i++;
-    }
-    return null;
-};
-
-const getPrevContext = async (book, l1, l2, l3, l4) => {
-    const db = await getDb();
-    const levels = [];
-    if(l4 && l4 > 0) {
-        levels.push([l1, l2, l3, l4-1]);
-    }
-    if(l3 && l3 > 1) {
-        levels.push([l1, l2, l3-1]);
-    }
-    if(l2 && l2 > 1) {
-        levels.push([l1, l2-1]);
-    }
-    if(l1 && l1 > 1) {
-        levels.push( [l1-1] );
-    }
-    let i = 0;
-    while( i < levels.length ) {
-        const context = extractBookContext(levels[i].join('.'));
-        const queryFormat = convertToQueryFormat(context, 'context');
-        const count = await db.collection("lines").countDocuments({book, ...queryFormat});
-        if(count > 0) {
-            return levels[i].join('.');
-        }
-        i++;
-    }
-    return null;
-};
-
-const getMinNextLevel = async (book, context) => {
+const getFirstChapterContext = async (book, context) => {
     const db = await getDb();
     const queryFormat = convertToQueryFormat(context, 'context');
-    const nextLevel = getNextLevel(context);
-    const agg = await db.collection('lines')
-        .aggregate([
-            {
-                $match: {
-                    book,
-                    ...queryFormat
-                }
-            },
-            {
-                $group: {
-                    _id: null,
-                    minNextLevel: { $min: `$context.${nextLevel}`}
-                }
-            }
-        ]).toArray();
-    const nxt = agg.length ? agg[0].minNextLevel: null;
-    return nxt;
+    console.log(queryFormat);
+    const line = await db.collection('lines').findOne(
+        {
+            book, 
+            ...queryFormat
+        }, 
+        {
+            projection: { context: 1, sequence: 1, bookContext: 1},
+            sort: { sequence: 1 }
+        }
+    );
+    return getChapterOfLine(line.context);
 };
 
-export const getBookChapter = async (book, chapter) => {
+const getNextChapterContext = async (book, sequence) => {
     const db = await getDb();
+    const line = await db.collection('lines').findOne(
+        {
+            book, 
+            sequence : { $gt: sequence }            
+        }, 
+        {
+            projection: { context: 1, sequence: 1, bookContext: 1},
+            sort: { sequence: 1 },
+            limit: 1
+        }
+    );
+    if(line && line.context) {
+        const linech = getChapterOfLine(line.context);
+        return convertToBookContext(linech);
+    }
+    return null;
+    
+};
+
+const getPrevChapterContext = async (book, sequence) => {
+    const db = await getDb();
+    const line = await db.collection('lines').findOne(
+        {
+            book, 
+            sequence : { $lt: sequence }            
+        }, 
+        {
+            projection: { context: 1, sequence: 1, bookContext: 1},
+            sort: { sequence: -1 },
+            limit: 1
+        }
+    );
+    console.log('previous context', line);
+    if(line && line.context) {
+        const linech = getChapterOfLine(line.context);
+        return convertToBookContext(linech);
+    }
+    return null;
+};
+
+const getChapter = async (book, context) => {
+    const db = await getDb();
+    const chpQuery = convertToQueryFormat(context, 'context');
+    const lines = await db.collection('lines').find(
+        {
+            book, 
+            ...chpQuery
+        }, 
+        {
+            projection: { createdAt: 0, createdBy: 0},
+            sort: { sequence: 1 }
+        }
+    ).toArray();
+    return lines;
+}
+
+
+export const getBookChapter = async (book, chNo) => {
     try {
-        const context = extractBookContext(chapter);
-        const queryFormat = convertToQueryFormat(context, 'context');
-        const nextLevel = getNextLevel(context);
-        const line = await db.collection('lines').findOne({book, ...queryFormat}, {projection: { context: 1}});
-        let nxt = null;
-        const query = {   
-            book,
-            ...queryFormat
-        };
-        if(_.keys(line.context).length > _.keys(context).length + 1) {
-            nxt = await getMinNextLevel(book, context);
-        }
-        if(nxt !== null) {
-            query[`context.${nextLevel}`] = nxt;
-            context[nextLevel] = nxt;
-        }
-        const lines = await db.collection('lines').find( query,
-            { projection: {createdBy: 0, createdAt: 0} }
-        ).toArray();
-        const chp = nxt ? `${chapter}.${nxt}`: chapter;
-        const nextContext = await getNextContext(book, context.L1, context.L2, context.L3, context.L4);
-        const prevContext = await getPrevContext(book, context.L1, context.L2, context.L3, context.L4);
-        return { lines, chapter: chp, nextContext, prevContext };
+        const context = extractBookContext(chNo);
+        console.log('extracted context', context);
+        const chapterContext = await getFirstChapterContext(book, context);
+        const lines = await getChapter(book, chapterContext);
+        const chp = getChapterOfLine(lines[0].context);
+        const chapter = convertToBookContext(chp);
+        const nextContext = await getNextChapterContext(book, lines[lines.length -1].sequence);
+        const prevContext = await getPrevChapterContext(book, lines[0].sequence);
+        return { lines, chapter, nextContext, prevContext };
     } catch(e) {
         console.log(e);
         return e;
