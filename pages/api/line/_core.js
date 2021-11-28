@@ -77,11 +77,13 @@ const extractBookContext = (bookContext) => {
 export const getLineByBookAndContext = async (book, bookContext) => {
     const db = await getDb();
     const context = extractBookContext(bookContext);
-    const lines = await  db.collection('lines').findOne(
+    const line = await  db.collection('lines').findOne(
             {book, context},
             { projection: {createdBy: 0, createdAt: 0} }
-        );
-    return getWordsofLine(lines);
+    );
+    line.prevContext = await getPrevContext(book, line.sequence);
+    line.nextContext = await getNextContext(book, line.sequence);
+    return getWordsofLine(line);
 };
 
 export const getOnlyLine = async (book, bookContext) => {
@@ -139,7 +141,7 @@ const getFirstChapterContext = async (book, context) => {
     return getChapterOfLine(line.context);
 };
 
-const getNextChapterContext = async (book, sequence) => {
+const getNextLine = async (book, sequence) => {
     const db = await getDb();
     const line = await db.collection('lines').findOne(
         {
@@ -153,14 +155,12 @@ const getNextChapterContext = async (book, sequence) => {
         }
     );
     if(line && line.context) {
-        const linech = getChapterOfLine(line.context);
-        return convertToBookContext(linech);
+        return line;
     }
-    return null;
-    
+    return null;    
 };
 
-const getPrevChapterContext = async (book, sequence) => {
+const getPrevLine = async (book, sequence) => {
     const db = await getDb();
     const line = await db.collection('lines').findOne(
         {
@@ -173,7 +173,39 @@ const getPrevChapterContext = async (book, sequence) => {
             limit: 1
         }
     );
-    console.log('previous context', line);
+    if(line && line.context) {
+        return line;
+    }
+    return null;
+};
+
+const getNextContext = async (book, sequence) => {
+    const line = await getNextLine(book, sequence);
+    if(line && line.context) {
+        return convertToBookContext(line.context);
+    }
+    return null;
+};
+
+const getPrevContext = async (book, sequence) => {
+    const line = await getPrevLine(book, sequence);
+    if(line && line.context) {
+        return convertToBookContext(line.context);
+    }
+    return null;
+};
+
+const getNextChapterContext = async (book, sequence) => {
+    const line = await getNextLine(book, sequence);
+    if(line && line.context) {
+        const linech = getChapterOfLine(line.context);
+        return convertToBookContext(linech);
+    }
+    return null;
+};
+
+const getPrevChapterContext = async (book, sequence) => {
+    const line = await getPrevLine(book, sequence);
     if(line && line.context) {
         const linech = getChapterOfLine(line.context);
         return convertToBookContext(linech);
