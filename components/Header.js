@@ -8,13 +8,29 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+
 import { signIn, signOut, useSession } from 'next-auth/client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { makeStyles } from '@material-ui/core/styles';
+import LanguageContext from '../shared/LanguageContext';
+import { useContext } from 'react';
+import LanguageSelector from './LanguageSelector';
+
+
+const useStyles = makeStyles((theme) => ({
+    appBar: {
+      zIndex: theme.zIndex.drawer + 1,
+    },
+    languageSelector: {
+        zIndex: theme.zIndex.drawer + 2
+    }
+}));
 
 export default function MenuAppBar() {
   const [session] = useSession();
   const [anchorEl, setAnchorEl] = useState(null);
+  const { language , setLanguage } = useContext(LanguageContext);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -31,6 +47,10 @@ export default function MenuAppBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+
+
+  const classes = useStyles();
 
   const getSignIn = () => {
     
@@ -73,7 +93,7 @@ export default function MenuAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="sticky">
+      <AppBar position="sticky" className={classes.appBar}>
         <Toolbar>
           <IconButton
             size="large"
@@ -84,12 +104,17 @@ export default function MenuAppBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Box sx={{ flexGrow: 1, justifyContent: 'center', textAlign: 'center' }}>
+          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', textAlign: 'center' }}>
             <Link href="/">
                 <Typography variant="h3" component="h3" sx={{ cursor: 'pointer', fontFamily: "Samarkan"}} >
                     SMRTHI
                 </Typography>
             </Link>
+            </Box>
+            <Box 
+                className={classes.languageSelector}
+                sx={{ justifyContent: 'right', display: 'flex' }}>
+                <LanguageSelector/>
             </Box>
           {getSignIn()}
         </Toolbar>

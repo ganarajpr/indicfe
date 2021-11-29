@@ -1,4 +1,4 @@
-import { getBookChapter } from "../../../../fetches/line";
+import { getBookChapter, getLine } from "../../../../fetches/line";
 import Layout from '../../../../components/Layout';
 import Container from '@mui/material/Container';
 import Link from 'next/link';
@@ -11,11 +11,12 @@ import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import { getSum } from '../../../../lib/util';
-import Sanscript from '@sanskrit-coders/sanscript';
 import { Divider } from "@mui/material";
+import LanguageText from "../../../../components/LanguageText";
 
 const getLines = (para) => {
     const lines = para.text.split('\n');
+    console.log(para);
     return (
         <Card variant="outlined" sx={{ overflowWrap: "break-word" }}>
             <Link href={`/book/${para.book}/${para.bookContext}`}>
@@ -23,7 +24,7 @@ const getLines = (para) => {
                     <CardContent>
                         {lines.map((line) => {
                             return (<Typography variant="h5" component="div" key={line}>
-                                {line}
+                                <LanguageText source={para.script}>{line}</LanguageText>
                             </Typography>);
                         })}
                         <Typography sx={{ mb: 1.5, textAlign: 'right' }} color="text.secondary">
@@ -76,7 +77,8 @@ export default function Book({ lines, bookName, chapter, nextContext, prevContex
                         <Link href={`/book/${lines[0].book}`}>
                             <Typography variant="h3" component="h3" 
                                 sx={{'cursor': 'pointer', color: '#999', ':hover': { color: '#666'}}}>
-                                {Sanscript.t(lines[0].book, 'hk', 'devanagari') + ' ' + chapter}        
+                                    <LanguageText source="hk">{lines[0].book}</LanguageText>
+                                {' ' + chapter}        
                             </Typography>
                         </Link>
                     </Paper>

@@ -3,6 +3,7 @@ import Head from 'next/head';
 import axios from "axios";
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
+import LanguageProvider from '../components/LanguageProvider';
 import theme from '../components/theme';
 import '../styles/globals.css';
 axios.defaults.baseURL = process.env.NEXTAUTH_URL;
@@ -30,7 +31,9 @@ export default function App ({ Component, pageProps }) {
         <CssBaseline>
           <ThemeProvider theme={theme}>
                 <Provider session={pageProps.session}>
-                    <Component {...pageProps} />
+                    <LanguageProvider>
+                        <Component {...pageProps} />
+                    </LanguageProvider>
                 </Provider>
             </ThemeProvider>
         </CssBaseline>

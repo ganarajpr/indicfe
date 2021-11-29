@@ -22,6 +22,7 @@ import { addWord } from '../../../fetches/word';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Head from 'next/head';
 import OriginalText from './_OriginalText';
+import LanguageText from '../../../components/LanguageText';
 
 const defaultValues = {
     translation: ""
@@ -123,7 +124,7 @@ export default function ShowLine({ line }) {
             <Paper elevation={1}>
                 <Link href={`/book/${line.book}/chapter/${chapter}`}>
                     <Typography variant="h3" component="h3" sx={{'cursor': 'pointer', color: '#999', ':hover': { color: '#666'}}}>
-                        { Sanscript.t(line.book, 'hk', 'devanagari') }     
+                        <LanguageText source="hk">{line.book}</LanguageText>
                     </Typography>
                 </Link>
                 <Typography variant="h4" component="h4" sx={{ color: '#666'}}>
@@ -159,7 +160,7 @@ export default function ShowLine({ line }) {
             }
             
         </Box> 
-        <Typography variant="h5" component="h5" sx={{fontStyle: "italic", mb: 5, color: 'text.secondary'}}>
+        {/* <Typography variant="h5" component="h5" sx={{fontStyle: "italic", mb: 5, color: 'text.secondary'}}>
             Words and Meanings
         </Typography>
         <Paper elevation={1} sx={{ p: 1, mt: 2 }}>
@@ -169,7 +170,7 @@ export default function ShowLine({ line }) {
                 translations={lineState?.words?.translations}
                 onSubmit={onAddTranslation}/>
         </Paper>
-        <Divider sx={{mb: 3, mt: 3}}/>
+        <Divider sx={{mb: 3, mt: 3}}/> */}
         <Typography variant="h5" component="h5" sx={{fontStyle: "italic", mb: 5, color: 'text.secondary'}}>
             Full Translations
         </Typography> 

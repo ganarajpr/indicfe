@@ -12,6 +12,7 @@ import CardContent from '@mui/material/CardContent';
 import Sanscript from '@sanskrit-coders/sanscript';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
+import LanguageText from "../../../components/LanguageText";
 
 export default function Book({ bookContexts,bookName }) {
 
@@ -63,7 +64,7 @@ export default function Book({ bookContexts,bookName }) {
                     <Paper elevation={0}>
                             <Typography variant="h3" component="h3" 
                                 sx={{ color: '#999' }}>
-                                {Sanscript.t(bookName, 'hk', 'devanagari')}        
+                                    <LanguageText source="hk">{bookName}</LanguageText>
                             </Typography>
                     </Paper>
                 </Box>

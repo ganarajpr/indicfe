@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Tooltip from '@mui/material/Tooltip';
 import _ from 'lodash';
+import LanguageText from "./LanguageText";
 
 const Wrapper = styled.div`
     font-size: 2em;
@@ -23,19 +24,19 @@ const Word = (props) => {
         return (<span>{props.children}&nbsp;</span>);    
     }
 
-    const {translations} = props; 
-
+    const {translations, script} = props; 
+    console.log('word', script);
     const getTranslationForToolTip = () => {
         return translations?.length ? translations[0]:  
             <Italicized>No available Translations</Italicized>;
     };
     return (<Tooltip title={getTranslationForToolTip()} arrow placement="top">
-            <StyledWord>{props.children}&nbsp;</StyledWord>
+            <StyledWord><LanguageText source={script}>{props.children}</LanguageText>&nbsp;</StyledWord>
     </Tooltip>);
 }
 
 const Verse = (props) => {
-    const { line, words } = props;
+    const { line, words, script } = props;
     const wordsInLine = line.split(' ');
     const cleaned = _.filter(wordsInLine, (word) => word !== ' ' && word !== '');
     const wordTranslationMap = _.reduce(words.translations, (acc,n) => {
@@ -48,7 +49,7 @@ const Verse = (props) => {
     }, {});
     return (<>
         <Wrapper>
-        {cleaned.map((word) => <Word key={word} 
+        {cleaned.map((word) => <Word key={word} script={script} 
             translations={wordTranslationMap[word]}>{word}</Word>)}
         </Wrapper>
     </>)    

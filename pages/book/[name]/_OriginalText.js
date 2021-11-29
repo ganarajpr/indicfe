@@ -6,8 +6,8 @@ import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
 import Verse from '../../../components/HighlightLine';
 import { useSession } from 'next-auth/client';
-
-import { useState, useEffect } from 'react';
+import LanguageContext from '../../../shared/LanguageContext';
+import { useState, useEffect, useContext } from 'react';
 import { useForm } from "react-hook-form";
 import Button from '@mui/material/Button';
 import { updateLine } from '../../../fetches/line';
@@ -23,25 +23,26 @@ const fabStyle = {
 export default function OriginalText({ line, words }) {
     const [lineState, setLine] = useState({});
     const [editMode, setEditMode] = useState(false);
+    const { language } = useContext(LanguageContext);
     const [session] = useSession();
     const { handleSubmit, reset, register, 
-        formState, setValue, getValues } = useForm({ defaultValues });
+        formState, setValue } = useForm({ defaultValues });
     
     const getLines = () => {
         return lineState.lines?.map( (line) => {
-        return (<Verse line={line} words={lineState.words} key={line}></Verse>)
+        return (<Verse line={line} script={lineState.script} words={lineState.words} key={line}></Verse>)
         });
     };
     useEffect( () => {
         const lines = line.text.split('\n');
         setLine({lines, ...line}); 
-        setValue('originalText', Sanscript.t(line.text, 'devanagari', 'itrans')); 
+        setValue('originalText', Sanscript.t(line.text, language, 'itrans')); 
     }, [line]);
 
     const onOriginalEdit = (e) => {
         const val = e.target.value;
         setValue('originalText', val);
-        const text = Sanscript.t(val, 'itrans', 'devanagari');
+        const text = Sanscript.t(val, 'itrans', language);
         const lines = text.split('\n');
         setLine({lines, ...line});
     };
@@ -56,7 +57,7 @@ export default function OriginalText({ line, words }) {
             const line = await updateLine(lineState._id, Sanscript.t(data.originalText, 'itrans', 'devanagari'));
             const lines = line.text.split('\n');
             setLine({lines, ...line}); 
-            reset({originalText: Sanscript.t(line.text, 'devanagari', 'itrans')});
+            reset({originalText: Sanscript.t(line.text, language, 'itrans')});
             setEditMode(false); 
         };
 
