@@ -36,13 +36,13 @@ export default function OriginalText({ line, words }) {
     useEffect( () => {
         const lines = line.text.split('\n');
         setLine({lines, ...line}); 
-        setValue('originalText', Sanscript.t(line.text, language, 'itrans')); 
+        setValue('originalText', Sanscript.t(line.text, line.script, 'itrans')); 
     }, [line]);
 
     const onOriginalEdit = (e) => {
         const val = e.target.value;
         setValue('originalText', val);
-        const text = Sanscript.t(val, 'itrans', language);
+        const text = Sanscript.t(val, 'itrans', lineState.script);
         const lines = text.split('\n');
         setLine({lines, ...line});
     };
@@ -54,10 +54,10 @@ export default function OriginalText({ line, words }) {
         }
         
         const onSubmit = async (data) => {
-            const line = await updateLine(lineState._id, Sanscript.t(data.originalText, 'itrans', 'devanagari'));
+            const line = await updateLine(lineState._id, Sanscript.t(data.originalText, 'itrans', lineState.script));
             const lines = line.text.split('\n');
             setLine({lines, ...line}); 
-            reset({originalText: Sanscript.t(line.text, language, 'itrans')});
+            reset({originalText: Sanscript.t(line.text, line.script, 'itrans')});
             setEditMode(false); 
         };
 

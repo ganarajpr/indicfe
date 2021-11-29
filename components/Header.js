@@ -92,8 +92,8 @@ export default function MenuAppBar() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="sticky" className={classes.appBar}>
+    <Box sx={{ flexGrow: 1, mb: 8 }}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
             size="large"
