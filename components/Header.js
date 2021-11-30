@@ -13,24 +13,15 @@ import { signIn, signOut, useSession } from 'next-auth/client';
 import { useState } from 'react';
 import Link from 'next/link';
 import { makeStyles } from '@material-ui/core/styles';
-import LanguageContext from '../shared/LanguageContext';
-import { useContext } from 'react';
-import LanguageSelector from './LanguageSelector';
 
-
-const useStyles = makeStyles((theme) => ({
+export default function Header({onHamburgerClick}) {
+  const useStyles = makeStyles((theme) => ({
     appBar: {
-      zIndex: theme.zIndex.drawer + 1,
-    },
-    languageSelector: {
-        zIndex: theme.zIndex.drawer + 2
+      zIndex: theme.zIndex.drawer + 1
     }
-}));
-
-export default function MenuAppBar() {
+  }));
   const [session] = useSession();
   const [anchorEl, setAnchorEl] = useState(null);
-  const { language , setLanguage } = useContext(LanguageContext);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -100,6 +91,7 @@ export default function MenuAppBar() {
             edge="start"
             color="inherit"
             aria-label="menu"
+            onClick={onHamburgerClick}
             sx={{ mr: 2 }}
           >
             <MenuIcon />
@@ -110,11 +102,6 @@ export default function MenuAppBar() {
                     SMRTHI
                 </Typography>
             </Link>
-            </Box>
-            <Box 
-                className={classes.languageSelector}
-                sx={{ justifyContent: 'right', display: 'flex' }}>
-                <LanguageSelector/>
             </Box>
           {getSignIn()}
         </Toolbar>
