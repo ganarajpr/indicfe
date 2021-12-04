@@ -75,6 +75,7 @@ const extractBookContext = (bookContext) => {
 };
 
 export const getLineByBookAndContext = async (book, bookContext) => {
+    try {
     const db = await getDb();
     const context = extractBookContext(bookContext);
     const line = await  db.collection('lines').findOne(
@@ -89,8 +90,9 @@ export const getLineByBookAndContext = async (book, bookContext) => {
 export const getOnlyLine = async (book, bookContext) => {
     const db = await getDb();
     const context = extractBookContext(bookContext);
+    const queryFormat = convertToQueryFormat(context, 'context');
     const lines = await  db.collection('lines').findOne(
-            {book, context},
+            {book, ...queryFormat},
             { projection: {createdBy: 0, createdAt: 0} }
         );
     return lines;
@@ -233,7 +235,6 @@ const getChapter = async (book, context) => {
 export const getBookChapter = async (book, chNo) => {
     try {
         const context = extractBookContext(chNo);
-        console.log('extracted context', context);
         const chapterContext = await getFirstChapterContext(book, context);
         const lines = await getChapter(book, chapterContext);
         const chp = getChapterOfLine(lines[0].context);

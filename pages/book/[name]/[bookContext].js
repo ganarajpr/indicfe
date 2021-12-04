@@ -121,15 +121,17 @@ export default function ShowLine({ line }) {
                     textAlign: 'center'
                 }}
             >
-            <Paper elevation={1}>
+            <Paper elevation={1} sx={{display: 'flex', pb: 1}}>
                 <Link href={`/book/${line.book}/chapter/${chapter}`}>
-                    <Typography variant="h3" component="h3" sx={{'cursor': 'pointer', color: '#999', ':hover': { color: '#666'}}}>
-                        <LanguageText source="hk">{line.book}</LanguageText>
-                    </Typography>
+                    <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center", 
+                        'cursor': 'pointer', ':hover': { color: '#666'}}}>
+                        <img src="/smrthi-symbol.png" height="50"/>
+                        <Typography variant="h4" component="h4" sx={{ color: '#999', ml: 3}}>
+                                <LanguageText source="hk">{line.book}</LanguageText>
+                                { ' ' + line.bookContext}  
+                        </Typography>
+                    </Box>
                 </Link>
-                <Typography variant="h4" component="h4" sx={{ color: '#666'}}>
-                    {line.bookContext}        
-                </Typography>
             </Paper>
         </Box>
         <Divider sx={{mt: 2, mb: 2}}/> 

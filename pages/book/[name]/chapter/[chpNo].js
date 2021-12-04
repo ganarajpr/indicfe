@@ -73,13 +73,16 @@ export default function Book({ lines, bookName, chapter, nextContext, prevContex
                             textAlign: 'center'
                         }}
                     >
-                    <Paper elevation={1}>
+                    <Paper elevation={1} sx={{pb: 1}}>
                         <Link href={`/book/${lines[0].book}`}>
-                            <Typography variant="h3" component="h3" 
-                                sx={{'cursor': 'pointer', color: '#999', ':hover': { color: '#666'}}}>
+                            <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center", 
+                                'cursor': 'pointer', ':hover': { color: '#666'}}}>
+                                <img src="/smrthi-symbol.png" height="50"/>
+                                <Typography variant="h4" component="h4" sx={{ color: '#999', ml: 2, mt: 1}}>
                                     <LanguageText source="hk">{lines[0].book}</LanguageText>
-                                {' ' + chapter}        
-                            </Typography>
+                                        {' ' + chapter}      
+                                </Typography>
+                            </Box>
                         </Link>
                     </Paper>
                 </Box>

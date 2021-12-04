@@ -62,10 +62,13 @@ export default function Book({ bookContexts,bookName }) {
                         }}
                     >
                     <Paper elevation={0}>
-                            <Typography variant="h3" component="h3" 
-                                sx={{ color: '#999' }}>
-                                    <LanguageText source="hk">{bookName}</LanguageText>
+                        <Box sx={{ display: "flex", flexGrow: 1, pb: 1,  justifyContent: "center", 
+                            'cursor': 'pointer', ':hover': { color: '#666'}}}>
+                            <img src="/smrthi-symbol.png" height="50"/>
+                            <Typography variant="h4" component="h4" sx={{ color: '#999', ml: 2, mt: 1}}>
+                                <LanguageText source="hk">{bookName}</LanguageText>   
                             </Typography>
+                        </Box>
                     </Paper>
                 </Box>
             <Grid container spacing={2}>
