@@ -96,11 +96,9 @@ export default function Header({onHamburgerClick}) {
           >
             <MenuIcon />
           </IconButton>
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', textAlign: 'center' }}>
+          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', cursor: 'pointer', textAlign: 'center' }}>
             <Link href="/">
-                <Typography variant="h3" component="h3" sx={{ cursor: 'pointer', fontFamily: "Samarkan"}} >
-                    SMRTHI
-                </Typography>
+                <img src="/smrthi-text.png" height="50"/>
             </Link>
             </Box>
           {getSignIn()}
