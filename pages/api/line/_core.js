@@ -75,7 +75,6 @@ const extractBookContext = (bookContext) => {
 };
 
 export const getLineByBookAndContext = async (book, bookContext) => {
-    try {
     const db = await getDb();
     const context = extractBookContext(bookContext);
     const line = await  db.collection('lines').findOne(
