@@ -13,6 +13,7 @@ import CardContent from '@mui/material/CardContent';
 import { getSum } from '../../../../lib/util';
 import { Divider } from "@mui/material";
 import LanguageText from "../../../../components/LanguageText";
+import Sanscript from '@sanskrit-coders/sanscript';
 
 const getLines = (para) => {
     const lines = para.text.split('\n');
@@ -64,6 +65,17 @@ export default function Book({ lines, bookName, chapter, nextContext, prevContex
         <Layout>
             <Head>
                 <title>Smrthi - {bookName} - {chapter}</title>
+                <meta name="description" content={ "Chapters of " + Sanscript.t(bookName, 'hk', 'devanagari') }/>
+                <meta property="og:type" content="website"/>
+                <meta property="og:url" content={`https://www.smrthi.com/book/${bookName}/chapter/${chapter}`}/>
+                <meta property="og:title" content={`Smrithi - ${Sanscript.t(bookName, 'hk', 'devanagari')} `}/>
+                <meta property="og:description" content={ "Chapter " + chapter + " of " + Sanscript.t(bookName, 'hk', 'devanagari') }/>
+                <meta property="og:image" content={`https://www.smrthi.com/logo.jpg`}/>
+                <meta property="twitter:card" content="summary"/>
+                <meta property="twitter:url" content={`https://www.smrthi.com/book/${bookName}/chapter/${chapter}`}/>
+                <meta property="twitter:title" content={`Chapter ${chapter} of ${Sanscript.t(bookName, 'hk', 'devanagari')}`}/>
+                <meta property="twitter:description" content={ "Chapter "+ chapter + " of " + Sanscript.t(bookName, 'hk', 'devanagari') }/>
+                <meta property="twitter:image" content={`https://www.smrthi.com/logo.jpg`}/>
             </Head>
             <Container maxWidth="lg">
                 <Box
