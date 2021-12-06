@@ -21,7 +21,7 @@ export default function ShowLine({ line }) {
 
   const getLines = () => {
     return lineState.lines?.map( (line) => {
-      return (<Verse line={line} words={lineState.words} key={line}></Verse>)
+      return (<Verse line={line} script={lineState.script} words={lineState.words} key={line}></Verse>)
     });
   };
 
