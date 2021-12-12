@@ -4,13 +4,9 @@ import Box from '@mui/material/Box';
 import _ from 'lodash';
 import { getLine } from '../../../fetches/line';
 import Verse from '../../../components/HighlightLine';
-import Link from 'next/link';
-import Card from '@mui/material/Card';
-import CardActionArea from '@mui/material/CardActionArea';
-import CardHeader from '@mui/material/CardHeader';
-import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import Sanscript from '@sanskrit-coders/sanscript';
+import LanguageText from '../../../components/LanguageText';
+import Paper from '@mui/material/Paper';
 
 export default function ShowLine({ line }) {
     const [lineState, setLine] = useState({});
@@ -25,17 +21,6 @@ export default function ShowLine({ line }) {
     });
   };
 
-    const header = (<Typography variant="h5" component="h5" 
-        sx={{ color: '#666', fontFamily: "'Vesper Libre', serif;" }}>
-        {Sanscript.t(line.book, 'hk', 'devanagari')}
-        </Typography>);
-
-    const subheader = (<Typography variant="p" component="p" color="text.secondary">
-        {line.bookContext}
-    </Typography>);
-
-
-
   return (
       <Container maxWidth="lg">
         <Box sx={{
@@ -45,25 +30,22 @@ export default function ShowLine({ line }) {
                 mt: 1
             }}
         >
-            <Card elevation={0} sx={{ overflowWrap: "break-word" }}>
-                <Link href={`/book/${line.book}/${line.bookContext}`}>
-                    <CardActionArea>
-                    <img src="/logo.png" width="200"/>
-                    <CardHeader
-                        disableTypography={true}
-                        title={header}
-                        subheader={subheader}                        
-                    />
-                        <CardContent>
-                            {getLines()}
-                            
-                            <Typography sx={{ mb: 1.5, textAlign: 'right', fontStyle: 'italic' }} color="text.secondary">
-                                www.smrthi.com
-                            </Typography>
-                        </CardContent>
-                    </CardActionArea>
-                </Link>
-            </Card>
+            <Paper elevation={1} sx={{display: 'block', pb: 1}}>
+                <Box sx={{ display: "block", flexGrow: 1, justifyContent: "center" }}>
+                    <img src="/logo.png" height="30"/>
+                </Box>
+                <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center", 
+                    'cursor': 'pointer', ':hover': { color: '#666'}}}>
+                    
+                    <Typography variant="h5" component="h5" sx={{ color: '#999', ml: 3, pt: 1}}>
+                            <LanguageText source="hk">{line.book}</LanguageText>
+                            { ' ' + line.bookContext}  
+                    </Typography>
+                </Box>
+            </Paper>
+            <Paper elevation={1} sx={{ p: 4, overflowWrap: "break-word", position: "relative" }}>
+            {getLines()}     
+            </Paper>
         </Box>       
       </Container>      
   )

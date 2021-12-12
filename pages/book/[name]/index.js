@@ -62,7 +62,7 @@ export default function Book({ bookContexts,bookName }) {
                         }}
                     >
                     <Paper elevation={0}>
-                        <Box sx={{ display: "flex", flexGrow: 1, pb: 1,  justifyContent: "center", 
+                        <Box sx={{ display: "flex", flexGrow: 1, pb: 1, justifyContent: "center", 
                             'cursor': 'pointer', ':hover': { color: '#666'}}}>
                             <img src="/smrthi-symbol.png" height="50"/>
                             <Typography variant="h4" component="h4" sx={{ color: '#999', ml: 2, mt: 1}}>
