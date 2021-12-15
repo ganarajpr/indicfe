@@ -29,12 +29,14 @@ export const getWordByText = async (text) => {
         },
         {
             '$unwind': {
-                path: '$user'
+                path: '$user',
+                "preserveNullAndEmptyArrays": true
             }
         },
         {
             '$unwind': {
-                path: '$locations'
+                path: '$locations',
+                "preserveNullAndEmptyArrays": true
             }
         }
     ];
