@@ -45,12 +45,20 @@ export const getWordByText = async (text) => {
 }
 
 
+const getInflections = (textArr) => {
+    return textArr.map( text => inflectPhrase(text) );
+};
+
+
 export const getWordforAllText = async (textArray) => {
+    console.log(textArray);
+    const infArray = getInflections(textArray);
+    console.log(infArray);
     const db = await getDb();
     const agg = [
         {
             '$match': {
-                text: {$in: textArray}
+                text: {$in: infArray}
             }
         },
         {
@@ -73,16 +81,18 @@ export const getWordforAllText = async (textArray) => {
         },
         {
             '$unwind': {
-                path: '$user'
+                path: '$user',
+                "preserveNullAndEmptyArrays": true
             }
         },
         {
             '$unwind': {
-                path: '$locations'
+                path: '$locations',
+                "preserveNullAndEmptyArrays": true
             }
         }
     ];
-    const translations = await db.collection('words').aggregate(agg).toArray();
+    const translations = await db.collection('wordshk').aggregate(agg).toArray();
     return { translations } ;
 }
 
@@ -116,12 +126,14 @@ export const getWordById = async (id) => {
         },
         {
             '$unwind': {
-                path: '$user'
+                path: '$user',
+                "preserveNullAndEmptyArrays": true
             }
         },
         {
             '$unwind': {
-                path: '$locations'
+                path: '$locations',
+                "preserveNullAndEmptyArrays": true
             }
         }
     ];
