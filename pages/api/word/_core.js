@@ -52,13 +52,11 @@ const getInflections = (textArr) => {
 
 export const getWordforAllText = async (textArray) => {
     console.log(textArray);
-    const infArray = getInflections(textArray);
-    console.log(infArray);
     const db = await getDb();
     const agg = [
         {
             '$match': {
-                text: {$in: infArray}
+                text: {$in: textArray}
             }
         },
         {
