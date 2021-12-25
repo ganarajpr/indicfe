@@ -49,22 +49,20 @@ export default function ShowLine({ line }) {
                 mt: 1
             }}
         >
-            <Paper elevation={1} sx={{display: 'block', pb: 1}}>
+            <Paper elevation={0} sx={{display: 'block', pb: 1}}>
                 <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center", 
                         'cursor': 'pointer', ':hover': { color: '#666'}}}>
-                        <img src="/logo.png" height="50"/>
-                </Box>
-            </Paper>
-            <Paper elevation={1} sx={{ p: 4, overflowWrap: "break-word", position: "relative" }}>
-            {getLines()}    
-            <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center", 
-                        'cursor': 'pointer', ':hover': { color: '#666'}}}>
-                        <Typography variant="p" component="p" sx={{ color: '#999', ml: 3,     
+                        <img src="/logo.png" height="30"/>
+                        <Typography variant="h6" component="h6" sx={{ color: '#999', ml: 3,     
                             fontFamily: "'Vesper Libre', serif" }}>
                                 <LanguageText source="hk">{line.book}</LanguageText>
                                 { ' ' + line.bookContext}  
                         </Typography>
-            </Box> 
+                </Box>
+            </Paper>
+            <Paper elevation={0} sx={{ p: 4, overflowWrap: "break-word", position: "relative" }}>
+            {getLines()}    
+
             </Paper>
 
         </Box>       
