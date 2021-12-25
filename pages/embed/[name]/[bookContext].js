@@ -19,7 +19,7 @@ export default function ShowLine({ line }) {
 
   const getLines = () => {
     return lineState.lines?.map( (line) => {
-      return (<Verse line={line} script={lineState.script} words={lineState.words} key={line}></Verse>)
+      return (<Verse small={true} line={line} script={lineState.script} words={lineState.words} key={line}></Verse>)
     });
   };
 
@@ -53,20 +53,19 @@ export default function ShowLine({ line }) {
                 <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center", 
                         'cursor': 'pointer', ':hover': { color: '#666'}}}>
                         <img src="/logo.png" height="50"/>
-                        <Typography variant="h4" component="h4" sx={{ color: '#999', ml: 3}}>
-                                <LanguageText source="hk">{line.book}</LanguageText>
-                                { ' ' + line.bookContext}  
-                        </Typography>
-                </Box>
-                <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center", 
-                    'cursor': 'pointer', ':hover': { color: '#666'}}}>
-                    
-                    
                 </Box>
             </Paper>
             <Paper elevation={1} sx={{ p: 4, overflowWrap: "break-word", position: "relative" }}>
-            {getLines()}     
+            {getLines()}    
+            <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center", 
+                        'cursor': 'pointer', ':hover': { color: '#666'}}}>
+                        <Typography variant="p" component="p" sx={{ color: '#999', ml: 3}}>
+                                <LanguageText source="hk">{line.book}</LanguageText>
+                                { ' ' + line.bookContext}  
+                        </Typography>
+            </Box> 
             </Paper>
+
         </Box>       
       </Container>      
   )

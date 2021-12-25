@@ -1,10 +1,10 @@
-import styled from "styled-components";
+import styled from '@emotion/styled';
 import Tooltip from '@mui/material/Tooltip';
 import _ from 'lodash';
 import LanguageText from "./LanguageText";
 
 const Wrapper = styled.div`
-    font-size: 2em;
+    font-size: ${props =>props.small ? '1.5em' : '2em'};
     font-family: 'Vesper Libre', serif;
     text-align: center;
 `;
@@ -36,7 +36,7 @@ const Word = (props) => {
 }
 
 const Verse = (props) => {
-    const { line, words, script } = props;
+    const { line, words, script, small } = props;
     const wordsInLine = line.split(' ');
     const cleaned = _.filter(wordsInLine, (word) => word !== ' ' && word !== '');
     const wordTranslationMap = _.reduce(words.translations, (acc,n) => {
@@ -48,7 +48,7 @@ const Verse = (props) => {
         return acc;
     }, {});
     return (<>
-        <Wrapper>
+        <Wrapper small={small}>
         {cleaned.map((word) => <Word key={word} script={script} 
             translations={wordTranslationMap[word]}>{word}</Word>)}
         </Wrapper>
