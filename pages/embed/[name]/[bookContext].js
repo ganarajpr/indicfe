@@ -50,16 +50,18 @@ export default function ShowLine({ line }) {
             }}
         >
             <Paper elevation={1} sx={{display: 'block', pb: 1}}>
-                <Box sx={{ display: "block", flexGrow: 1, justifyContent: "center" }}>
-                    <img src="/logo.png" height="30"/>
+                <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center", 
+                        'cursor': 'pointer', ':hover': { color: '#666'}}}>
+                        <img src="/logo.png" height="50"/>
+                        <Typography variant="h4" component="h4" sx={{ color: '#999', ml: 3}}>
+                                <LanguageText source="hk">{line.book}</LanguageText>
+                                { ' ' + line.bookContext}  
+                        </Typography>
                 </Box>
                 <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center", 
                     'cursor': 'pointer', ':hover': { color: '#666'}}}>
                     
-                    <Typography variant="h5" component="h5" sx={{ color: '#999', ml: 3, pt: 1}}>
-                            <LanguageText source="hk">{line.book}</LanguageText>
-                            { ' ' + line.bookContext}  
-                    </Typography>
+                    
                 </Box>
             </Paper>
             <Paper elevation={1} sx={{ p: 4, overflowWrap: "break-word", position: "relative" }}>
