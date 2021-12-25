@@ -59,7 +59,8 @@ export default function ShowLine({ line }) {
             {getLines()}    
             <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center", 
                         'cursor': 'pointer', ':hover': { color: '#666'}}}>
-                        <Typography variant="p" component="p" sx={{ color: '#999', ml: 3}}>
+                        <Typography variant="p" component="p" sx={{ color: '#999', ml: 3,     
+                            fontFamily: "'Vesper Libre', serif" }}>
                                 <LanguageText source="hk">{line.book}</LanguageText>
                                 { ' ' + line.bookContext}  
                         </Typography>
