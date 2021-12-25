@@ -40,7 +40,18 @@ export default function Home({ books } ) {
   return (
     <Layout>
         <Head>
-            <title>Smrthi</title>
+            <title>Smrthi - Home</title>
+            <meta name="description" content={ "Books of Ancient Sanskrit/Indic Literature" }/>
+            <meta property="og:type" content="website"/>
+            <meta property="og:url" content={`https://www.smrthi.com/`}/>
+            <meta property="og:title" content={`Smrithi - Home`}/>
+            <meta property="og:description" content={ "Books of Ancient Sanskrit/Indic Literature" }/>
+            <meta property="og:image" content={`https://www.smrthi.com/logo.jpg`}/>
+            <meta property="twitter:card" content="summary"/>
+            <meta property="twitter:url" content={`https://www.smrthi.com/`}/>
+            <meta property="twitter:title" content={`Smrithi - Home`}/>
+            <meta property="twitter:description" content={ "Smrithi - Home"}/>
+            <meta property="twitter:image" content={`https://www.smrthi.com/logo.jpg`}/>
         </Head>
         <Container maxWidth="lg">
             <Grid container spacing={2}>

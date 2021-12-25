@@ -7,6 +7,8 @@ import Verse from '../../../components/HighlightLine';
 import Typography from '@mui/material/Typography';
 import LanguageText from '../../../components/LanguageText';
 import Paper from '@mui/material/Paper';
+import Head from 'next/head';
+import Sanscript from '@sanskrit-coders/sanscript';
 
 export default function ShowLine({ line }) {
     const [lineState, setLine] = useState({});
@@ -23,6 +25,23 @@ export default function ShowLine({ line }) {
 
   return (
       <Container maxWidth="lg">
+          <Head>
+            <title>Smrthi - {Sanscript.t(line.book, 'hk', 'devanagari')} {line.bookContext}</title>
+            <link rel="alternate" type="application/json+oembed"
+                href={`http://smrthi.com/api/oembed?url=http%3A%2F%2Fsmrthi.com%2Fbook%2F${line.book}%2F${line.bookContext}&format=json`}
+                title={`${Sanscript.t(line.book, 'hk', 'devanagari')} ${line.bookContext}`} />
+            <meta name="description" content={line.text}/>
+            <meta property="og:type" content="website"/>
+            <meta property="og:url" content={`https://www.smrthi.com/book/${line.book}/${line.bookContext}`}/>
+            <meta property="og:title" content={`Smrithi - ${Sanscript.t(line.book, 'hk', 'devanagari')} ${line.bookContext}`}/>
+            <meta property="og:description" content={line.text}/>
+            <meta property="og:image" content={`https://www.smrthi.com/api/image/${line.book}/${line.bookContext}.jpg`}/>
+            <meta property="twitter:card" content="summary_large_image"/>
+            <meta property="twitter:url" content={`https://www.smrthi.com/book/${line.book}/${line.bookContext}`}/>
+            <meta property="twitter:title" content={`${Sanscript.t(line.book, 'hk', 'devanagari')} ${line.bookContext}`}/>
+            <meta property="twitter:description" content={line.text}/>
+            <meta property="twitter:image" content={`https://www.smrthi.com/api/image/${line.book}/${line.bookContext}.jpg`}/>
+        </Head>
         <Box sx={{
                 flexGrow: 1,
                 justifyContent: 'center',
