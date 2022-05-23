@@ -25,13 +25,13 @@ export default function Indus({seals}) {
                   }) 
             } */}
               {
-                  seals.map(seal => { 
+                  seals.map( (seal) => { 
                       return (
-                            <div>
+                            <div key={seal.text}>
                             {
-                                seal.map(symbol => {
+                                seal.glyphs.map( (symbol, index) => {
                                     return (
-                                        <span style={{ fontFamily: 'Indus', fontSize: '40px' }}>{symbol}</span>
+                                        <span key={index} style={{ fontFamily: 'Indus', fontSize: '40px' }}>{symbol}</span>
                                     )
                                 })
                             }
@@ -47,7 +47,7 @@ export default function Indus({seals}) {
 
 export async function getServerSideProps() {
     const { seals } = await getSeals();
-    console.log(seals);
+    // console.log(seals[0]);
   return {
       props: {
         seals

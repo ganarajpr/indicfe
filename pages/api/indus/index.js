@@ -1,7 +1,7 @@
 import corsWrapper from "../../../lib/corsWrapper";
 import content from './indus.json';
 import seals from './valid.json';
-
+import _ from 'lodash-es';
 
 const getSymbolsToGlyph = () => {
     const symbols = {};
@@ -20,10 +20,17 @@ const getSeals = () => {
     const symbols = getSymbolsToGlyph();
     const finalSeals = sealSymbols.map(seal => {
         return seal.map(symbol => {
-            return symbols[+symbol];
+            return symbols[+symbol] ? symbols[+symbol] : ' ' +symbol;
         });
     });
-    return finalSeals;
+
+    return _.zipWith(finalSeals, seals, (seal, sealObj) => {
+        console.log(sealObj);
+        return {
+            text: sealObj?.text,
+            glyphs: seal
+        };
+    });
 };
 
 async function handler(req, res) {
