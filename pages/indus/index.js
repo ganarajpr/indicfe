@@ -1,8 +1,8 @@
 import Layout from "../../components/Layout";
 import Container from '@mui/material/Container';
 import Head from 'next/head';
-import content from './indus.json';
-export default function Indus( ) {
+import { getSeals } from "../../fetches/indus";
+export default function Indus({seals}) {
 
   
   return (
@@ -11,19 +11,34 @@ export default function Indus( ) {
             <title>Smrthi - Indus</title>
         </Head>
         <Container maxWidth="lg">
-              {
+              {/* {
                   Object.keys(content).map(key => {
-                      if (content[key].glyph !== '.' && content[key].glyph !== '?') {
+                      if (content[key][0].glyph !== '.' && content[key][0].glyph !== '?') {
                         return (
                             <div>
                               <span>{key}</span>&nbsp;
-                              <span style={{fontFamily: 'Indus'}}>{content[key].glyph}</span>
+                              <span style={{fontFamily: 'Indus', fontSize: '40px'}}>{content[key][0].glyph}</span>
                             </div>
                           )
                       }
                       return null;
                   }) 
-            }
+            } */}
+              {
+                  seals.map(seal => { 
+                      return (
+                            <div>
+                            {
+                                seal.map(symbol => {
+                                    return (
+                                        <span style={{ fontFamily: 'Indus', fontSize: '40px' }}>{symbol}</span>
+                                    )
+                                })
+                            }
+                            </div>
+                        )
+                  })
+              }
         </Container> 
     </Layout>
   )
@@ -31,8 +46,11 @@ export default function Indus( ) {
 
 
 export async function getServerSideProps() {
+    const { seals } = await getSeals();
+    console.log(seals);
   return {
-    props: {
+      props: {
+        seals
     }
  };
 }
