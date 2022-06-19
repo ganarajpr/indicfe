@@ -78,11 +78,11 @@ export default function ShowLine({ line }) {
     return lineState.translations?.map( (t, i) => {
       return (
         <Paper elevation={1} sx={{ p: 4, mt: 2, overflowWrap: "break-word" }} key={t.text}>
-            <Typography variant="p" component="p" sx={{display: "inline", mr: 4}}>
+            <Typography variant="p" component="p" sx={{display: "inline", mr: 4}} data-test="translation">
                     {t.text}        
             </Typography>
             { isLoggedIn && session.user.id === t.createdBy ? 
-                <IconButton variant="contained" color="error" onClick={ () => { onDeleteClick(t._id)}}>
+                <IconButton variant="contained" color="error" onClick={ () => { onDeleteClick(t._id)}} data-test="transDelBtn">
                     <DeleteIcon/>
                 </IconButton>
                 : null 
@@ -126,7 +126,7 @@ export default function ShowLine({ line }) {
                     <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center", 
                         'cursor': 'pointer', ':hover': { color: '#666'}}}>
                         <img src="/smrthi-symbol.png" height="50"/>
-                        <Typography variant="h4" component="h4" sx={{ color: '#999', ml: 3}}>
+                        <Typography variant="h4" component="h4" sx={{ color: '#999', ml: 3}} data-test="bookLocation">
                                 <LanguageText source="hk">{line.book}</LanguageText>
                                 { ' ' + line.bookContext}  
                         </Typography>
@@ -145,7 +145,7 @@ export default function ShowLine({ line }) {
             >
                 { line.prevContext &&
                 <Link href={`/book/${line.book}/${line.prevContext}`}>
-                    <Typography variant="h5" component="h5" 
+                    <Typography variant="h5" component="h5" data-test="prevContext"
                         sx={{'cursor': 'pointer', display: 'inline-block', color: 'primary.main', ':hover': { color: 'secondary.main'}, textAlign: 'left'}}>
                         Prev        
                     </Typography>
@@ -154,7 +154,7 @@ export default function ShowLine({ line }) {
             {
                 line.nextContext && 
                 <Link href={`/book/${line.book}/${line.nextContext}`}>
-                    <Typography variant="h5" component="h5" 
+                    <Typography variant="h5" component="h5" data-test="nextContext"
                         sx={{'cursor': 'pointer', display: 'inline-block', color: 'primary.main', ':hover': { color: 'secondary.main'}, float: 'right'}}>
                         Next        
                     </Typography>
@@ -173,7 +173,7 @@ export default function ShowLine({ line }) {
                 onSubmit={onAddTranslation}/>
         </Paper>
         <Divider sx={{mb: 3, mt: 3}}/> */}
-        <Typography variant="h5" component="h5" sx={{fontStyle: "italic", mb: 5, color: 'text.secondary'}}>
+        <Typography variant="h5" component="h5" sx={{fontStyle: "italic", mb: 5, color: 'text.secondary'}} data-test="fullTranslationH5">
             Full Translations
         </Typography> 
         {getTranslations()}
@@ -212,7 +212,7 @@ export default function ShowLine({ line }) {
                         />
                     </Box>
                     <Box sx={{paddingTop: 3, paddingLeft: 1}}>
-                        <Button color='secondary' type="submit" variant="contained" size="large" fullWidth>Add Translation</Button>
+                        <Button color='secondary' type="submit" variant="contained" data-test="addTranslationButton" size="large" fullWidth>Add Translation</Button>
                     </Box>
                 </Box>
             </LoggedInContent>

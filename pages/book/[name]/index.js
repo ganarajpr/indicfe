@@ -19,7 +19,7 @@ export default function Book({ bookContexts,bookName }) {
   const getBookContextList = () => {
     if(bookContexts?.length) {
         return _.map(bookContexts, (spl) => {
-            return (<Grid item xs={12} lg={4} md={3} key={spl}>
+            return (<Grid item xs={12} lg={4} md={3} key={spl} data-test="chapter">
                 <Card variant="outlined">
                   <Link href={`/book/${bookName}/chapter/${spl}`}>
                       <CardActionArea>
@@ -65,7 +65,7 @@ export default function Book({ bookContexts,bookName }) {
                         <Box sx={{ display: "flex", flexGrow: 1, pb: 1, justifyContent: "center", 
                             'cursor': 'pointer', ':hover': { color: '#666'}}}>
                             <img src="/smrthi-symbol.png" height="50"/>
-                            <Typography variant="h4" component="h4" sx={{ color: '#999', ml: 2, mt: 1}}>
+                            <Typography variant="h4" component="h4" sx={{ color: '#999', ml: 2, mt: 1}}  data-test="bookName">
                                 <LanguageText source="hk">{bookName}</LanguageText>   
                             </Typography>
                         </Box>

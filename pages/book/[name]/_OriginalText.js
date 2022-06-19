@@ -101,7 +101,7 @@ export default function OriginalText({ line, words }) {
             {getLines()}
             {
                 session?.user?.authorised &&
-                !editMode && (<Fab color="secondary" aria-label="edit" sx={fabStyle} size="small" onClick={() => setEditMode(true)}>
+                !editMode && (<Fab color="secondary" data-test="editBtn" aria-label="edit" sx={fabStyle} size="small" onClick={() => setEditMode(true)}>
                     <EditIcon />
                 </Fab>) 
             }

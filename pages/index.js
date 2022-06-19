@@ -14,15 +14,15 @@ export default function Home({ books } ) {
   const getBookList = () => {
     if(books?.length) {
       return books.map( (book) => {
-        return (<Grid item xs={12} lg={4} md={3} key={book}>
+        return (<Grid item xs={12} lg={4} md={3} key={book} data-test="bookItem">
             <Card variant="outlined" sx={{ overflowWrap: "break-word" }}>
                 <Link href={`/book/${book}`}>
                     <CardActionArea>
                         <CardContent>
-                            <Typography color="text.secondary">
+                            <Typography color="text.secondary" data-test="bookTitleSkt">
                                 { Sanscript.t(book, 'hk', 'devanagari') }
                             </Typography>
-                            <Typography color="text.secondary">
+                            <Typography color="text.secondary" data-test="bookTitleEng">
                                 { Sanscript.t(book, 'hk', 'iast') }
                             </Typography>
                         </CardContent>

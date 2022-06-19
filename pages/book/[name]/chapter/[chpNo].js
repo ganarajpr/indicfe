@@ -17,18 +17,17 @@ import Sanscript from '@sanskrit-coders/sanscript';
 
 const getLines = (para) => {
     const lines = para.text.split('\n');
-    console.log(para);
     return (
-        <Card variant="outlined" sx={{ overflowWrap: "break-word" }}>
+        <Card variant="outlined" sx={{ overflowWrap: "break-word" }} data-test="shloka">
             <Link href={`/book/${para.book}/${para.bookContext}`}>
                 <CardActionArea>
                     <CardContent>
                         {lines.map((line) => {
-                            return (<Typography variant="h5" component="div" key={line}>
+                            return (<Typography variant="h5" component="div" key={line} data-test="line">
                                 <LanguageText source={para.script}>{line}</LanguageText>
                             </Typography>);
                         })}
-                        <Typography sx={{ mb: 1.5, textAlign: 'right' }} color="text.secondary">
+                        <Typography sx={{ mb: 1.5, textAlign: 'right' }} color="text.secondary" data-test="bookContext">
                             { para.bookContext}
                         </Typography>
                     </CardContent>
@@ -90,7 +89,7 @@ export default function Book({ lines, bookName, chapter, nextContext, prevContex
                             <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center", 
                                 'cursor': 'pointer', ':hover': { color: '#666'}}}>
                                 <img src="/smrthi-symbol.png" height="50"/>
-                                <Typography variant="h4" component="h4" sx={{ color: '#999', ml: 2, mt: 1}}>
+                                <Typography variant="h4" component="h4" sx={{ color: '#999', ml: 2, mt: 1}} data-test="bookContext">
                                     <LanguageText source="hk">{lines[0].book}</LanguageText>
                                         {' ' + chapter}      
                                 </Typography>
@@ -108,7 +107,7 @@ export default function Book({ lines, bookName, chapter, nextContext, prevContex
                     >
                      { prevContext &&
                         <Link href={`/book/${lines[0].book}/chapter/${prevContext}`}>
-                            <Typography variant="h5" component="h5" 
+                            <Typography variant="h5" component="h5" data-test="prev" 
                                 sx={{'cursor': 'pointer', display: 'inline-block', color: 'primary.main', ':hover': { color: 'secondary.main'}, textAlign: 'left'}}>
                                 Prev        
                             </Typography>
@@ -117,7 +116,7 @@ export default function Book({ lines, bookName, chapter, nextContext, prevContex
                     {
                         nextContext && 
                         <Link href={`/book/${lines[0].book}/chapter/${nextContext}`}>
-                            <Typography variant="h5" component="h5" 
+                            <Typography variant="h5" component="h5" data-test="next"
                                 sx={{'cursor': 'pointer', display: 'inline-block', color: 'primary.main', ':hover': { color: 'secondary.main'}, float: 'right'}}>
                                 Next        
                             </Typography>

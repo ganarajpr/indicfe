@@ -48,7 +48,7 @@ const Verse = (props) => {
         return acc;
     }, {});
     return (<>
-        <Wrapper small={small}>
+        <Wrapper small={small} data-test="verse">
         {cleaned.map((word) => <Word key={word} script={script} 
             translations={wordTranslationMap[word]}>{word}</Word>)}
         </Wrapper>
