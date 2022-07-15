@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 html,
 body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, 'Vesper Libre',
@@ -8,3 +13,8 @@ body {
   font-family: Indus; 
   src: url('/fonts/sk_indus_script-webfont.ttf'); 
 } 
+
+#__next {
+  height: 100%;
+  width: 100%;
+}
