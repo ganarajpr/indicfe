@@ -91,9 +91,8 @@ export default function ShowLine({ line }) {
     });
   };
 
-  const chapter = _.initial(line.bookContext.split('.')).join('.');
-
-
+    const chapter = _.initial(line.bookContext.split('.')).join('.');
+    
   return (
     <Layout>
         <Head>
@@ -112,8 +111,22 @@ export default function ShowLine({ line }) {
             <meta property="twitter:title" content={`${Sanscript.t(line.book, 'hk', 'devanagari')} ${line.bookContext}`}/>
             <meta property="twitter:description" content={line.text}/>
             <meta property="twitter:image" content={`https://www.smrthi.com/api/image/${line.book}/${line.bookContext}.jpg`}/>
-        </Head>
-      <Container maxWidth="lg">
+          </Head>
+          <Link href={`/book/${line.book}/chapter/${chapter}`}>
+            <div className="grid grid-flow-col justify-center gap-2">
+                <img className="w-14" src="/smrthi-symbol.png"/>
+                <p className="text-4xl inline justify-center self-center text-slate-700" data-test="bookLocation">
+                      <LanguageText source="hk">{line.book}</LanguageText>
+                      { ' ' + line.bookContext}  
+                </p>
+            </div>  
+          </Link>
+          <div className="grid grid-flow-col justify-center mt-4">
+            <OriginalText line={line}/>
+            </div>
+          
+        
+      {/* <Container maxWidth="lg">
         <Box
             sx={{
                     flexGrow: 1,
@@ -162,17 +175,6 @@ export default function ShowLine({ line }) {
             }
             
         </Box> 
-        {/* <Typography variant="h5" component="h5" sx={{fontStyle: "italic", mb: 5, color: 'text.secondary'}}>
-            Words and Meanings
-        </Typography>
-        <Paper elevation={1} sx={{ p: 1, mt: 2 }}>
-            <WordTranslations words={getWords()} translations={lineState?.words?.translations}/>
-            <Divider sx={{mb: 3, mt: 3}}/>
-            <WordInteractionForm words={getWords()} 
-                translations={lineState?.words?.translations}
-                onSubmit={onAddTranslation}/>
-        </Paper>
-        <Divider sx={{mb: 3, mt: 3}}/> */}
         <Typography variant="h5" component="h5" sx={{fontStyle: "italic", mb: 5, color: 'text.secondary'}} data-test="fullTranslationH5">
             Full Translations
         </Typography> 
@@ -217,7 +219,7 @@ export default function ShowLine({ line }) {
                 </Box>
             </LoggedInContent>
         </Paper>         
-      </Container>      
+      </Container>       */}
     </Layout>    
   )
 }

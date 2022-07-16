@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
-import Verse from '../../../components/HighlightLine';
+import Verse from '../../../components/Verse';
 import { useSession } from 'next-auth/client';
 import LanguageContext from '../../../shared/LanguageContext';
 import { useState, useEffect, useContext } from 'react';
@@ -30,7 +30,7 @@ export default function OriginalText({ line, words }) {
     
     const getLines = () => {
         return lineState.lines?.map( (line) => {
-        return (<Verse line={line} script={lineState.script} words={lineState.words} key={line}></Verse>)
+            return (<Verse line={line} script={lineState.script} words={lineState.words} key={line}></Verse>)
         });
     };
     useEffect( () => {
@@ -96,16 +96,16 @@ export default function OriginalText({ line, words }) {
             </Box>);
     };
 
-    return (<Box sx={{ flexGrow: 1, justifyContent: 'center', textAlign: 'center', mt: 5 }}>
-        <Paper elevation={1} sx={{ p: 4, overflowWrap: "break-word", position: "relative" }}>
+    return (<div className="grid grid-flow-col place-items-center">
+        <div className='text-lg'>
             {getLines()}
-            {
+            {/* {
                 session?.user?.authorised &&
                 !editMode && (<Fab color="secondary" data-test="editBtn" aria-label="edit" sx={fabStyle} size="small" onClick={() => setEditMode(true)}>
                     <EditIcon />
                 </Fab>) 
             }
-            {getEditing(editMode)}            
-        </Paper>
-    </Box>)
+            {getEditing(editMode)}             */}
+        </div>
+    </div>)
 }

@@ -25,7 +25,6 @@ const Word = (props) => {
     }
 
     const {translations, script} = props; 
-    console.log('word', script);
     const getTranslationForToolTip = () => {
         return translations?.length ? translations[0]:  
             <Italicized>No available Translations</Italicized>;
