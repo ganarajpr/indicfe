@@ -20,7 +20,7 @@ export default function Layout(props) {
                     <UserButton className="col-span-1 mr-3 self-center justify-self-end" />
                 </Link>
           </div>
-          <div className="mt-4 h-full w-full grid ">
+          <div className="mt-4 h-full w-full grid">
             {props.children}
           </div>
         </div>

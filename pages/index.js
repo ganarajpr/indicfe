@@ -12,7 +12,7 @@ export default function Home({ books }) {
                 return (
                     <Link href={`/book/${book}`}>
                         <div
-                            className="col-span-3 p-3 border cursor-pointer"
+                            className="col-span-3 shadow-md p-3 border cursor-pointer hover:bg-pink-900 hover:text-white"
                             key={book}
                         >
                             <p className="text-lg">
