@@ -1,13 +1,8 @@
 import { useState, useEffect } from 'react';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import { useForm } from "react-hook-form";
 import _ from 'lodash';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Link from 'next/link';
 import Sanscript from '@sanskrit-coders/sanscript';
@@ -23,6 +18,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Head from 'next/head';
 import OriginalText from './_OriginalText';
 import LanguageText from '../../../components/LanguageText';
+import ChevronLeftButton from '../../../components/ChevronLeftButton';
+import ChevronRightButton from '../../../components/ChevronRightButton';
 
 const defaultValues = {
     translation: ""
@@ -93,7 +90,8 @@ export default function ShowLine({ line }) {
 
     const chapter = _.initial(line.bookContext.split('.')).join('.');
     
-  return (
+    return (
+      <>
     <Layout>
         <Head>
             <title>Smrthi - {Sanscript.t(line.book, 'hk', 'devanagari')} {line.bookContext}</title>
@@ -111,19 +109,20 @@ export default function ShowLine({ line }) {
             <meta property="twitter:title" content={`${Sanscript.t(line.book, 'hk', 'devanagari')} ${line.bookContext}`}/>
             <meta property="twitter:description" content={line.text}/>
             <meta property="twitter:image" content={`https://www.smrthi.com/api/image/${line.book}/${line.bookContext}.jpg`}/>
-          </Head>
-          <Link href={`/book/${line.book}/chapter/${chapter}`}>
-            <div className="grid grid-flow-col justify-center gap-2">
+        </Head>
+        <Link href={`/book/${line.book}/chapter/${chapter}`}>
+            <div className="grid grid-flow-col justify-center gap-2 cursor-pointer">
                 <img className="w-14" src="/smrthi-symbol.png"/>
                 <p className="text-4xl inline justify-center self-center text-slate-700" data-test="bookLocation">
-                      <LanguageText source="hk">{line.book}</LanguageText>
-                      { ' ' + line.bookContext}  
+                        <LanguageText source="hk">{line.book}</LanguageText>
+                        { ' ' + line.bookContext}  
                 </p>
             </div>  
-          </Link>
-          <div className="grid grid-flow-col justify-center mt-4">
+        </Link>
+        <div className="grid grid-flow-col justify-center mt-4 mb-20 mx-4">
             <OriginalText line={line}/>
-            </div>
+          </div>
+        
           
         
       {/* <Container maxWidth="lg">
@@ -221,6 +220,20 @@ export default function ShowLine({ line }) {
         </Paper>         
       </Container>       */}
     </Layout>    
+            <div className="grid grid-flow-col w-full h-16 border-4 bottom-0 fixed bg-pink-900 text-white">
+            { line.prevContext &&
+                <Link href={`/book/${line.book}/${line.prevContext}`}>
+                        <ChevronLeftButton data-test="prevContext" className="justify-self-start grid grid-flow-col place-items-center text-2xl font-bold ml-5 p-1 hover:bg-white hover:text-pink-900">Previous</ChevronLeftButton>            
+                </Link>
+                }
+                {
+                line.nextContext && 
+                <Link href={`/book/${line.book}/${line.nextContext}`}>
+                            <ChevronRightButton data-test="nextContext" className="justify-self-end grid grid-flow-col place-items-center font-bold text-2xl mr-5 p-1 hover:bg-white hover:text-pink-900">Next</ChevronRightButton>            
+                        </Link>
+                }
+    </div>
+    </>
   )
 }
 
