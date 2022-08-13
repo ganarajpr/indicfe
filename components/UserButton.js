@@ -2,8 +2,8 @@ export default function UserButton(props) {
     const { className = '', ...rest } = props;
     return (
         <button
-                    className={`border-none hover:rounded-full p-2 
-            hover:bg-slate-400 hover:text-slate-50 ${className ? className : ''}`} {...rest}
+                    className={`border-none hover:rounded-full p-2 pt-1 
+            hover:bg-pink-900 hover:text-white ${className ? className : ''}`} {...rest}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
