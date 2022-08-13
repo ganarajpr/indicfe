@@ -3,27 +3,38 @@ import { getBooks } from "../fetches/books";
 import Link from "next/link";
 import Head from "next/head";
 import Sanscript from "@sanskrit-coders/sanscript";
-
+import _ from "lodash-es";
 export default function Home({ books }) {
 
+    const getBookForKey = (key) => {
+        return books[key].map((book) => {
+            return (
+                <Link href={`/book/${book}`}>
+                    <div
+                        className="col-span-12 shadow-md p-3 border cursor-pointer hover:bg-pink-900 hover:text-white"
+                        key={book}
+                    >
+                        <p className="text-lg">
+                            {Sanscript.t(book, "hk", "devanagari")} /{" "}
+                            {Sanscript.t(book, "hk", "iast")}
+                        </p>
+                    </div>
+                </Link>
+            );
+        });
+    };
+
     const getBookList = () => {
-        if (books?.length) {
-            return books.map((book) => {
-                return (
-                    <Link href={`/book/${book}`}>
-                        <div
-                            className="col-span-3 shadow-md p-3 border cursor-pointer hover:bg-pink-900 hover:text-white"
-                            key={book}
-                        >
-                            <p className="text-lg">
-                                {Sanscript.t(book, "hk", "devanagari")} /{" "}
-                                {Sanscript.t(book, "hk", "iast")}
-                            </p>
-                        </div>
-                    </Link>
-                );
+        const keys = Object.keys(books);
+        return keys.map((key) => {
+            return (<>
+                <div
+                    className="col-span-12 shadow-md p-3 border cursor-pointer bg-pink-900 text-white my-4"
+                    >{String.fromCharCode(key).toUpperCase()}</div>
+                {getBookForKey(key)}
+            </>);
+            
             });
-        }
     };
 
     return (
@@ -69,9 +80,17 @@ export default function Home({ books }) {
 
 export async function getServerSideProps() {
     const { books } = await getBooks();
+    // books.sort((a, b) => {
+    //     const numa = a.toLowerCase().charCodeAt(0);
+    //     const numb = b.toLowerCase().charCodeAt(0);
+    //     return numa - numb;
+    // });
+    const grouped = _.groupBy(books, (book) => {
+        return book.toLowerCase().charCodeAt(0);
+    });
     return {
         props: {
-            books,
+            books: grouped,
         },
     };
 }

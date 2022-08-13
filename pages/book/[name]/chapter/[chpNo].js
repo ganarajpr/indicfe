@@ -12,30 +12,22 @@ import ChevronRightButton from "../../../../components/ChevronRightButton";
 const getLines = (para) => {
     const lines = para.text.split("\n");
     return (
-        <Link href={`/book/${para.book}/${para.bookContext}`}>
-            <div className="grid grid-flow-col">
+        <div className="grid grid-flow-col">
             <div className="grid justify-center self-center mr-6">
                 {para.bookContext}
             </div>
             <div className="grid grid-flow-row justify-start">
-                        {lines.map((line) => {
-                            return (
-                                <h5 className="text-2xl"
-                                    key={line}
-                                    data-test="line"
-                                >
-                                    <LanguageText source={para.script}>
-                                        {line}
-                                    </LanguageText>
-                                </h5>
-                            );
-                        })}
-                    
+                {lines.map((line) => {
+                    return (
+                        <h5 className="text-2xl" key={line} data-test="line">
+                            <LanguageText source={para.script}>
+                                {line}
+                            </LanguageText>
+                        </h5>
+                    );
+                })}
             </div>
-            
-            </div>
-                
-            </Link>
+        </div>
     );
 };
 
@@ -47,9 +39,14 @@ const displayLines = (paragraphs) => {
     });
     return paragraphs.map((para) => {
         return (
-            <div key={para.bookContext} className="grid grid-flow-row container mx-auto justify-start p-5 border-b cursor-pointer hover:shadow-md hover:bg-pink-900 hover:text-white">
-                {getLines(para)}
-            </div>
+            <Link href={`/book/${para.book}/${para.bookContext}`}>
+                <div
+                    key={para.bookContext}
+                    className="grid grid-flow-row container mx-auto justify-start p-5 border-b cursor-pointer hover:shadow-md hover:bg-pink-900 hover:text-white"
+                >
+                    {getLines(para)}
+                </div>
+            </Link>
         );
     });
 };
@@ -144,10 +141,9 @@ export default function Book({
                 </Link>
                 <div className="grid mt-8 mb-20 mx-4">
                     <div className="grid grid-flow-row">
-                        {displayLines(lines)} 
+                        {displayLines(lines)}
                     </div>
                 </div>
-
             </Layout>
             <div className="grid grid-flow-col w-full h-16 border-4 bottom-0 fixed bg-pink-900 text-white">
                 {prevContext && (
