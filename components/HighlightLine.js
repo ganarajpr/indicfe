@@ -30,7 +30,9 @@ const Word = (props) => {
             <Italicized>No available Translations</Italicized>;
     };
     return (<Tooltip title={getTranslationForToolTip()} arrow placement="top">
-            <StyledWord><LanguageText source={script}>{props.children}</LanguageText>&nbsp;</StyledWord>
+        <StyledWord>
+            <LanguageText source={script}>{props.children}</LanguageText>&nbsp;
+        </StyledWord>
     </Tooltip>);
 }
 

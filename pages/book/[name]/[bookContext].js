@@ -119,9 +119,9 @@ export default function ShowLine({ line }) {
                 </p>
             </div>  
         </Link>
-        <div className="grid grid-flow-col justify-center mt-4 mb-20 mx-4">
+        <div className="grid grid-flow-col mt-4 mb-20 mx-4">
             <OriginalText line={line}/>
-          </div>
+        </div>
         
           
         
@@ -229,8 +229,8 @@ export default function ShowLine({ line }) {
                 {
                 line.nextContext && 
                 <Link href={`/book/${line.book}/${line.nextContext}`}>
-                            <ChevronRightButton data-test="nextContext" className="justify-self-end grid grid-flow-col place-items-center font-bold text-2xl mr-5 p-1 hover:bg-white hover:text-pink-900">Next</ChevronRightButton>            
-                        </Link>
+                        <ChevronRightButton data-test="nextContext" className="justify-self-end grid grid-flow-col place-items-center font-bold text-2xl mr-5 p-1 hover:bg-white hover:text-pink-900">Next</ChevronRightButton>            
+                </Link>
                 }
     </div>
     </>

@@ -3,7 +3,6 @@ import Layout from "../../../../components/Layout";
 import Link from "next/link";
 import _ from "lodash-es";
 import Head from "next/head";
-import Typography from "@mui/material/Typography";
 import { getSum } from "../../../../lib/util";
 import LanguageText from "../../../../components/LanguageText";
 import Sanscript from "@sanskrit-coders/sanscript";

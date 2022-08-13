@@ -1,9 +1,6 @@
 import Sanscript from '@sanskrit-coders/sanscript';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Fab from '@mui/material/Fab';
-import EditIcon from '@mui/icons-material/Edit';
 import Verse from '../../../components/Verse';
 import { useSession } from 'next-auth/client';
 import LanguageContext from '../../../shared/LanguageContext';
