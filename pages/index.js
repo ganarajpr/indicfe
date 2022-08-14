@@ -9,7 +9,7 @@ export default function Home({ books }) {
     const getBookForKey = (key) => {
         return books[key].map((book) => {
             return (
-                <Link href={`/book/${book}`}>
+                <Link href={`/book/${book}`} key={book}>
                     <div
                         className="col-span-12 shadow-md p-3 border cursor-pointer hover:bg-pink-900 hover:text-white"
                         key={book}

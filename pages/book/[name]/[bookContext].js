@@ -78,7 +78,7 @@ export default function ShowLine({ line }) {
             //         : null
             //     }
             // </Paper>);
-            <div className="italic text-2xl text-slate-700 px-6">
+            <div key={t.text} className="italic text-2xl text-slate-700 px-6">
                 {t.text}
             </div>);
 

@@ -39,7 +39,7 @@ const displayLines = (paragraphs) => {
     });
     return paragraphs.map((para) => {
         return (
-            <Link href={`/book/${para.book}/${para.bookContext}`}>
+            <Link href={`/book/${para.book}/${para.bookContext}`} key={para.bookContext}>
                 <div
                     key={para.bookContext}
                     className="grid grid-flow-row container mx-auto justify-start p-5 border-b cursor-pointer hover:shadow-md hover:bg-pink-900 hover:text-white"
