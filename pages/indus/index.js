@@ -1,5 +1,4 @@
 import Layout from "../../components/Layout";
-import Container from '@mui/material/Container';
 import Head from 'next/head';
 import { getSeals } from "../../fetches/indus";
 export default function Indus({seals}) {
@@ -10,7 +9,7 @@ export default function Indus({seals}) {
         <Head>
             <title>Smrthi - Indus</title>
         </Head>
-        <Container maxWidth="lg">
+        <div className="grid grid-flow-row justify-center">
               {/* {
                   Object.keys(content).map(key => {
                       if (content[key][0].glyph !== '.' && content[key][0].glyph !== '?') {
@@ -39,7 +38,7 @@ export default function Indus({seals}) {
                         )
                   })
               }
-        </Container> 
+        </div> 
     </Layout>
   )
 }
@@ -47,7 +46,6 @@ export default function Indus({seals}) {
 
 export async function getServerSideProps() {
     const { seals } = await getSeals();
-    // console.log(seals[0]);
   return {
       props: {
         seals

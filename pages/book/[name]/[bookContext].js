@@ -1,20 +1,13 @@
 import { useState, useEffect } from 'react';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
 import { useForm } from "react-hook-form";
 import _ from 'lodash';
-import IconButton from '@mui/material/IconButton';
 import Link from 'next/link';
 import Sanscript from '@sanskrit-coders/sanscript';
 
 import { getLine, addFullTranslation, deleteTranslationForLine } from '../../../fetches/line';
 import Layout from '../../../components/Layout';
 import { useSession } from 'next-auth/client';
-import LoggedInContent from '../../../components/LoggedInContent';
-import WordTranslations from '../../../components/WordTranslations';
-import WordInteractionForm from '../../../components/WordInteractionForm';
 import { addWord } from '../../../fetches/word';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Head from 'next/head';
 import OriginalText from './_OriginalText';
 import LanguageText from '../../../components/LanguageText';
@@ -73,18 +66,22 @@ export default function ShowLine({ line }) {
 
   const getTranslations = () => {    
     return lineState.translations?.map( (t, i) => {
-      return (
-        <Paper elevation={1} sx={{ p: 4, mt: 2, overflowWrap: "break-word" }} key={t.text}>
-            <Typography variant="p" component="p" sx={{display: "inline", mr: 4}} data-test="translation">
-                    {t.text}        
-            </Typography>
-            { isLoggedIn && session.user.id === t.createdBy ? 
-                <IconButton variant="contained" color="error" onClick={ () => { onDeleteClick(t._id)}} data-test="transDelBtn">
-                    <DeleteIcon/>
-                </IconButton>
-                : null 
-            }           
-        </Paper>);
+        return (
+            // <Paper elevation={1} sx={{ p: 4, mt: 2, overflowWrap: "break-word" }} key={t.text}>
+            //     <Typography variant="p" component="p" sx={{display: "inline", mr: 4}} data-test="translation">
+            //             {t.text}
+            //     </Typography>
+            //     { isLoggedIn && session.user.id === t.createdBy ?
+            //         <IconButton variant="contained" color="error" onClick={ () => { onDeleteClick(t._id)}} data-test="transDelBtn">
+            //             <DeleteIcon/>
+            //         </IconButton>
+            //         : null
+            //     }
+            // </Paper>);
+            <div className="italic text-2xl text-slate-700 px-6">
+                {t.text}
+            </div>);
+
     });
   };
 
@@ -121,6 +118,9 @@ export default function ShowLine({ line }) {
         </Link>
         <div className="grid grid-flow-col mt-4 mb-20 mx-4">
             <OriginalText line={line}/>
+        </div>
+        <div className="grid grid-flow-col mx-4">
+            {getTranslations()}
         </div>
         
           
