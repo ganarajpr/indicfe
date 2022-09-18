@@ -4,7 +4,7 @@ import getDb from '../../../mongo';
 import { MongoDBAdapter } from "../../../mongo/adapters";
 import { ObjectId } from 'mongodb';
 
-export default async (req, res) => {
+const AuthHandler = async (req, res) => {
     const db = await getDb();
     const options = {
         providers: [
@@ -30,3 +30,5 @@ export default async (req, res) => {
     };
     return NextAuth(req, res, options);
 }
+
+export default AuthHandler;

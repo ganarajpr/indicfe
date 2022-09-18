@@ -1,28 +1,18 @@
 import { useState, useEffect } from 'react';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import { useForm } from "react-hook-form";
 import _ from 'lodash';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import Link from 'next/link';
 import Sanscript from '@sanskrit-coders/sanscript';
 
 import { getLine, addFullTranslation, deleteTranslationForLine } from '../../../fetches/line';
 import Layout from '../../../components/Layout';
 import { useSession } from 'next-auth/client';
-import LoggedInContent from '../../../components/LoggedInContent';
-import WordTranslations from '../../../components/WordTranslations';
-import WordInteractionForm from '../../../components/WordInteractionForm';
 import { addWord } from '../../../fetches/word';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Head from 'next/head';
 import OriginalText from './_OriginalText';
 import LanguageText from '../../../components/LanguageText';
+import ChevronLeftButton from '../../../components/ChevronLeftButton';
+import ChevronRightButton from '../../../components/ChevronRightButton';
 
 const defaultValues = {
     translation: ""
@@ -76,25 +66,29 @@ export default function ShowLine({ line }) {
 
   const getTranslations = () => {    
     return lineState.translations?.map( (t, i) => {
-      return (
-        <Paper elevation={1} sx={{ p: 4, mt: 2, overflowWrap: "break-word" }} key={t.text}>
-            <Typography variant="p" component="p" sx={{display: "inline", mr: 4}} data-test="translation">
-                    {t.text}        
-            </Typography>
-            { isLoggedIn && session.user.id === t.createdBy ? 
-                <IconButton variant="contained" color="error" onClick={ () => { onDeleteClick(t._id)}} data-test="transDelBtn">
-                    <DeleteIcon/>
-                </IconButton>
-                : null 
-            }           
-        </Paper>);
+        return (
+            // <Paper elevation={1} sx={{ p: 4, mt: 2, overflowWrap: "break-word" }} key={t.text}>
+            //     <Typography variant="p" component="p" sx={{display: "inline", mr: 4}} data-test="translation">
+            //             {t.text}
+            //     </Typography>
+            //     { isLoggedIn && session.user.id === t.createdBy ?
+            //         <IconButton variant="contained" color="error" onClick={ () => { onDeleteClick(t._id)}} data-test="transDelBtn">
+            //             <DeleteIcon/>
+            //         </IconButton>
+            //         : null
+            //     }
+            // </Paper>);
+            <div key={t.text} className="italic text-2xl text-slate-700 px-6">
+                {t.text}
+            </div>);
+
     });
   };
 
-  const chapter = _.initial(line.bookContext.split('.')).join('.');
-
-
-  return (
+    const chapter = _.initial(line.bookContext.split('.')).join('.');
+    
+    return (
+      <>
     <Layout>
         <Head>
             <title>Smrthi - {Sanscript.t(line.book, 'hk', 'devanagari')} {line.bookContext}</title>
@@ -113,7 +107,25 @@ export default function ShowLine({ line }) {
             <meta property="twitter:description" content={line.text}/>
             <meta property="twitter:image" content={`https://www.smrthi.com/api/image/${line.book}/${line.bookContext}.jpg`}/>
         </Head>
-      <Container maxWidth="lg">
+        <Link href={`/book/${line.book}/chapter/${chapter}`}>
+            <div className="grid grid-flow-col justify-center gap-2 cursor-pointer">
+                <img className="w-14" src="/smrthi-symbol.png"/>
+                <p className="text-4xl inline justify-center self-center text-slate-700" data-test="bookLocation">
+                        <LanguageText source="hk">{line.book}</LanguageText>
+                        { ' ' + line.bookContext}  
+                </p>
+            </div>  
+        </Link>
+        <div className="grid grid-flow-col mt-4 mb-20 mx-4">
+            <OriginalText line={line}/>
+        </div>
+        <div className="grid grid-flow-col mx-4">
+            {getTranslations()}
+        </div>
+        
+          
+        
+      {/* <Container maxWidth="lg">
         <Box
             sx={{
                     flexGrow: 1,
@@ -162,17 +174,6 @@ export default function ShowLine({ line }) {
             }
             
         </Box> 
-        {/* <Typography variant="h5" component="h5" sx={{fontStyle: "italic", mb: 5, color: 'text.secondary'}}>
-            Words and Meanings
-        </Typography>
-        <Paper elevation={1} sx={{ p: 1, mt: 2 }}>
-            <WordTranslations words={getWords()} translations={lineState?.words?.translations}/>
-            <Divider sx={{mb: 3, mt: 3}}/>
-            <WordInteractionForm words={getWords()} 
-                translations={lineState?.words?.translations}
-                onSubmit={onAddTranslation}/>
-        </Paper>
-        <Divider sx={{mb: 3, mt: 3}}/> */}
         <Typography variant="h5" component="h5" sx={{fontStyle: "italic", mb: 5, color: 'text.secondary'}} data-test="fullTranslationH5">
             Full Translations
         </Typography> 
@@ -217,8 +218,22 @@ export default function ShowLine({ line }) {
                 </Box>
             </LoggedInContent>
         </Paper>         
-      </Container>      
+      </Container>       */}
     </Layout>    
+            <div className="grid grid-flow-col w-full h-16 border-4 bottom-0 fixed bg-pink-900 text-white">
+            { line.prevContext &&
+                <Link href={`/book/${line.book}/${line.prevContext}`}>
+                        <ChevronLeftButton data-test="prevContext" className="justify-self-start grid grid-flow-col place-items-center text-2xl font-bold ml-5 p-1 hover:bg-white hover:text-pink-900">Previous</ChevronLeftButton>            
+                </Link>
+                }
+                {
+                line.nextContext && 
+                <Link href={`/book/${line.book}/${line.nextContext}`}>
+                        <ChevronRightButton data-test="nextContext" className="justify-self-end grid grid-flow-col place-items-center font-bold text-2xl mr-5 p-1 hover:bg-white hover:text-pink-900">Next</ChevronRightButton>            
+                </Link>
+                }
+    </div>
+    </>
   )
 }
 

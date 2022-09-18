@@ -1,25 +1,15 @@
 import Sanscript from '@sanskrit-coders/sanscript';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Fab from '@mui/material/Fab';
-import EditIcon from '@mui/icons-material/Edit';
-import Verse from '../../../components/HighlightLine';
+import Verse from '../../../components/Verse';
 import { useSession } from 'next-auth/client';
 import LanguageContext from '../../../shared/LanguageContext';
 import { useState, useEffect, useContext } from 'react';
 import { useForm } from "react-hook-form";
-import Button from '@mui/material/Button';
 import { updateLine } from '../../../fetches/line';
+import PencilButton from '../../../components/PencilButton';
 const defaultValues = {
     originalText: "" 
 };
 
-const fabStyle = {
-    position: 'absolute',
-    bottom: 16,
-    right: 16,
-  };
 export default function OriginalText({ line, words }) {
     const [lineState, setLine] = useState({});
     const [editMode, setEditMode] = useState(false);
@@ -30,7 +20,7 @@ export default function OriginalText({ line, words }) {
     
     const getLines = () => {
         return lineState.lines?.map( (line) => {
-        return (<Verse line={line} script={lineState.script} words={lineState.words} key={line}></Verse>)
+            return (<Verse line={line} script={lineState.script} words={lineState.words} key={line}></Verse>)
         });
     };
     useEffect( () => {
@@ -61,19 +51,17 @@ export default function OriginalText({ line, words }) {
             setEditMode(false); 
         };
 
-        return (<Box component="form" 
+      return (<form
+          className="grid grid-flow-row justify-items-stretch"
                 noValidate
-                onSubmit={handleSubmit(onSubmit)} sx={{
-                '& .MuiFormControl-root': { m: 1, p: 0 }
-            }}>
-            <Box sx={{paddingTop: 1, paddingRight: 1}}>
-                <TextField
+                onSubmit={handleSubmit(onSubmit)}>
+            <textarea
                     id="originalText"
                     label="Original text"
                     variant="standard"
                     multiline
                     required
-                    fullWidth
+                    className="border-2 border-gray-300 rounded-lg p-2 mt-5"
                     {
                         ...formState.errors.originalText ? {error:true} : null
                     }
@@ -89,23 +77,21 @@ export default function OriginalText({ line, words }) {
                     }
                     onChange={onOriginalEdit} 
                 />
-            </Box>
-            <Box sx={{paddingTop: 3, paddingLeft: 1}}>
-                <Button color='secondary' type="submit" variant="contained" size="large" fullWidth>Submit</Button>
-            </Box>
-            </Box>);
+            <button className="bg-pink-900 hover:bg-pink-800 text-white mt-5 p-4 rounded-md" type="submit" variant="contained" size="large" fullWidth>Submit</button>
+            </form>);
     };
 
-    return (<Box sx={{ flexGrow: 1, justifyContent: 'center', textAlign: 'center', mt: 5 }}>
-        <Paper elevation={1} sx={{ p: 4, overflowWrap: "break-word", position: "relative" }}>
+    return (<div className="grid grid-flow-row place-items-center">
+        <div className='text-lg'>
             {getLines()}
-            {
-                session?.user?.authorised &&
-                !editMode && (<Fab color="secondary" data-test="editBtn" aria-label="edit" sx={fabStyle} size="small" onClick={() => setEditMode(true)}>
-                    <EditIcon />
-                </Fab>) 
-            }
+            
             {getEditing(editMode)}            
-        </Paper>
-    </Box>)
+        </div>
+        {
+                session?.user?.authorised &&
+                !editMode && (<PencilButton className="bg-pink-900 w-14 h-14 mt-4 hover:bg-pink-800 grid grid-flow-col justify-center content-center rounded-md text-white" onClick={() => setEditMode(true)}>
+                    
+                </PencilButton>) 
+        }
+    </div>)
 }

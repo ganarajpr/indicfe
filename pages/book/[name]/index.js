@@ -1,40 +1,28 @@
 import { getBook } from "../../../fetches/books";
 import Layout from "../../../components/Layout";
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 import Link from 'next/link';
 import _ from 'lodash-es';
 import Head from 'next/head';
-import Typography from '@mui/material/Typography';
-import Card from '@mui/material/Card';
-import CardActionArea from '@mui/material/CardActionArea';
-import CardContent from '@mui/material/CardContent';
 import Sanscript from '@sanskrit-coders/sanscript';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import LanguageText from "../../../components/LanguageText";
 
-export default function Book({ bookContexts,bookName }) {
-
-  const getBookContextList = () => {
+const getBookContextList = (bookContexts, bookName) => {
     if(bookContexts?.length) {
         return _.map(bookContexts, (spl) => {
-            return (<Grid item xs={12} lg={4} md={3} key={spl} data-test="chapter">
-                <Card variant="outlined">
-                  <Link href={`/book/${bookName}/chapter/${spl}`}>
-                      <CardActionArea>
-                          <CardContent>
-                              <Typography color="text.secondary">
-                                  { spl }
-                              </Typography>
-                          </CardContent>
-                      </CardActionArea>
-                  </Link>
-                </Card>
-            </Grid>);
+            return (
+                <Link href={`/book/${bookName}/chapter/${spl}`} key={spl}>
+                    <div
+                        className="col-span-12 md:col-span-6 lg:col-span-3 shadow-md p-3 border cursor-pointer items-center justify-items-center hover:bg-pink-900 hover:text-white">
+                        <div className="text-lg text-center">
+                            {spl}
+                        </div>
+                    </div>
+                </Link>
+            );
         });
     }
   };
+export default function Book({ bookContexts,bookName }) {
 
   return (
     <Layout>
@@ -52,29 +40,15 @@ export default function Book({ bookContexts,bookName }) {
             <meta property="twitter:description" content={ "Chapters of " + Sanscript.t(bookName, 'hk', 'devanagari') }/>
             <meta property="twitter:image" content={`https://www.smrthi.com/logo.jpg`}/>
         </Head>
-        <Container maxWidth="sm">
-                  <Box
-                    sx={{
-                            flexGrow: 1,
-                            justifyContent: 'center',
-                            textAlign: 'center',
-                            mb: 2
-                        }}
-                    >
-                    <Paper elevation={0}>
-                        <Box sx={{ display: "flex", flexGrow: 1, pb: 1, justifyContent: "center", 
-                            'cursor': 'pointer', ':hover': { color: '#666'}}}>
-                            <img src="/smrthi-symbol.png" height="50"/>
-                            <Typography variant="h4" component="h4" sx={{ color: '#999', ml: 2, mt: 1}}  data-test="bookName">
-                                <LanguageText source="hk">{bookName}</LanguageText>   
-                            </Typography>
-                        </Box>
-                    </Paper>
-                </Box>
-            <Grid container spacing={2}>
-                {getBookContextList()}
-            </Grid>
-        </Container> 
+        <div className="grid grid-flow-col justify-center gap-2">
+            <img className="w-14" src="/smrthi-symbol.png" height="50" />
+            <p className="text-4xl inline justify-center self-center text-slate-700" data-test="bookName">
+                <LanguageText source="hk">{bookName}</LanguageText>
+            </p>
+        </div>
+        <div className="grid grid-flow-row grid-cols-12 gap-1 p-4">
+            {getBookContextList(bookContexts, bookName)}
+        </div>
     </Layout>
   )
 }

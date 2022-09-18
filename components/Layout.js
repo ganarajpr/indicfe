@@ -1,27 +1,28 @@
-import Header from './Header';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import SideBar from './SideBar';
-import LanguageSelector from './LanguageSelector';
-import { useState } from 'react';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Link from "next/link";
+import { signIn, signOut, useSession } from "next-auth/client";
+import HamburgerButton from "./HamburgerButton";
+import UserButton from "./UserButton";
 
-export default function Layout (props) {
-    const [open, setOpen] = useState(false);
-    const onMenuClick = () => {
-      setOpen(!open);
-    };
+export default function Layout(props) {
     return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Header onHamburgerClick={onMenuClick}/>
-      <Container maxWidth="lg" sx={{paddingTop: 2}}>
-          {props.children}
-        <ClickAwayListener onClickAway={() => setOpen(false)}>
-          <SideBar open={open} onBackdropClick={()=> setOpen(false)}>
-            <LanguageSelector/>
-          </SideBar>
-        </ClickAwayListener>
-      </Container>
-      </Box>
-    )
-  }
+        <div className="">
+            <div className="grid grid-flow-col p-4 w-full border shadow-md row-span-1">
+                <HamburgerButton className="col-span-1 ml-3 justify-self-start self-center" />
+                <div className="grid grid-flow-col justify-center col-auto">
+                    <Link href="/">
+                        <img
+                            src="/smrthi-text.png"
+                            className="w-20 self-center cursor-pointer"
+                        />
+                    </Link>
+                </div>
+                <Link href="/api/auth/signin">
+                    <UserButton className="col-span-1 mr-3 self-center justify-self-end" />
+                </Link>
+          </div>
+          <div className="mt-4 h-full w-full grid">
+            {props.children}
+          </div>
+        </div>
+    );
+}
