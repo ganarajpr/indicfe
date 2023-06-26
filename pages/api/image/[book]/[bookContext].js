@@ -1,5 +1,4 @@
 import corsWrapper from "../../../../lib/corsWrapper";
-//import { getLineByBookAndContext } from '../../line/_core';
 import { getScreenshot } from '../../../../lib/chromium';
 
 async function handler(req, res) {
